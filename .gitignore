@@ -1,3 +1,22 @@
 #ignore all .env file
 *.env
 .env
+# Ignore .env file
+.env
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other examples
+*.swp
+*.swo
