@@ -1,0 +1,413 @@
+<%- include('../layout/adminhead.ejs') %>
+</head>
+
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Manage Categories</h2>
+                        <p>edit existing categories, create new ones.</p>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Search Categories" class="form-control bg-white" />
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <form id="categoryForm">
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Name</label>
+                                        <div id="errorMessagesName" class="text-danger"></div>
+                                        <input type="text" placeholder="Type here" class="form-control"
+                                            id="categoryName" required />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <div id="errorMessagesDescription" class="text-danger"></div>
+                                        <textarea placeholder="Type here" class="form-control" id="categoryDescription"
+                                            required></textarea>
+                                    </div>
+                                    <div class="d-grid">
+                                        <div id="errorMessages" class="text-danger"></div>
+                                        <button type="button" class="btn btn-primary" id="createCategoryButton"
+                                            onclick="createCategory()">Create category</button>
+                                        <button type="button" class="btn btn-primary" id="updateCategoryButton" hidden
+                                            onclick="updateCategory()">Update category</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-lg-1">Name</th>
+                                                <th class="col-lg-3">Description</th>
+                                                <th class="col-lg-1">Status</th>
+                                                <th class="col-lg-3 text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% categories.forEach(category=> { %>
+                                                <tr>
+                                                    <td><b>
+                                                            <%= category.categoryName %>
+                                                        </b></td>
+                                                    <td>
+                                                        <%= category.description %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (!category.isBlock) { %>
+                                                            <span class="badge badge-pill badge-soft-success"
+                                                                id="unlist-status-<%= category.id %>">Listed</span>
+                                                            <% } else { %>
+                                                                <span class="badge badge-pill badge-soft-danger"
+                                                                    id="unlist-status-<%= category.id %>">Unlisted</span>
+                                                                <% } %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <% if (!category.isBlock) { %>
+                                                            <button class="btn btn-outline-danger btn-sm"
+                                                                onclick="unlistCategory('<%= category.id %>')"
+                                                                id="unlist-button-<%= category.id %>">
+                                                                <i class="fas fa-ban"></i> Unlist
+                                                            </button>
+                                                            <% } else { %>
+                                                                <button class="btn btn-brand btn-sm"
+                                                                    onclick="unlistCategory('<%= category.id %>')"
+                                                                    id="unlist-button-<%= category.id %>">
+                                                                    <i class="fas fa-check"></i> List
+                                                                </button>
+                                                                <% } %>
+                                                                    <button class="btn btn-brand btn-sm ms-2"
+                                                                        data-id="<%= category.id %>"
+                                                                        data-name="<%= category.categoryName %>"
+                                                                        data-description="<%= category.description %>"
+                                                                        onclick="editCategory(this)">
+                                                                        <i class="fas fa-edit"></i> Edit info
+                                                                    </button>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- .col// -->
+                        </div>
+                        <!-- .row // -->
+                    </div>
+                    <!-- card body .// -->
+                </div>
+                <!-- card .// -->
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <script>
+            function displayError(errorMessage) {
+                const errorDiv = document.getElementById('errorMessages');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorName(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesName');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorDescription(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesDescription');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function validateWhenCreate() {
+                const categoryName = document.getElementById('categoryName').value.trim();
+                const categoryDescription = document.getElementById('categoryDescription').value.trim();
+
+                document.getElementById('errorMessagesName').innerHTML = '';
+                document.getElementById('errorMessagesDescription').innerHTML = ''
+                document.getElementById('errorMessages').innerHTML = ''
+
+                if (!categoryName) {
+                    displayErrorName("*Enter category name")
+                    return false;
+                }
+                
+                const minLength = 3; // Minimum length of category name
+                const maxLength = 50; // Maximum length of category name
+                const allowedCharacters = /^[a-zA-Z0-9\s]+$/; // Regular expression to allow alphanumeric characters and spaces
+
+                // Check if category name is present and within length limits
+                if (!categoryName || categoryName.length < minLength || categoryName.length > maxLength) {
+                    displayErrorName("*Category name must be between " + minLength + " and " + maxLength + " characters.") 
+                    return false
+                }
+                
+                // Check if category name contains only allowed characters
+                if (!allowedCharacters.test(categoryName)) {
+                    displayErrorName( "*Category name can only contain letters, numbers, and spaces.");
+                    return false
+                }
+                
+                if (!categoryDescription) {
+                    displayErrorDescription("*Enter discription")
+                    return false;
+                }
+
+                if (!allowedCharacters.test(categoryDescription)) {
+                    displayErrorDescription( "*Category name can only contain letters, numbers, and spaces.");
+                    return false
+                }
+                
+                return true;
+            }
+
+            document.getElementById('categoryName').addEventListener('input', validateWhenCreate);
+            document.getElementById('categoryDescription').addEventListener('input', validateWhenCreate);
+
+            function createCategory() {
+                if (validateWhenCreate()) {
+
+                    const categoryName = document.getElementById('categoryName').value.trim();
+                    const categoryDescription = document.getElementById('categoryDescription').value.trim();
+
+                    document.getElementById('errorMessagesName').innerHTML = '';
+                    document.getElementById('errorMessagesDescription').innerHTML = ''
+                    document.getElementById('errorMessages').innerHTML = ''
+
+
+
+                    const categoryFormData = {
+                        categoryName: categoryName,
+                        categoryDescription: categoryDescription
+                    };
+
+                    console.log(categoryFormData);
+
+                    axios.post('/admin/category', categoryFormData)
+                        .then(res => {
+                            if (res.data.next === 1) {
+                                window.location.reload();
+                            } else if (res.data.next === 100) {
+                                displayError("*This category already exists.");
+                            }
+                        })
+                        .catch(err => {
+                            console.log("Error uploading category info: ", err);
+                        });
+
+                }
+
+            }
+        </script>
+
+        <script>
+
+            function unlistCategory(categoryId) {
+
+                axios.post(`/admin/unlistcategory/${categoryId}`)
+                    .then(res => {
+                        if (res.data.success) {
+                            let button = document.getElementById(`unlist-button-${categoryId}`);
+                            let status = document.getElementById(`unlist-status-${categoryId}`);
+                            if (button.classList.contains('btn-outline-danger')) {
+                                status.classList.remove('badge-soft-success');
+                                status.classList.add('badge-soft-danger');
+                                status.innerHTML = 'Unlisted';
+                                button.classList.remove('btn-outline-danger');
+                                button.classList.add('btn-brand');
+                                button.innerHTML = '<i class="fas fa-check"></i> List';
+                            } else {
+                                status.classList.remove('badge-soft-danger');
+                                status.classList.add('badge-soft-success');
+                                status.innerHTML = 'Listed';
+                                button.classList.remove('btn-brand');
+                                button.classList.add('btn-outline-danger');
+                                button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.log("error in sending category id");
+                    });
+            }
+
+        </script>
+
+        <script>
+            let categoryIdToUpdate; // Define a global variable to store the category ID
+
+            function editCategory(button) {
+
+                
+
+                // Get the data attributes from the button
+                categoryIdToUpdate = button.getAttribute('data-id');
+                const categoryName = button.getAttribute('data-name');
+                const categoryDescription = button.getAttribute('data-description');
+
+                // Populate the form fields with the retrieved data
+                document.getElementById('categoryName').value = categoryName;
+                document.getElementById('categoryDescription').value = categoryDescription;
+
+                document.getElementById('createCategoryButton').hidden = true;
+                document.getElementById('updateCategoryButton').hidden = false;
+            }
+
+            function updateCategory() {
+
+                if(!validateWhenCreate()){
+                    return console.log('Error validating when update category')
+                }
+                const categoryName = document.getElementById('categoryName').value.trim();
+                const categoryDescription = document.getElementById('categoryDescription').value.trim();
+
+
+                const categoryFormData = {
+                    categoryId: categoryIdToUpdate, // Use the global variable here
+                    categoryName: categoryName,
+                    categoryDescription: categoryDescription
+                };
+
+                // console.log(`Updating category ${categoryIdToUpdate} with data:`, categoryFormData);
+
+                axios.post('/admin/updatecategory', categoryFormData)
+                    .then(res => {
+                        if (res.data.next === 1) {
+                            window.location.reload();
+                        } else if (res.data.next === 100) {
+                            displayError("*category is already there.");
+                        }
+                    })
+                    .catch(err => {
+                        console.log("Error updating category info: ", err);
+                    });
+            }
+
+            // Ensure the form is not submitting in the default way
+            document.getElementById('categoryForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+            });
+        </script>
+
+
+    </body>
+
+    </html>

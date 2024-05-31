@@ -1,0 +1,537 @@
+<%- include('../layout/adminhead.ejs') %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+
+    </head>
+
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                            <button class="btn btn-light bg" type="button"> <i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                            class="material-icons md-apps"></i> </button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Product</h2>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up"
+                                    onclick="getProductDetails()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>1. General info</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product title</label>
+                                            <div id="errorMessagesName" class="text-danger"></div>
+                                            <input type="text" id="productTitle" placeholder="Type here"
+                                                class="form-control" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Description</label>
+                                            <div id="errorMessagesDescription" class="text-danger"></div>
+
+                                            <textarea id="productDescription" placeholder="Type here"
+                                                class="form-control" rows="4" required></textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Brand name</label>
+                                            <!-- You can uncomment and use this select if needed -->
+                                            <select id="productBrand" class="form-select">
+                                                <option value="none">None</option>
+                                                <option>Apple</option>
+                                                <option>Samsung</option>
+                                                <option>Oneplus</option>
+                                                <option>Nothing</option>
+                                                <option>iqoo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>2. Pricing</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Cost in INR</label>
+                                            <div id="errorMessagesPrice" class="text-danger"></div>
+
+                                            <input type="text" id="productCost" placeholder="₹00.0" class="form-control"
+                                                required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>3. Category</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <% if(categories.length> 0) {%>
+                                                <% categories.forEach(category=> { %>
+                                                    <label class="mb-2 form-check form-check-inline"
+                                                        style="width: 45%;">
+                                                        <input class="form-check-input" checked name="mycategory"
+                                                            type="radio" value="Clothes">
+                                                        <span class="form-check-label">
+                                                            <%= category.categoryName %>
+                                                        </span>
+                                                    </label>
+                                                    <% }) %>
+                                                        <% }else{ %>
+                                                            <label class="mb-2" style="width: 45%;">
+
+                                                                <span class="form-check-label text-danger">*No
+                                                                    categories found</span>
+                                                            </label>
+                                                            <% } %>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <h6>4. Stock Information</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Quantity</label>
+                                            <div id="errorMessagesStock" class="text-danger"></div>
+
+                                            <input type="number" id="productQuantity" placeholder="Enter quantity"
+                                                class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6>5. Media</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Images</label>
+                                            <div id="errorMessagesImage" class="text-danger"></div>
+                                            <input class="form-control" type="file" id="image1" name="images"
+                                                onchange="previewImage(event, 'preview1')" required>
+                                            <img id="preview1"
+                                                style="width: 100px; height: 100px; margin-top: 10px; display: none;"
+                                                alt="Image Preview" onclick="startCrop('preview1')" />
+                                            <input class="form-control" type="file" id="image2" name="images"
+                                                onchange="previewImage(event, 'preview2')">
+                                            <img id="preview2"
+                                                style="width: 100px; height: 100px; margin-top: 10px; display: none;"
+                                                alt="Image Preview" />
+                                            <input class="form-control" type="file" id="image3" name="images"
+                                                onchange="previewImage(event, 'preview3')">
+                                            <img id="preview3"
+                                                style="width: 100px; height: 100px; margin-top: 10px; display: none;"
+                                                alt="Image Preview" />
+
+
+
+
+
+                                            <!-- cropping sample -->
+                                            <!-- <label class="form-label">Images</label>
+                                                <div id="errorMessagesImage" class="text-danger"></div>
+                                                <input class="form-control" type="file" id="imageInput" name="images" onchange="previewImage(event, 'preview1')">
+                                                <div id="imagePreviewContainer" style="position: relative;">
+                                                    <button id="cropButton" style="position: absolute; top: 10px; left: 10px; display: none;" onclick="startCrop()">Crop Image</button>
+                                                    <img id="imagePreview" style="width: 100px; height: 100px; margin-top: 10px; display: none;" alt="Image Preview" />
+                                                </div>
+                                                <div id="cropperContainer" style="display: none;">
+                                                    <img id="cropperImage" style="max-width: 100%;" alt="Cropper Image" />
+                                                    <button id="confirmCropButton" onclick="confirmCrop()">Confirm Crop</button>
+                                                </div>
+                                                <div style="width: 100px; height: 100px " id="result"></div>
+                                                <input type="hidden" id="croppedImageName" name="croppedImageName"> -->
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div id="cropModal" style="display:none;">
+                <img id="cropImage" style="max-width: 100%;">
+                <button id="cropButton">Crop</button>
+            </div>
+
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">
+                            All rights reserved
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </body>
+    <script>
+       
+
+
+    </script>
+
+    <script>
+
+        function validateProductDetails() {
+            let title = document.getElementById('productTitle').value.trim();
+            let description = document.getElementById('productDescription').value.trim();
+            let cost = document.getElementById('productCost').value.trim();
+            let stock = document.getElementById('productQuantity').value.trim();
+            let image_one = document.getElementById('image1').files[0]
+            let image_two = document.getElementById('image2').files[0]
+            let image_three = document.getElementById('image3').files[0]
+
+            document.getElementById('errorMessagesName').innerHTML = '';
+            document.getElementById('errorMessagesDescription').innerHTML = '';
+            document.getElementById('errorMessagesPrice').innerHTML = '';
+            document.getElementById('errorMessagesStock').innerHTML = '';
+            document.getElementById('errorMessagesImage').innerHTML = '';
+
+
+            //product name validation
+            if (title === '') {
+                displayErrorName('*Product name is required.')
+                return false;
+            } else if (title.length < 3) {
+                displayErrorName(`*Product name must be at least 3 characters long.`);
+                return false;
+            } else if (title.length > 30) {
+                displayErrorName(`*Product name must be less than 30 characters long.`);
+                return false;
+            }
+
+            //product description validation
+            if (description === '') {
+                displayErrorDescription('*Product description is required.')
+                return false;
+            }
+
+            //product price validation
+            var minPrice = 5000;
+            var maxPrice = 200000;
+
+            if (cost === '') {
+                displayErrorPrice('*Product price is required.')
+                return false;
+            } else if (isNaN(cost) || cost <= 0) {
+                displayErrorPrice('*Product price must be a positive number.')
+                return false;
+            } else if (cost < minPrice) {
+                displayErrorPrice(`*Product price must be at least $${minPrice.toFixed(2)}.`)
+                return false;
+            } else if (cost > maxPrice) {
+                displayErrorPrice(`*Product price must be less than or equal to $${maxPrice.toFixed(2)}.`)
+                return false;
+            }
+
+            //product quantity validation
+            var minQuantity = 1;
+            var maxQuantity = 100
+
+            if (stock == '') {
+                displayErrorStock('*Product quantity is required.')
+                return false
+            } else if (isNaN(stock) || stock <= 0) {
+                displayErrorStock('*Product quantity must be a positive integer.');
+                return false;
+            } else if (stock < minQuantity) {
+                displayErrorStock(`*Product quantity must be at least ${minQuantity}.`);
+                return false;
+            } else if (stock > maxQuantity) {
+                displayErrorStock(`*Product quantity must be less than or equal to ${maxQuantity}.`);
+                return false;
+            }
+
+            //product image validation
+            if (!image_one) {
+                displayErrorImage('*Product image is required.')
+                return false;
+            } else {
+                // Check file type
+                var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(image_one.type)) {
+                    displayErrorImage('*Only JPEG, PNG, and GIF images are allowed.')
+                    return false
+                } else {
+                    // Check file size (in bytes)
+                    var maxSize = 5 * 1024 * 1024; // 5MB
+                    if (image_one.size > maxSize) {
+                        displayErrorImage('*Maximum file size is 5MB.');
+                        return false;
+                    }
+                }
+            }
+
+            if (!image_two) {
+                displayErrorImage('*Please select 3 images.')
+                return false;
+            } else {
+                // Check file type
+                var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(image_one.type)) {
+                    displayErrorImage('*Only JPEG, PNG, and GIF images are allowed.')
+                    return false
+                } else {
+                    // Check file size (in bytes)
+                    var maxSize = 5 * 1024 * 1024; // 5MB
+                    if (image_one.size > maxSize) {
+                        displayErrorImage('*Maximum file size is 5MB.');
+                        return false;
+                    }
+                }
+            }
+
+            if (!image_three) {
+                displayErrorImage('*Please select 3 images.')
+                return false;
+            } else {
+                // Check file type
+                var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(image_one.type)) {
+                    displayErrorImage('*Only JPEG, PNG, and GIF images are allowed.')
+                    return false
+                } else {
+                    // Check file size (in bytes)
+                    var maxSize = 5 * 1024 * 1024; // 5MB
+                    if (image_one.size > maxSize) {
+                        displayErrorImage('*Maximum file size is 5MB.');
+                        return false;
+                    }
+                }
+            }
+
+            return true
+        }
+
+        function displayErrorName(errorMessage) {
+            const errorDiv = document.getElementById('errorMessagesName');
+            const errorParagraph = document.createElement('p');
+            errorParagraph.textContent = errorMessage;
+            errorDiv.appendChild(errorParagraph);
+        }
+
+        function displayErrorDescription(errorMessage) {
+            const errorDiv = document.getElementById('errorMessagesDescription');
+            const errorParagraph = document.createElement('p');
+            errorParagraph.textContent = errorMessage;
+            errorDiv.appendChild(errorParagraph);
+        }
+
+        function displayErrorPrice(errorMessage) {
+            const errorDiv = document.getElementById('errorMessagesPrice');
+            const errorParagraph = document.createElement('p');
+            errorParagraph.textContent = errorMessage;
+            errorDiv.appendChild(errorParagraph);
+        }
+
+        function displayErrorStock(errorMessage) {
+            const errorDiv = document.getElementById('errorMessagesStock');
+            const errorParagraph = document.createElement('p');
+            errorParagraph.textContent = errorMessage;
+            errorDiv.appendChild(errorParagraph);
+        }
+
+        function displayErrorImage(errorMessage) {
+            const errorDiv = document.getElementById('errorMessagesImage');
+            const errorParagraph = document.createElement('p');
+            errorParagraph.textContent = errorMessage;
+            errorDiv.appendChild(errorParagraph);
+        }
+
+        document.getElementById('productTitle').addEventListener('input', validateProductDetails)
+        document.getElementById('productDescription').addEventListener('input', validateProductDetails)
+        document.getElementById('productCost').addEventListener('input', validateProductDetails)
+        document.getElementById('productQuantity').addEventListener('input', validateProductDetails)
+        document.getElementById('image1').addEventListener('input', validateProductDetails)
+        document.getElementById('image2').addEventListener('input', validateProductDetails)
+        document.getElementById('image3').addEventListener('input', validateProductDetails)
+
+
+
+        function getProductDetails() {
+
+            if (validateProductDetails()) {
+                // Get values from the form
+                let title = document.getElementById('productTitle').value;
+                let description = document.getElementById('productDescription').value;
+                let brand = document.getElementById('productBrand').value
+                let cost = document.getElementById('productCost').value;
+                let stock = document.getElementById('productQuantity').value;
+                let category = document.querySelector('input[name="mycategory"]:checked').value;
+
+                // Create a FormData object to handle file uploads
+                let formData = new FormData();
+                formData.append('title', title);
+                formData.append('description', description);
+                formData.append('brand', brand);
+                formData.append('cost', cost);
+                formData.append('category', category);
+                formData.append('stock', stock);
+                formData.append('images', document.getElementById('image1').files[0]);
+                formData.append('images', document.getElementById('image2').files[0]);
+                formData.append('images', document.getElementById('image3').files[0]);
+
+                for (let [key, value] of formData.entries()) {
+                    console.log(`Key: ${key}, Value:`, value);
+                }
+
+                // Send the form data using Axios
+                axios.post('/admin/createproducts', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then(res => {
+                        if (res.data.success) {
+                            window.location.href = '/admin/products'
+                        } else {
+                            displayErrorName("*Product is already there")
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+
+        }
+    </script>
+    <script>
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById(previewId);
+                output.src = reader.result;
+                output.style.display = 'inline-block'; // Show the preview image after uploading
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+
+    </html>

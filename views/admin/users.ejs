@@ -1,0 +1,313 @@
+<%- include('../layout/adminhead.ejs') %>
+</head>
+
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        
+        
+        
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <!-- <li class="nav-item">
+                                <a class="nav-link btn-icon" href="#">
+                                    <i class="material-icons md-notifications animation-shake"></i>
+                                    <span class="badge rounded-pill">3</span>
+                                </a>
+                            </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                                <a href="#" class="requestfullscreen nav-link btn-icon"><i
+                                        class="material-icons md-cast"></i></a>
+                            </li> -->
+                        <!-- <li class="dropdown nav-item">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                                    aria-expanded="false"><i class="material-icons md-public"></i></a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                                    <a class="dropdown-item text-brand" href="#"><img
+                                            src="assets/imgs/theme/flag-us.png" alt="English" />English</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png"
+                                            alt="Français" />Français</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png"
+                                            alt="Français" />日本語</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png"
+                                            alt="Français" />中国人</a>
+                                </div>
+                            </li> -->
+                        <!-- <li class="dropdown nav-item">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                                    aria-expanded="false"> <img class="img-xs rounded-circle"
+                                        src="assets/imgs/people/avatar-2.png" alt="User" /></a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                    <a class="dropdown-item" href="#"><i
+                                            class="material-icons md-perm_identity"></i>Edit
+                                        Profile</a>
+                                    <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                        Settings</a>
+                                    <a class="dropdown-item" href="#"><i
+                                            class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                    <a class="dropdown-item" href="#"><i
+                                            class="material-icons md-receipt"></i>Billing</a>
+                                    <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                        center</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="#"><i
+                                            class="material-icons md-exit_to_app"></i>Logout</a>
+                                </div>
+                            </li> -->
+                    </ul>
+                </div>
+            </header>
+            <!-- main.ejs -->
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Users list</h2>
+                    <div>
+                        <a href="/admin/createuser" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <div class="col-lg-4 col-md-6 me-auto">
+                                <input type="text" placeholder="Search..." class="form-control" />
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Phone No</option>
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Show 20</option>
+                                    <option>Show 30</option>
+                                    <option>Show 40</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header>
+                    <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Phone No</th>
+                                        <th>Registered</th>
+                                        <th class="">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% users.forEach(user=> { %>
+                                        <!-- Table content goes here -->    
+                                        <tr>
+                                            <td class="col-lg-3">
+                                                <div class="itemside">
+                                                    <div class="left">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                            fill="currentColor" class="bi bi-person-circle"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM5.5 5a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0zM8 10c-1.5 0-2.5.5-3.5 1 0-1 1.5-1.5 3.5-1.5s3.5.5 3.5 1c-1 0-2.5.5-3.5 1-.5-.5-2-1-3.5-1z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <%= user.username %>
+                                                        </h6>
+                                                        <!-- <small class="text-muted">User ID: #001</small> -->
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="col-lg-3">
+                                                <%= user.email %>
+                                            </td>
+                                            <td class="col-lg-2">
+                                                <%= user.phone %>
+                                            </td>
+                                            <td class="col-lg-3">
+                                                <%= user.createdAt.toLocaleDateString() %>
+                                            </td>
+                                            <td class="">
+                                                <!-- <a href="#" class="btn btn-sm btn-block btn-danger rounded font-sm mt-15">Block</a> -->
+                                                <% if (!user.isBlock) { %>
+                                                    <button id="block-btn-<%= user.id %>"
+                                                        class="btn btn-sm btn-outline-danger rounded font-sm mt-15 block-btn"
+                                                        data-id="<%= user.id %>"
+                                                        onclick="blockUser('<%= user.id %>')">
+                                                        <i class="material-icons md-block"></i> Block
+                                                    </button> 
+                                                <% } else { %>
+                                                    <button id="block-btn-<%= user.id %>"
+                                                        class="btn btn-sm btn-brand rounded font-sm mt-15 unblock-btn"
+                                                        data-id="<%= user.id %>"
+                                                        onclick="blockUser('<%= user.id %>')">
+                                                        <i class="material-icons md-check_circle"></i> Unblock
+                                                    </button>
+                                                <% } %>
+                                                
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                            <!-- table-responsive.// -->
+                        </div>
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+                <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <script>
+            function blockUser(userId) {
+                console.log(userId);
+                axios.post(`/admin/blockuser/${userId}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            console.log(response.data.success);
+                            let button = document.getElementById(`block-btn-${userId}`);
+                            if (button.classList.contains('btn-outline-danger')) {
+                                button.classList.remove('btn-outline-danger');
+                                button.classList.add('btn-brand');
+                                button.innerHTML = '<i class="material-icons md-check_circle"></i> Unblock';
+                            } else {
+                                button.classList.remove('btn-brand');
+                                button.classList.add('btn-outline-danger');
+                                button.innerHTML = '<i class="material-icons md-block"></i> Block';
+                            }
+                        } else {
+                            alert("An error occurred");
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Error in blocking and unblocking");
+                    });
+            }
+        </script>
+        
+    </body>
+
+    </html>

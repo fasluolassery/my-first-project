@@ -1,0 +1,302 @@
+<%- include('../layout/adminhead.ejs') %>
+</head>
+
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Products List</h2>
+                        <p>Lorem ipsum dolor sit amet.</p>
+                    </div>
+                    <div>
+                        <a href="/admin/createproducts" class="btn btn-primary btn-sm rounded">Create new</a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                                <select class="form-select">
+                                    <option selected>All category</option>
+                                    <option>Electronics</option>
+                                    <option>Clothes</option>
+                                    <option>Automobile</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-6">
+                                <input type="date" value="02.05.2021" class="form-control" />
+                            </div>
+                            <div class="col-md-2 col-6">
+                                <select class="form-select">
+                                    <option selected>Status</option>
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="text-center">Quantity</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(product=> { %>
+                                    <tr>
+                                        <td>
+                                            <a class="itemside d-flex align-items-center" href="#">
+                                                <div class="left me-3">
+                                                    <img src="<%= product.imagePaths[0] %>" class="img-sm img-thumbnail"
+                                                        alt="Item" />
+                                                </div>
+                                                <div class="info">
+                                                    <h6 class="mb-0">
+                                                        <%= product.productName %>
+                                                    </h6>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td><span>
+                                                <%= product.price %>
+                                            </span></td>
+                                        <td>
+                                            <% if (!product.isBlock) { %>
+                                                <span class="badge badge-pill badge-soft-success"
+                                                    id="unlist-status-<%= product.id %>">Listed</span>
+                                                <% } else { %>
+                                                    <span class="badge badge-pill badge-soft-danger"
+                                                        id="unlist-status-<%= product.id %>">Unlisted</span>
+                                                    <% } %>
+                                        </td>
+                                        <td class="text-center"><span>
+                                                <%= product.stock %>
+                                            </span></td>
+                                        <td class="text-center">
+                                            <% if (!product.isBlock) { %>
+                                                <button class="btn btn-outline-danger btn-sm"
+                                                    onclick="unlistProducts('<%= product.id %>')"
+                                                    id="unlist-button-<%= product.id %>">
+                                                    <i class="fas fa-ban"></i> Unlist
+                                                </button>
+                                                <% } else { %>
+                                                    <button class="btn btn-brand btn-sm"
+                                                        onclick="unlistProducts('<%= product.id %>')"
+                                                        id="unlist-button-<%= product.id %>">
+                                                        <i class="fas fa-check"></i> List
+                                                    </button>
+                                                    <% } %>
+                                                        <a href="/admin/editproducts?id=<%= product.id %>" ><button class="btn btn-brand btn-sm ms-2"
+                                                            data-id="<%= product.id %>"
+                                                            >
+                                                            <i class="fas fa-edit"></i> Edit info
+                                                        </button></a>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+                <div class="pagination-area mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+        <script>
+            function unlistProducts(productId) {
+                axios.post(`/admin/unlistproduct/${productId}`)
+                    .then(res => {
+                        if (res.data.success) {
+                            let button = document.getElementById(`unlist-button-${productId}`);
+                            let status = document.getElementById(`unlist-status-${productId}`);
+                            if (button.classList.contains('btn-outline-danger')) {
+                                status.classList.remove('badge-soft-success');
+                                status.classList.add('badge-soft-danger');
+                                status.innerHTML = 'Unlisted';
+                                button.classList.remove('btn-outline-danger');
+                                button.classList.add('btn-brand');
+                                button.innerHTML = '<i class="fas fa-check"></i> List';
+                            } else {
+                                status.classList.remove('badge-soft-danger');
+                                status.classList.add('badge-soft-success');
+                                status.innerHTML = 'Listed';
+                                button.classList.remove('btn-brand');
+                                button.classList.add('btn-outline-danger');
+                                button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.log("error in sending product id");
+                    });
+            }
+        </script>
+
+        <!-- <script>
+            function editProducts(button) {
+                // Retrieve product ID from data attributes
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+                const productId = button.getAttribute('data-id');
+
+                // Send the GET request to the backend using Axios
+                axios.get(`/admin/editproducts?id=${encodeURIComponent(productId)}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            const product = response.data.product
+                            renderEditPage(product);
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('There was an error making the request:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            }
+
+            function renderEditPage(product){
+                window.location.href = `/admin/editproducts?id=${product._id}&name=${encodeURIComponent(product.productName)}&price=${encodeURIComponent(product.price)}`;
+
+            }
+
+        </script> -->
+
+
+    </body>
+
+    </html>

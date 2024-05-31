@@ -1,0 +1,319 @@
+<%- include('../layout/adminhead.ejs') %>
+</head>
+
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <!-- main.ejs -->
+            <section class="content-main">
+                <div class="content-header col-6">
+                    <h2 class="content-title">Create New User</h2>
+                    <div>
+                        <a href="/admin/users" class="btn btn-primary btn-sm"><i
+                                class="material-icons md-arrow_back"></i> Back to Users List</a>
+                    </div>
+                </div>
+                <div class="card mb-4 col-6">
+                    <div class="card-body">
+                        <form action="/admin/createuser" method="post" id="createUser">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <div id="errorMessagesName" class="text-danger"></div>
+                                <input type="text" class="form-control rounded-pill shadow-sm" id="userName"
+                                    placeholder="Enter name" required value="kuttippa">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <div id="errorMessagesMail" class="text-danger"></div>
+                                <input type="email" class="form-control rounded-pill shadow-sm" id="userEmail"
+                                    placeholder="Enter email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <div id="errorMessagesPhone" class="text-danger"></div>
+                                <input type="tel" class="form-control rounded-pill shadow-sm" id="userPhone"
+                                    placeholder="Enter phone number" required value="0123456789">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div id="errorMessagesPassword" class="text-danger"></div>
+                                <input type="password" class="form-control rounded-pill shadow-sm" id="userPassword"
+                                    placeholder="Enter password" required value="kuttippa">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block rounded-pill shadow"
+                                onclick="userValidateForm()">Create
+                                User</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+        <script>
+            function userValidateForm() {
+                const username = document.getElementById('userName').value.trim();
+                const email = document.getElementById('userEmail').value.trim();
+                const phone = document.getElementById('userPhone').value.trim();
+                const password = document.getElementById('userPassword').value.trim();
+
+                // Clear previous error messages
+                document.getElementById('errorMessagesName').innerHTML = '';
+                document.getElementById('errorMessagesMail').innerHTML = '';
+                document.getElementById('errorMessagesPhone').innerHTML = '';
+                document.getElementById('errorMessagesPassword').innerHTML = '';
+
+                // Validate username
+                if (!validateName(username)) {
+                    return false;
+                }
+
+                // Validate email
+                if (email === '') {
+                    displayErrorMail('*Please enter your email');
+                    return false;
+                } else if (!isValidEmail(email)) {
+                    displayErrorMail('*Please enter a valid email address');
+                    return false;
+                }
+
+                // Validate phone
+                if (phone === '') {
+                    displayErrorPhone('*Please enter your phone number');
+                    return false;
+                } else if (!isValidPhoneNumber(phone)) {
+                    displayErrorPhone('*Please enter a valid phone number');
+                    return false;
+                }
+
+                // Validate password
+                if (password === '') {
+                    displayErrorPassword('*Please enter your password');
+                    return false;
+                } else if (password.length < 6) {
+                    displayErrorPassword('*Password must be at least 6 characters long');
+                    return false;
+                }
+
+                // All fields are valid
+                return true;
+            }
+
+            function validateName(username) {
+                const nameRegex = /^[a-zA-Z\s'-]{2,50}$/;
+
+                if (username === '') {
+                    displayErrorName('*Please enter your name');
+                    return false;
+                } else if (!nameRegex.test(username)) {
+                    displayErrorName('*Please enter a valid name');
+                    // (letters, spaces, hyphens, and apostrophes only)
+                    return false;
+                } else {
+                    // clearErrorName(); // Function to clear the error message
+                    return true;
+                }
+            }
+
+            // Function to check if email is valid
+            function isValidEmail(email) {
+                // Regular expression for validating email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // Function to check if phone number is valid
+            function isValidPhoneNumber(phone) {
+                // Regular expression for validating phone number format
+                const phoneRegex = /^\d{10}$/;
+                return phoneRegex.test(phone);
+            }
+
+            function displayErrorName(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesName');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorMail(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesMail');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorPhone(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesPhone');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorPassword(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesPassword');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+
+
+            document.getElementById('userName').addEventListener('input', userValidateForm);
+            document.getElementById('userEmail').addEventListener('input', userValidateForm);
+            document.getElementById('userPhone').addEventListener('input', userValidateForm);
+            document.getElementById('userPassword').addEventListener('input', userValidateForm);
+
+            document.getElementById('createUser').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                if (userValidateForm()) {
+
+                    console.log("validation success...")//! TO REMOVE
+
+                    const formData = {
+                        userName: document.getElementById('userName').value.trim(),
+                        userEmail: document.getElementById('userEmail').value.trim(),
+                        userPhone: document.getElementById('userPhone').value.trim(),
+                        userPassword: document.getElementById('userPassword').value.trim(),
+                    };
+
+                    // console.log(formData) //! TO REMOVE
+
+                    // Send form data to backend using Axios
+                    axios.post('/admin/createuser', formData)
+                        .then(response => {
+                            // Handle successful response from backend
+                            console.log('Response:', response.data);
+                            if (response.data.status == 'Email is already registered') {
+                                console.log("Email is already registered")
+                                displayErrorMail(response.data.status)
+                            } else if (response.data.status == 'success') {
+                                window.location.href = '/admin/users'
+
+                            }
+                        })
+                        .catch(error => {
+                            // Handle error
+                            console.error('Error:', error);
+                        });
+                    // this.submit(); // Submit the form if validation passes
+                }
+
+            });
+        </script>
+
+
+    </body>
+
+    </html>
