@@ -2163,3 +2163,58 @@ document.getElementById('adminLogin').addEventListener('submit', function (event
 
 
 //     </html>
+
+//! grid product model
+
+//  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
+// <div class="product">
+//     <span class="badges">
+//     <span class="sale">-10%</span>
+//     <span class="new">New</span>
+//     </span>
+//     <div class="thumb">
+//         <a href="single-product.html" class="image">
+//             <img src="assets/images/product-image/2.webp" alt="Product" />
+//             <img class="hover-image" src="assets/images/product-image/2.webp" alt="Product" />
+//         </a>
+//     </div>
+//     <div class="content">
+//         <span class="category"><a href="#">Accessories</a></span>
+//         <h5 class="title"><a href="single-product.html">Bluetooth Headphone
+//             </a>
+//         </h5>
+//         <span class="price">
+//         <span class="old">$48.50</span>
+//         <span class="new">$38.50</span>
+//         </span>
+//     </div>
+//     <div class="actions">
+//         <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
+//             class="pe-7s-shopbag"></i></button>
+//         <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
+//                 class="pe-7s-like"></i></button>
+//         <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></button>
+//         <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i
+//                 class="pe-7s-refresh-2"></i></button>
+//     </div>
+// </div>
+// </div> 
+
+var CartPlusMinus = $(".cart-plus-minus");
+    CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+    CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+    $(".qtybutton").on("click", function() {
+        var $button = $(this);
+        var oldValue = $button.parent().find("input").val();
+        if ($button.text() === "+") {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 1;
+            }
+        }
+        $button.parent().find("input").val(newVal);
+    });

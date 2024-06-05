@@ -1,5 +1,5 @@
 <%- include('../layout/adminhead.ejs') %>
-</head>
+    </head>
 
 
     <body class="dark">
@@ -151,14 +151,16 @@
                                             </a>
                                         </td>
                                         <td><span>
-                                                <%= product.price %>
+                                                ₹<%= product.price %>
                                             </span></td>
                                         <td>
                                             <% if (!product.isBlock) { %>
                                                 <span class="badge badge-pill badge-soft-success"
+                                                    style="height: 20px; width: 60px;"
                                                     id="unlist-status-<%= product.id %>">Listed</span>
                                                 <% } else { %>
-                                                    <span class="badge badge-pill badge-soft-danger"
+                                                    <span class="badge badge-pill badge-soft-danger text-center"
+                                                        style="height: 20px; width: 60px;"
                                                         id="unlist-status-<%= product.id %>">Unlisted</span>
                                                     <% } %>
                                         </td>
@@ -167,23 +169,25 @@
                                             </span></td>
                                         <td class="text-center">
                                             <% if (!product.isBlock) { %>
-                                                <button class="btn btn-outline-danger btn-sm"
+                                                <button class="btn btn-outline-danger btn-sm justify-content-center"
+                                                    style="height: 31px; width: 80px;"
                                                     onclick="unlistProducts('<%= product.id %>')"
                                                     id="unlist-button-<%= product.id %>">
                                                     <i class="fas fa-ban"></i> Unlist
                                                 </button>
                                                 <% } else { %>
-                                                    <button class="btn btn-brand btn-sm"
+                                                    <button class="btn btn-brand btn-sm justify-content-center"
+                                                        style="height: 31px; width: 80px;"
                                                         onclick="unlistProducts('<%= product.id %>')"
                                                         id="unlist-button-<%= product.id %>">
-                                                        <i class="fas fa-check"></i> List
+                                                        <i class="fas fa-check text-center"></i> List
                                                     </button>
                                                     <% } %>
-                                                        <a href="/admin/editproducts?id=<%= product.id %>" ><button class="btn btn-brand btn-sm ms-2"
-                                                            data-id="<%= product.id %>"
-                                                            >
-                                                            <i class="fas fa-edit"></i> Edit info
-                                                        </button></a>
+                                                        <a href="/admin/editproducts?id=<%= product.id %>"><button
+                                                                class="btn btn-brand btn-sm ms-2"
+                                                                data-id="<%= product.id %>">
+                                                                <i class="fas fa-edit"></i> Edit info
+                                                            </button></a>
                                         </td>
                                     </tr>
                                     <% }) %>

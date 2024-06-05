@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     "use strict";
 
 
@@ -13,7 +13,7 @@
             Background Image             
     -------------------------------------------*/
 
-    $('[data-bg-image]').each(function() {
+    $('[data-bg-image]').each(function () {
         var $this = $(this),
             $image = $this.data('bg-image');
         $this.css('background-image', 'url(' + $image + ')');
@@ -22,7 +22,7 @@
     /*---------------------------
        Menu Fixed On Scroll Active
     ------------------------------ */
-    $(window).on("scroll", function(e) {
+    $(window).on("scroll", function (e) {
         var window_top = $(window).scrollTop() + 1;
         if (window_top > 250) {
             $(".sticky-nav").addClass("menu_fixed animated fadeInDown");
@@ -37,23 +37,23 @@
 
     // Add slideDown animation to Bootstrap dropdown when expanding.
 
-    $('.dropdown').on('show.bs.dropdown', function() {
+    $('.dropdown').on('show.bs.dropdown', function () {
         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
     });
     // Add slideUp animation to Bootstrap dropdown when collapsing.
-    $('.dropdown').on('hide.bs.dropdown', function() {
+    $('.dropdown').on('hide.bs.dropdown', function () {
         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
     });
 
     /*---------------------------------
         Off Canvas Function
     -----------------------------------*/
-    (function() {
+    (function () {
         var $offCanvasToggle = $(".offcanvas-toggle"),
             $offCanvas = $(".offcanvas"),
             $offCanvasOverlay = $(".offcanvas-overlay"),
             $mobileMenuToggle = $(".mobile-menu-toggle");
-        $offCanvasToggle.on("click", function(e) {
+        $offCanvasToggle.on("click", function (e) {
             e.preventDefault();
             var $this = $(this),
                 $target = $this.attr("href");
@@ -64,7 +64,7 @@
                 $this.addClass("close");
             }
         });
-        $(".offcanvas-close, .offcanvas-overlay").on("click", function(e) {
+        $(".offcanvas-close, .offcanvas-overlay").on("click", function (e) {
             e.preventDefault();
             $body.removeClass("offcanvas-open");
             $offCanvas.removeClass("offcanvas-open");
@@ -84,7 +84,7 @@
         $offCanvasNavSubMenu.parent().prepend('<span class="menu-expand"></span>');
 
         /*Category Sub Menu Toggle*/
-        $offCanvasNav.on("click", "li a, .menu-expand", function(e) {
+        $offCanvasNav.on("click", "li a, .menu-expand", function (e) {
             var $this = $(this);
             if ($this.attr("href") === "#" || $this.hasClass("menu-expand")) {
                 e.preventDefault();
@@ -287,13 +287,13 @@
         freeMode: true,
         watchSlidesVisibility: true,
         watchSlidesProgress: true,
-        centerMood:true,
+        centerMood: true,
     });
     var galleryTop = new Swiper('.gallery-top', {
         spaceBetween: 0,
         loop: true,
         slidesPerView: 1,
-        centerMood:true,
+        centerMood: true,
         thumbs: {
             swiper: galleryThumb
         }
@@ -375,25 +375,53 @@
     /*----------------------------
         Cart Plus Minus Button
     ------------------------------ */
+
+    var paragraph = document.getElementById("numericParagraph");
+    var numericString = paragraph.textContent;
+    var numericValue = parseFloat(numericString);
+    
+    const errorMessageInStock = document.getElementById('errorMessageInStock')
+
     var CartPlusMinus = $(".cart-plus-minus");
     CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
     CartPlusMinus.append('<div class="inc qtybutton">+</div>');
-    $(".qtybutton").on("click", function() {
-        var $button = $(this);
-        var oldValue = $button.parent().find("input").val();
-        if ($button.text() === "+") {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 1) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 1;
-            }
-        }
-        $button.parent().find("input").val(newVal);
-    });
 
+    $(".qtybutton").on("click", function () {
+        var $button = $(this);
+        var inputField = $button.parent().find("input");
+        var oldValue = parseFloat(inputField.val());
+        var maxQuantity = 5 
+        var stockQuantity = numericValue; 
+
+        // Calculate the new value based on the button clicked
+        var newVal;
+        if ($button.text() === "+") {
+            // Limit the increment to a maximum of 5 and available stock
+            newVal = Math.min(oldValue + 1, 5, stockQuantity);
+        } else {
+            // Don't allow decrementing below 1
+            newVal = Math.max(oldValue - 1, 1);
+        }
+
+        // if(){
+        //     errorMessageInStock.style.display = "block"
+        // }else{
+        //     errorMessageInStock.style.display = "none"
+        // }
+
+        // Check if the new value exceeds the maximum quantity
+        if (newVal >= maxQuantity ) {
+            errorMessageInStock.style.display = "block"
+            // return;
+        }else if(newVal >= stockQuantity){
+            errorMessageInStock.style.display = "block"
+        }else{
+            errorMessageInStock.style.display = "none"
+        }
+
+        // Update the input field with the new value
+        inputField.val(newVal);
+    });
 
     /*------------------------------
             Single Product Slider
@@ -435,11 +463,11 @@
     /*-------------------------------
         Create an account toggle
     ---------------------------------*/
-    $(".checkout-toggle2").on("click", function() {
+    $(".checkout-toggle2").on("click", function () {
         $(".open-toggle2").slideToggle(1000);
     });
 
-    $(".checkout-toggle").on("click", function() {
+    $(".checkout-toggle").on("click", function () {
         $(".open-toggle").slideToggle(1000);
     });
 
@@ -456,10 +484,10 @@
     /*---------------------
         Countdown
     --------------------- */
-    $("[data-countdown]").each(function() {
+    $("[data-countdown]").each(function () {
         var $this = $(this),
             finalDate = $(this).data("countdown");
-        $this.countdown(finalDate, function(event) {
+        $this.countdown(finalDate, function (event) {
             $this.html(event.strftime('<span class="cdown hour"><span class="cdown-1">%-H</span><p>Hrs</p></span> <span class="cdown minutes"><span class="cdown-1">%M</span> <p>Min</p></span> <span class="cdown second"><span class="cdown-1"> %S</span> <p>Sec</p></span>'));
         });
     });

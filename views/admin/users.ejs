@@ -216,14 +216,16 @@
                                                 <!-- <a href="#" class="btn btn-sm btn-block btn-danger rounded font-sm mt-15">Block</a> -->
                                                 <% if (!user.isBlock) { %>
                                                     <button id="block-btn-<%= user.id %>"
-                                                        class="btn btn-sm btn-outline-danger rounded font-sm mt-15 block-btn"
+                                                        style="height: 35px; width: 80px;"
+                                                        class="btn btn-sm btn-outline-danger rounded font-sm mt-15 block-btn justify-content-center"
                                                         data-id="<%= user.id %>"
                                                         onclick="blockUser('<%= user.id %>')">
                                                         <i class="material-icons md-block"></i> Block
                                                     </button> 
                                                 <% } else { %>
                                                     <button id="block-btn-<%= user.id %>"
-                                                        class="btn btn-sm btn-brand rounded font-sm mt-15 unblock-btn"
+                                                        class="btn btn-sm btn-brand rounded font-sm mt-15 unblock-btn justify-content-center"
+                                                        style="height: 35px; width: 80px;"
                                                         data-id="<%= user.id %>"
                                                         onclick="blockUser('<%= user.id %>')">
                                                         <i class="material-icons md-check_circle"></i> Unblock

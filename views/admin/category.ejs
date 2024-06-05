@@ -149,21 +149,25 @@
                                                     <td>
                                                         <% if (!category.isBlock) { %>
                                                             <span class="badge badge-pill badge-soft-success"
+                                                                style="height: 20px; width: 60px;"
                                                                 id="unlist-status-<%= category.id %>">Listed</span>
                                                             <% } else { %>
                                                                 <span class="badge badge-pill badge-soft-danger"
+                                                                    style="height: 20px; width: 60px;"
                                                                     id="unlist-status-<%= category.id %>">Unlisted</span>
                                                                 <% } %>
                                                     </td>
                                                     <td class="text-center">
                                                         <% if (!category.isBlock) { %>
-                                                            <button class="btn btn-outline-danger btn-sm"
+                                                            <button class="btn btn-outline-danger btn-sm justify-content-center"
+                                                                style="height: 31px; width: 80px;"
                                                                 onclick="unlistCategory('<%= category.id %>')"
                                                                 id="unlist-button-<%= category.id %>">
                                                                 <i class="fas fa-ban"></i> Unlist
                                                             </button>
                                                             <% } else { %>
-                                                                <button class="btn btn-brand btn-sm"
+                                                                <button class="btn btn-brand btn-sm justify-content-center"
+                                                                    style="height: 31px; width: 80px;"
                                                                     onclick="unlistCategory('<%= category.id %>')"
                                                                     id="unlist-button-<%= category.id %>">
                                                                     <i class="fas fa-check"></i> List
@@ -356,8 +360,6 @@
 
             function editCategory(button) {
 
-                
-
                 // Get the data attributes from the button
                 categoryIdToUpdate = button.getAttribute('data-id');
                 const categoryName = button.getAttribute('data-name');
@@ -369,6 +371,7 @@
 
                 document.getElementById('createCategoryButton').hidden = true;
                 document.getElementById('updateCategoryButton').hidden = false;
+
             }
 
             function updateCategory() {
@@ -386,7 +389,7 @@
                     categoryDescription: categoryDescription
                 };
 
-                // console.log(`Updating category ${categoryIdToUpdate} with data:`, categoryFormData);
+                console.log(`Updating category ${categoryIdToUpdate} with data:`, categoryFormData);
 
                 axios.post('/admin/updatecategory', categoryFormData)
                     .then(res => {

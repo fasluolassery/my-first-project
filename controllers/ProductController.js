@@ -1,6 +1,8 @@
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel')
 
+
+//!Admin
 const loadProducts = async (req, res) => {
     try {
         const findAllProducts = await Product.find()
@@ -43,6 +45,11 @@ const createProducts = async (req, res) => {
     try {
         const productDetails = req.body;
         // console.log(productDetails) //! to remove
+
+        //! to do 
+        const findCategory = await Category.find({categoryName: productDetails.category})
+        // console.log(findCategory) //! to remove
+
         const existingProduct = await Product.findOne({ productName: productDetails.title })
         if (existingProduct) {
             res.send({success: 0})
@@ -157,11 +164,15 @@ const editProducts = async (req, res) => {
     }
 };
 
+
+//!User
 const loadProductsUser = async (req, res) => {
     try {
-        const findAllProducts = await Product.find()
-        // console.log(findAllProducts)
-        res.render('user/products', { products: findAllProducts })
+        const findAllProducts = await Product.find({isBlock: false})
+        const findAllCategories = await Category.find({isBlock: false})
+
+        console.log(findAllProducts)
+        res.render('user/products', { products: findAllProducts, categories: findAllCategories})
     } catch (err) {
         console.log("Error loading products page in user side", err.message)
     }
@@ -169,14 +180,31 @@ const loadProductsUser = async (req, res) => {
 
 const loadSingleProductUser = async (req, res) => {
     try {
-        const productId = req.query.id
-        const findProduct = await Product.findOne({ _id: productId })
-        // console.log(findProduct)
-        res.render('user/productview', { product: findProduct })
+        const productId = req.query.id;
+        const findProduct = await Product.findOne({ _id: productId });
+
+        const findRelatedProducts = await Product.find({category: findProduct.category})
+        // console.log(findRelatedProducts) //!to remove
+
+        if (!findProduct) {
+            throw new Error('Product not found');
+        }
+
+        // Create breadcrumb data based on the product's category
+        const breadcrumbs = [
+            { name: 'Home', url: '/' },
+            { name: findProduct.category, url: `/category/${findProduct.category.toLowerCase()}` },
+            { name: findProduct.productName, url: `/product?id=${findProduct._id}` }
+        ];
+
+        // Pass breadcrumbs to the template
+        res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts });
     } catch (err) {
-        console.log("Error loading single products", err.message)
+        console.log("Error loading single product", err.message);
+        res.status(500).send("Internal Server Error");
     }
-}
+};
+
 
 
 module.exports = {

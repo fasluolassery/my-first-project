@@ -45,7 +45,7 @@
                             <span class="text">Products</span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a class="menu-link" href="/admin/category">
                             <i class="icon material-icons md-category"></i>
                             <span class="text">Categories</span>
@@ -164,27 +164,26 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
-                                            <% if(categories.length> 0) {%>
+                                            <% if(categories.length> 0) { %>
                                                 <% categories.forEach(category=> { %>
                                                     <label class="mb-2 form-check form-check-inline"
                                                         style="width: 45%;">
-                                                        <input class="form-check-input" checked name="mycategory"
-                                                            type="radio" value="Clothes">
+                                                        <input class="form-check-input" name="mycategory" type="radio"
+                                                            value="<%= category.categoryName %>" checked>
                                                         <span class="form-check-label">
                                                             <%= category.categoryName %>
                                                         </span>
                                                     </label>
                                                     <% }) %>
-                                                        <% }else{ %>
+                                                        <% } else { %>
                                                             <label class="mb-2" style="width: 45%;">
-
                                                                 <span class="form-check-label text-danger">*No
                                                                     categories found</span>
                                                             </label>
                                                             <% } %>
-
                                         </div>
                                     </div>
+
                                 </div>
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
@@ -291,7 +290,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </body>
     <script>
-       
+
 
 
     </script>
@@ -314,6 +313,8 @@
             document.getElementById('errorMessagesImage').innerHTML = '';
 
 
+            const allowedCharacters = /^[a-zA-Z0-9\s]+$/; // Regular expression to allow alphanumeric characters and spaces
+
             //product name validation
             if (title === '') {
                 displayErrorName('*Product name is required.')
@@ -324,6 +325,9 @@
             } else if (title.length > 30) {
                 displayErrorName(`*Product name must be less than 30 characters long.`);
                 return false;
+            } else if (!allowedCharacters.test(title)) {
+                displayErrorName("*Product name can only contain letters, numbers, and spaces.");
+                return false
             }
 
             //product description validation
@@ -351,13 +355,13 @@
             }
 
             //product quantity validation
-            var minQuantity = 1;
+            var minQuantity = 0;
             var maxQuantity = 100
 
             if (stock == '') {
                 displayErrorStock('*Product quantity is required.')
                 return false
-            } else if (isNaN(stock) || stock <= 0) {
+            } else if (isNaN(stock) || stock < 0) {
                 displayErrorStock('*Product quantity must be a positive integer.');
                 return false;
             } else if (stock < minQuantity) {

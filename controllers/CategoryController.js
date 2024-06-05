@@ -73,12 +73,12 @@ const updateCategory = async (req, res) => {
 
         const existingCategory = await Category.findOne({ categoryName: updateCategoryDetails.categoryName.toLowerCase() })
 
-        // if(existingCategory){
-        //     if (updateCategoryDetails.categoryName.toLowerCase() == existingCategory.categoryName.toLowerCase()) {
-        //         res.send({ next: 100 })
-        //         return console.log("Category already there")
-        //     }
-        // }
+        if(existingCategory){
+            if (updateCategoryDetails.categoryName.toLowerCase() == existingCategory.categoryName.toLowerCase()) {
+                res.send({ next: 100 })
+                return console.log("Category already there")
+            }
+        }
 
         if (!findCategory) {
             return console.log("category not found")

@@ -1,6 +1,31 @@
 <!-- Mirrored from htmldemo.net/hmart/hmart/index-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 09 May 2024 13:11:55 GMT -->
 <%- include('../layout/userMeta.ejs') %>
+
+<style>
+    .amount {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+
+        /* category old new new-price*/
+    .category {
+        font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+    }
+
+    .old {
+        font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+    }
+
+    .new {
+        font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+    }
+
+    .new-price {
+        font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+    }
+</style>
+
 </head>
+
 
     <body>
         <div class="main-wrapper">
@@ -23,7 +48,7 @@
                                                     For Smart Device </h2>
                                                 <span class="price">
                                                     <span class="mini-title">Only</span>
-                                                    <span class="amount">$24.00</span>
+                                                    <span class="amount">₹7999.00</span>
                                                 </span>
                                                 <a href="/products"
                                                     class="btn btn-primary text-capitalize">Shop All Devices</a>
@@ -52,7 +77,7 @@
                                                     For Smart Device </h2>
                                                 <span class="price">
                                                     <span class="mini-title">Only</span>
-                                                    <span class="amount">$24.00</span>
+                                                    <span class="amount">₹7999.00</span>
                                                 </span>
                                                 <a href="/products"
                                                     class="btn btn-primary text-capitalize">Shop All Devices</a>
@@ -89,7 +114,7 @@
                                     <img src="assets/images/banner/6.webp" alt="">
                                     <div class="banner-content nth-child-3">
                                         <h3 class="title">Speaker</h3>
-                                        <span class="category">From $69.00</span>
+                                        <span class="category">From ₹5999.00</span>
                                         <a href="/products" class="shop-link">Shop Now <i
                                                 class="fa fa-arrow-right" aria-hidden="true"></i></a>
                                     </div>
@@ -100,7 +125,7 @@
                                     <img src="assets/images/banner/7.webp" alt="">
                                     <div class="banner-content nth-child-2">
                                         <h3 class="title">Smartphone</h3>
-                                        <span class="category">From $95.00</span>
+                                        <span class="category">From ₹7999.00</span>
                                         <a href="/products" class="shop-link">Shop Now <i
                                                 class="fa fa-arrow-right" aria-hidden="true"></i></a>
                                     </div>
@@ -153,7 +178,7 @@
                                                             <%= product.productName %>
                                                         </a></h5>
                                                     <span class="price">
-                                                        <span class="new">$<%= product.price.toFixed(2) %></span>
+                                                        <span class="new">₹<%= product.price.toFixed(2) %></span>
                                                     </span>
                                                 </div>
                                                 <div class="actions">
@@ -195,7 +220,7 @@
                                     <div class="banner-content nth-child-3">
                                         <h3 class="title">Smart Watch For <br>
                                             Your Hand</h3>
-                                        <span class="category">From $69.00</span>
+                                        <span class="category">From ₹5999.00</span>
                                         <a href="shop-left-sidebar.html" class="shop-link">Shop Now <i
                                                 class="fa fa-arrow-right" aria-hidden="true"></i></a>
                                     </div>
@@ -203,11 +228,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="single-banner">
-                                    <img src="assets/images/banner/9.webp" alt="">
+                                    <img src="assets/images/banner/8.webp" alt="">
                                     <div class="banner-content nth-child-2">
                                         <h3 class="title">Smart Watch For <br>
                                             Your Hand</h3>
-                                        <span class="category">From $95.00</span>
+                                        <span class="category">From ₹5999.00</span>
                                         <a href="shop-left-sidebar.html" class="shop-link">Shop Now <i
                                                 class="fa fa-arrow-right" aria-hidden="true"></i></a>
                                     </div>
@@ -244,8 +269,8 @@
                                         <div class="prize-content">
                                             <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
                                             <span class="price">
-                                                <span class="old">$48.50</span>
-                                                <span class="new">$38.50</span>
+                                                <span class="old">₹11500.00</span>
+                                                <span class="new">₹5500.00</span>
                                             </span>
                                         </div>
                                         <div class="product-feature">
@@ -272,8 +297,8 @@
                                         <div class="prize-content">
                                             <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
                                             <span class="price">
-                                                <span class="old">$48.50</span>
-                                                <span class="new">$38.50</span>
+                                                <span class="old">₹15000.00</span>
+                                                <span class="new">₹8500.00</span>
                                             </span>
                                         </div>
                                         <div class="product-feature">
@@ -300,8 +325,8 @@
                                         <div class="prize-content">
                                             <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
                                             <span class="price">
-                                                <span class="old">$48.50</span>
-                                                <span class="new">$38.50</span>
+                                                <span class="old">₹15000.00</span>
+                                                <span class="new">₹8500.00</span>
                                             </span>
                                         </div>
                                         <div class="product-feature">
@@ -328,8 +353,8 @@
                                         <div class="prize-content">
                                             <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
                                             <span class="price">
-                                                <span class="old">$48.50</span>
-                                                <span class="new">$38.50</span>
+                                                <span class="old">₹15000.50</span>
+                                                <span class="new">₹8500.50</span>
                                             </span>
                                         </div>
                                         <div class="product-feature">
@@ -358,7 +383,7 @@
                         <div class="row justify-content-center align-items-center h-100">
                             <div class="col-12 text-center">
                                 <h2 class="title"> <span>Smart Fashion</span> With Smart Devices </h2>
-                                <a href="shop-left-sidebar.html" class="btn btn-primary text-capitalize m-auto">Shop All
+                                <a href="/products" class="btn btn-primary text-capitalize m-auto">Shop All
                                     Devices</a>
                             </div>
                         </div>
@@ -444,7 +469,7 @@
                                     <h2>Modern Smart Phone</h2>
                                     <div class="pricing-meta">
                                         <ul class="d-flex">
-                                            <li class="new-price">$20.90</li>
+                                            <li class="new-price">₹18000</li>
                                         </ul>
                                     </div>
                                     <div class="pro-details-rating-wrap">
