@@ -61,8 +61,8 @@ const userLoginDetails = async (req, res) => {
 
         const { loginEmail, loginPassword } = req.body
 
-        console.log(loginEmail) //! to remove
-        console.log(loginPassword) //! to remove
+        // console.log(loginEmail) //! to remove
+        // console.log(loginPassword) //! to remove
 
         const checkUser = await User.findOne({email:loginEmail})
 
@@ -71,7 +71,7 @@ const userLoginDetails = async (req, res) => {
             return console.log("user not found")
         }
 
-        console.log(checkUser.password) //! to remove
+        // console.log(checkUser.password) //! to remove
 
         const passMatch = await bcrypt.compare(loginPassword, checkUser.password)
 
@@ -79,7 +79,7 @@ const userLoginDetails = async (req, res) => {
             res.send( { next: 100} )
             return console.log("Incorrect password")
         }
-        console.log(checkUser.isBlock)
+        // console.log(checkUser.isBlock)
         if(checkUser.isBlock){
             res.send( {next: 200})
             return console.log("your account has been temporarily blocked")

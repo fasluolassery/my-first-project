@@ -73,7 +73,7 @@
                                 <div class="swiper-container zoom-top">
                                     <div class="swiper-wrapper">
                                         <% product.imagePaths.forEach((imagePath, index)=> { %>
-                                            <div class="swiper-slide" style="width: 570px; height: 650px;">
+                                            <div class="swiper-slide">
 
                                                 <img class="img-responsive m-auto zoom" src="<%= imagePath %>"
                                                     alt="<%= product.productName %> Image <%= index + 1 %>">
@@ -377,7 +377,7 @@
                                                 </span> -->
                                                         <div class="thumb">
                                                             <a href="productview?id=<%=rp.id %>" class="image">
-                                                                <img src="<%= rp.imagePaths[0] %>" alt="Product" style="width: 295px; height: 300px;"/>
+                                                                <img src="<%= rp.imagePaths[0] %>" alt="Product"/>
                                                                 <img class="hover-image" src="<%= rp.imagePaths[1] %>"
                                                                     alt="Product" />
                                                             </a>

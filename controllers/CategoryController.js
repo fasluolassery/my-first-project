@@ -12,7 +12,7 @@ const loadCategory = async (req, res) => {
 const getCategoryDetails = async (req, res) => {
     try {
         const categoryDetails = req.body
-        console.log(categoryDetails)
+        // console.log(categoryDetails) //!to remove
         const existingCategory = await Category.findOne({ categoryName: categoryDetails.categoryName.toLowerCase() })
 
         if(existingCategory){
@@ -67,7 +67,7 @@ const unlistCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
     try {
         const updateCategoryDetails = req.body
-        console.log(updateCategoryDetails) //! to remove
+        // console.log(updateCategoryDetails) //! to remove
 
         const findCategory = await Category.findOne({ _id: updateCategoryDetails.categoryId })
 

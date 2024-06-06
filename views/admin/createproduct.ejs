@@ -2,7 +2,23 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet" />
 
+    <style>
+        .cropper-container {
+            width: 100%;
+            max-height: 400px;
+            /* margin-bottom: 1px; */
+        }
+
+        .modal-content {
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #363636;
+        }
+    </style>
 
     </head>
 
@@ -209,27 +225,30 @@
                                     <div class="col-md-3">
                                         <h6>5. Media</h6>
                                     </div>
+                                    
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Images</label>
                                             <div id="errorMessagesImage" class="text-danger"></div>
                                             <input class="form-control" type="file" id="image1" name="images"
-                                                onchange="previewImage(event, 'preview1')" required>
+                                                onchange="triggerCropModal(event, 'preview1')" required>
                                             <img id="preview1"
                                                 style="width: 100px; height: 100px; margin-top: 10px; display: none;"
-                                                alt="Image Preview" onclick="startCrop('preview1')" />
+                                                alt="Image Preview" onclick="startCrop('preview1')" src=""/>
                                             <input class="form-control" type="file" id="image2" name="images"
-                                                onchange="previewImage(event, 'preview2')">
+                                                onchange="triggerCropModal(event, 'preview2')">
                                             <img id="preview2"
                                                 style="width: 100px; height: 100px; margin-top: 10px; display: none;"
-                                                alt="Image Preview" />
+                                                alt="Image Preview" src="" />
                                             <input class="form-control" type="file" id="image3" name="images"
-                                                onchange="previewImage(event, 'preview3')">
+                                                onchange="triggerCropModal(event, 'preview3')">
                                             <img id="preview3"
                                                 style="width: 100px; height: 100px; margin-top: 10px; display: none;"
-                                                alt="Image Preview" />
+                                                alt="Image Preview" src=""/>
                                         </div>
                                     </div>
+
+
                                 </div>
 
 
@@ -239,10 +258,8 @@
                     </div>
                 </div>
             </section>
-            <div id="cropModal" style="display:none;">
-                <img id="cropImage" style="max-width: 100%;">
-                <button id="cropButton">Crop</button>
-            </div>
+
+            
 
             <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">
@@ -258,6 +275,18 @@
                     </div>
                 </div>
             </footer>
+            
+            <!-- Modal for cropping -->
+            <div id="cropperModal" class="modal">
+                <div class="modal-content">
+                    <div class="cropper-container">
+                        <img id="cropperImage" src="" alt="Image for cropping" />
+                    </div>
+                    <button class="btn-brand btn-sm justify-content-center btn mt-1" onclick="cropImage()">Crop</button>
+                    <button class="btn-outline-danger btn-sm justify-content-center btn mt-1" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+
         </main>
         <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
@@ -271,12 +300,76 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/cropperjs"></script>
+
     </body>
+
+
     <script>
+    let cropper;
+    let currentInput;
+    let croppedFiles = new Map(); // To store the cropped files
+
+    function triggerCropModal(event, previewId) {
+        const input = event.target;
+        const file = input.files[0];
+        currentInput = input; // Save the reference to the current input
+        currentPreviewId = previewId; // Save the reference to the current preview ID
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const cropperImage = document.getElementById('cropperImage');
+                cropperImage.src = e.target.result;
+                document.getElementById('cropperModal').style.display = 'block';
+                if (cropper) {
+                    cropper.destroy();
+                }
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 3 / 4, // Portrait aspect ratio
+                    viewMode: 1,
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function cropImage(event) {
+    if (cropper) {
+        cropper.getCroppedCanvas({
+            width: 300, // desired width
+            height: 400, // desired height
+        }).toBlob(function(blob) {
+            const croppedImageSrc = URL.createObjectURL(blob);
+            const imagePreview = document.getElementById(currentPreviewId);
+            if (imagePreview && imagePreview.tagName === 'IMG') {
+                imagePreview.src = croppedImageSrc; // Update the image src with the cropped image
+            }
+            // Call the previewImage function to update the preview
+            previewImage({ target: { files: [blob] } }, currentPreviewId);
+            
+            // Replace the file input with the cropped image blob
+            const dataTransfer = new DataTransfer();
+            const file = new File([blob], `croppedImage${Date.now()}.jpg`, { type: "image/jpeg" });
+            dataTransfer.items.add(file);
+            currentInput.files = dataTransfer.files;
+            // Store the cropped file in the Map
+            croppedFiles.set(currentInput.name, file);
+            closeModal();
+        }, 'image/jpeg');
+    }
+}
 
 
 
-    </script>
+    function closeModal() {
+        document.getElementById('cropperModal').style.display = 'none';
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+    }
+</script>
+
 
     <script>
 
@@ -508,16 +601,20 @@
 
         }
     </script>
+
     <script>
-        function previewImage(event, previewId) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                const output = document.getElementById(previewId);
-                output.src = reader.result;
-                output.style.display = 'inline-block'; // Show the preview image after uploading
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        }
+       function previewImage(event, previewId) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const output = document.getElementById(previewId);
+        console.log("Reader result:", reader.result);
+        console.log("Preview element:", output);
+        output.src = reader.result;
+        output.style.display = 'inline-block'; // Show the preview image after uploading
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+
     </script>
 
 

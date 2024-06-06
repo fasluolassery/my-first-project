@@ -54,7 +54,7 @@ const loadVerifyOtp = async (req, res) => {
         
 
         const timeToSend = otpSaving.exprAt.getTime()
-        console.log(timeToSend) //! to remove
+        // console.log(timeToSend) //! to remove
 
         res.render('user/otppage', {timeToSend,ttlValue})
         

@@ -29,7 +29,7 @@ const loadEditProduct = async (req, res) => {
         const findProduct = await Product.findOne({ _id: productId })
         const findAllCategories = await Category.find()
 
-        // console.log(findProduct)
+        // console.log(findProduct) //! to remove
 
         if (!findProduct) {
             return console.log("there is no product")
@@ -171,7 +171,7 @@ const loadProductsUser = async (req, res) => {
         const findAllProducts = await Product.find({isBlock: false})
         const findAllCategories = await Category.find({isBlock: false})
 
-        console.log(findAllProducts)
+        // console.log(findAllProducts)
         res.render('user/products', { products: findAllProducts, categories: findAllCategories})
     } catch (err) {
         console.log("Error loading products page in user side", err.message)

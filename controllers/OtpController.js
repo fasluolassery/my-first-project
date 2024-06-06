@@ -8,8 +8,8 @@ const userVerifyOtp = async (req, res) => {
         const realOtp = req.session.userOtp
         const userTypedOtp = req.body.otp
 
-        console.log(userTypedOtp) //! to remove
-        console.log(realOtp) //! to remove
+        // console.log(userTypedOtp) //! to remove
+        // console.log(realOtp) //! to remove
 
         if (userTypedOtp === realOtp) {
             const otpVerifyUser = req.session.user
