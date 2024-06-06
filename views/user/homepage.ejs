@@ -156,7 +156,7 @@
                                     <% products.forEach(product=> { %>
                                         <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                             <!-- Single Product -->
-                                            <div class="product" style="width: 270px; height: 425px;">
+                                            <div class="product">
                                                 <span class="badges">
                                                     <% if (product.isNew) { %>
                                                         <span class="new">New</span>
@@ -165,13 +165,14 @@
                                                 <div class="thumb">
                                                     <a href="productview?id=<%= product.id %>" class="image">
                                                         <img src="<%= product.imagePaths[0] %>"
-                                                            alt="<%= product.productName %>" height="300px" width="255px"/>
+                                                            style="width: 295px; height: 300px;"
+                                                            alt="<%= product.productName %>">
                                                         <img class="hover-image" src="<%= product.imagePaths[0] %>"
                                                             alt="<%= product.productName %>" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
-                                                    <span class="category"><a href="#">
+                                                    <span class="category mt-3"><a href="#">
                                                             <%= product.category %>
                                                         </a></span>
                                                     <h5 class="title"><a href="productview?id=<%= product.id %>">

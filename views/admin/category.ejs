@@ -1,5 +1,5 @@
 <%- include('../layout/adminhead.ejs') %>
-</head>
+    </head>
 
 
     <body class="dark">
@@ -119,10 +119,14 @@
                                     </div>
                                     <div class="d-grid">
                                         <div id="errorMessages" class="text-danger"></div>
-                                        <button type="button" class="btn btn-primary" id="createCategoryButton"
-                                            onclick="createCategory()">Create category</button>
-                                        <button type="button" class="btn btn-primary" id="updateCategoryButton" hidden
-                                            onclick="updateCategory()">Update category</button>
+                                        <button type="button" class="btn btn-primary justify-content-center"
+                                            id="createCategoryButton" onclick="createCategory()">Create
+                                            category</button>
+                                        <button type="button" class="btn btn-primary justify-content-center"
+                                            id="updateCategoryButton" hidden onclick="updateCategory()">Update
+                                            category</button>
+                                        <button type="button" class="btn btn-outline-danger mt-2 justify-content-center" hidden
+                                            id="cancelUpdateButton" onclick="">Cancel</button>
                                     </div>
                                 </form>
                             </div>
@@ -143,9 +147,23 @@
                                                     <td><b>
                                                             <%= category.categoryName %>
                                                         </b></td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <%= category.description %>
+                                                    </td> -->
+
+                                                    <td>
+                                                        <!-- Toggle button -->
+                                                        <button class="btn btn-secondary justify-content-center" style="height: 31px; width: 80px;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                            Description
+                                                        </button>
+                                                        <!-- Collapsible content -->
+                                                        <div class="collapse" id="collapseExample">
+                                                            <div class="mt-2">
+                                                                <%= category.description %>
+                                                            </div>
+                                                        </div>
                                                     </td>
+
                                                     <td>
                                                         <% if (!category.isBlock) { %>
                                                             <span class="badge badge-pill badge-soft-success"
@@ -159,14 +177,16 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <% if (!category.isBlock) { %>
-                                                            <button class="btn btn-outline-danger btn-sm justify-content-center"
+                                                            <button
+                                                                class="btn btn-outline-danger btn-sm justify-content-center"
                                                                 style="height: 31px; width: 80px;"
                                                                 onclick="unlistCategory('<%= category.id %>')"
                                                                 id="unlist-button-<%= category.id %>">
                                                                 <i class="fas fa-ban"></i> Unlist
                                                             </button>
                                                             <% } else { %>
-                                                                <button class="btn btn-brand btn-sm justify-content-center"
+                                                                <button
+                                                                    class="btn btn-brand btn-sm justify-content-center"
                                                                     style="height: 31px; width: 80px;"
                                                                     onclick="unlistCategory('<%= category.id %>')"
                                                                     id="unlist-button-<%= category.id %>">
@@ -253,33 +273,33 @@
                     displayErrorName("*Enter category name")
                     return false;
                 }
-                
+
                 const minLength = 3; // Minimum length of category name
                 const maxLength = 50; // Maximum length of category name
                 const allowedCharacters = /^[a-zA-Z0-9\s]+$/; // Regular expression to allow alphanumeric characters and spaces
 
                 // Check if category name is present and within length limits
                 if (!categoryName || categoryName.length < minLength || categoryName.length > maxLength) {
-                    displayErrorName("*Category name must be between " + minLength + " and " + maxLength + " characters.") 
+                    displayErrorName("*Category name must be between " + minLength + " and " + maxLength + " characters.")
                     return false
                 }
-                
+
                 // Check if category name contains only allowed characters
                 if (!allowedCharacters.test(categoryName)) {
-                    displayErrorName( "*Category name can only contain letters, numbers, and spaces.");
+                    displayErrorName("*Category name can only contain letters, numbers, and spaces.");
                     return false
                 }
-                
+
                 if (!categoryDescription) {
                     displayErrorDescription("*Enter discription")
                     return false;
                 }
 
                 if (!allowedCharacters.test(categoryDescription)) {
-                    displayErrorDescription( "*Category name can only contain letters, numbers, and spaces.");
+                    displayErrorDescription("*Category name can only contain letters, numbers, and spaces.");
                     return false
                 }
-                
+
                 return true;
             }
 
@@ -360,6 +380,9 @@
 
             function editCategory(button) {
 
+                const cancel = document.getElementById('cancelUpdateButton')
+                cancel.removeAttribute('hidden');
+
                 // Get the data attributes from the button
                 categoryIdToUpdate = button.getAttribute('data-id');
                 const categoryName = button.getAttribute('data-name');
@@ -374,9 +397,18 @@
 
             }
 
+            const cancel = document.getElementById('cancelUpdateButton');
+
+            // Add a click event listener to the button
+            cancel.addEventListener('click', function () {
+                // Navigate to the desired route
+                window.location.href = '/admin/category'; // Replace with your desired route
+            });
+
             function updateCategory() {
 
-                if(!validateWhenCreate()){
+
+                if (!validateWhenCreate()) {
                     return console.log('Error validating when update category')
                 }
                 const categoryName = document.getElementById('categoryName').value.trim();

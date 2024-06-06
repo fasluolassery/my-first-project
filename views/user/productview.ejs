@@ -371,19 +371,19 @@
                                             <% relatedProducts.forEach(rp=> { %>
                                                 <div class="swiper-slide">
                                                     <!-- Single Prodect -->
-                                                    <div class="product" style="width: 270px; height: 425px;">
+                                                    <div class="product">
                                                         <!-- <span class="badges">
                                                     <span class="new">New</span>
                                                 </span> -->
                                                         <div class="thumb">
                                                             <a href="productview?id=<%=rp.id %>" class="image">
-                                                                <img src="<%= rp.imagePaths[0] %>" alt="Product" />
+                                                                <img src="<%= rp.imagePaths[0] %>" alt="Product" style="width: 295px; height: 300px;"/>
                                                                 <img class="hover-image" src="<%= rp.imagePaths[1] %>"
                                                                     alt="Product" />
                                                             </a>
                                                         </div>
                                                         <div class="content">
-                                                            <span class="category"><a href="#">
+                                                            <span class="category mt-3"><a href="#">
                                                                     <%= rp.category %>
                                                                 </a></span>
                                                             <h5 class="title"><a href="productview?id=<%=rp.id %>">

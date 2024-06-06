@@ -417,11 +417,11 @@
                                     window.location.href = '/home'
                                 }, 800)
                             } else if (res.data.next == 0) {
-                                displayErrorLoginEmail("User not found");
+                                displayErrorLoginEmail("*User not found");
                             } else if (res.data.next == 100) {
-                                displayErrorLoginEmail("Incorrect password");
+                                displayErrorLoginEmail("*Incorrect password");
                             } else if (res.data.next == 200) {
-                                displayErrorLoginEmail("your account has been temporarily blocked")
+                                displayErrorLoginEmail("*your account has been temporarily blocked")
                             }
                         })
                         .catch(error => {

@@ -15,7 +15,7 @@ const loadProducts = async (req, res) => {
 
 const loadCreateProducts = async (req, res) => {
     try {
-        const findAllCategories = await Category.find()
+        const findAllCategories = await Category.find({isBlock: false})
         // console.log(findAllCategories) //! to remove
         res.render('admin/createproduct', { categories: findAllCategories })
     } catch (error) {
@@ -91,7 +91,7 @@ const createProducts = async (req, res) => {
 const unlistProducts = async (req, res) => {
     try {
         const productId = req.params.id
-        console.log(productId)
+        // console.log(productId) //!to remove
         const findProduct = await Product.findOne({ _id: productId })
 
         if (findProduct) {

@@ -85,10 +85,13 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane fade show active" id="shop-grid">
                                                     <div class="row mb-n-30px">
+
+
+
                                                         <% products.forEach(product=> { %>
                                                             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                                                 <!-- Single Product -->
-                                                                <div class="product" style="width: 270px; height: 425px;">
+                                                                <div class="product">
                                                                     <% if (product.isNew) { %>
                                                                         <!-- Assuming you have an `isNew` property to indicate new products -->
                                                                         <span class="badges">
@@ -99,6 +102,7 @@
                                                                                 <a href="productview?id=<%= product.id %>"
                                                                                     class="image">
                                                                                     <img src="<%= product.imagePaths[0] %>"
+                                                                                    style="width: 295px; height: 300px;"
                                                                                         alt="<%= product.productName %>" />
                                                                                     <% if (product.imagePaths[1]) { %>
                                                                                         <img class="hover-image"
@@ -112,7 +116,7 @@
                                                                                 </a>
                                                                             </div>
                                                                             <div class="content">
-                                                                                <span class="category"><a href="#">
+                                                                                <span class="category mt-3"><a href="#">
                                                                                         <%= product.category %>
                                                                                     </a></span>
                                                                                 <h5 class="title"><a
@@ -160,6 +164,9 @@
 
                                                     </div>
                                                 </div>
+
+
+
                                                 <div class="tab-pane fade mb-n-30px" id="shop-list">
                                                     <% if(products) { %>
                                                         <% products.forEach(product=> { %>
@@ -248,7 +255,7 @@
                                     </div>
                                     <!-- Tab Content Area End -->
                                     <!--  Pagination Area Start -->
-                                    <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up"
+                                    <!-- <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up"
                                         data-aos-delay="200">
                                         <div class="pages">
                                             <ul>
@@ -263,7 +270,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!--  Pagination Area End -->
                                 </div>
                                 <!-- Shop Bottom Area End -->
