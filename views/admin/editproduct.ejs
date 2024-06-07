@@ -1,5 +1,5 @@
 <%- include('../layout/adminhead.ejs') %>
-</head>
+    </head>
 
 
     <body class="dark">
@@ -95,7 +95,14 @@
                         <div class="content-header">
                             <h2 class="content-title">Edit Product</h2>
                             <div>
-                                <button class="btn btn-md rounded font-sm hover-up" id="updateButton">Update</button>
+                                <button class="btn btn-md rounded font-sm hover-up" style="margin-left: 225px;"
+                                    id="updateButton">Update</button>
+                            </div>
+                            <div>
+                                <a href="/admin/products">
+                                    <button class="btn btn-danger rounded font-sm hover-up"
+                                        id="updateCancelButton">cancel</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -157,25 +164,28 @@
                                         <div class="mb-4">
 
 
-                                            <% if(categories.length > 0) { %>
-                                                <% categories.forEach(category => { %>
-                                                    <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                        <input class="form-check-input" name="mycategory" type="radio" 
-                                                            value="<%= category.categoryName %>" 
-                                                            <% if (category.categoryName === product.category) { %>checked<% } %>>
-                                                        <span class="form-check-label">
-                                                            <%= category.categoryName %>
-                                                        </span>
+                                            <% if(categories.length> 0) { %>
+                                                <% categories.forEach(category=> { %>
+                                                    <label class="mb-2 form-check form-check-inline"
+                                                        style="width: 45%;">
+                                                        <input class="form-check-input" name="mycategory" type="radio"
+                                                            value="<%= category.categoryName %>" <% if
+                                                            (category.categoryName===product.category) { %>checked<% }
+                                                            %>>
+                                                            <span class="form-check-label">
+                                                                <%= category.categoryName %>
+                                                            </span>
                                                     </label>
-                                                <% }) %>
-                                            <% } else { %>
-                                                <label class="mb-2" style="width: 45%;">
-                                                    <span class="form-check-label text-danger">*No categories found</span>
-                                                </label>
-                                            <% } %>
+                                                    <% }) %>
+                                                        <% } else { %>
+                                                            <label class="mb-2" style="width: 45%;">
+                                                                <span class="form-check-label text-danger">*No
+                                                                    categories found</span>
+                                                            </label>
+                                                            <% } %>
 
-                                            
-                                            
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -320,13 +330,13 @@
             }
 
             //product quantity validation
-            var minQuantity = 0; 
+            var minQuantity = 0;
             var maxQuantity = 100
 
-            if(stock == ''){
+            if (stock == '') {
                 displayErrorStock('*Product quantity is required.')
                 return false
-            }else if (isNaN(stock) || stock < 0) {
+            } else if (isNaN(stock) || stock < 0) {
                 displayErrorStock('*Product quantity must be a positive integer.');
                 return false;
             } else if (stock < minQuantity) {
@@ -383,7 +393,7 @@
 
         function getProductDetails(productId) {
 
-            if(!validateProductDetails()){
+            if (!validateProductDetails()) {
                 return console.log("Error validate edit products")
             }
 

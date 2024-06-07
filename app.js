@@ -55,6 +55,11 @@ app.use('/', userRoutes);
 app.use('/admin', adminRoutes);
 // ---------------------------
 
+//error handle page not found
+// app.use((req, res) => {
+//     res.status(404).render('user/404');
+// });
+
 // Start server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

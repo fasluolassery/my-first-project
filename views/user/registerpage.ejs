@@ -53,6 +53,9 @@
                                             <div class="login-form-container">
                                                 <div class="login-register-form">
                                                     <form action="/" method="post" id="userLogin">
+                                                        <div class="text-danger" id="sessionError">
+                                                            <%= typeof error !== 'undefined' ? error : '' %>
+                                                        </div>                                                        
                                                         <div id="errorMessagesLoginEmail" class="text-danger"></div>
                                                         <input type="email" name="usernamelogin" class="form-control"
                                                             placeholder="Email" id="userMailLogin" required />
@@ -335,6 +338,8 @@
 
                 document.getElementById('errorMessagesLoginEmail').innerHTML = ''
                 document.getElementById('errorMessagesLoginPassword').innerHTML = ''
+                document.getElementById('sessionError').innerHTML = ''
+
 
                 if (loginEmail === '') {
                     displayErrorLoginEmail('*Please enter your email');

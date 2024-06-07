@@ -22,7 +22,7 @@ adminRouter.get('/editproducts', productController.loadEditProduct)
 adminRouter.get('/createuser', userController.loadCreateUser)
 
 
-adminRouter.post('/login', adminValidation.validateLoginAdmin, authController.verifyAdminLogin) //todo 
+adminRouter.post('/login', adminValidation.validateLoginAdmin, authController.verifyAdminLogin) //todo
 adminRouter.post('/blockuser/:id', userController.blockUser)
 adminRouter.post('/category', categoryController.getCategoryDetails)
 adminRouter.post('/unlistcategory/:id', categoryController.unlistCategory)

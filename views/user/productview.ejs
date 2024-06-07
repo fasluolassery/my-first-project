@@ -9,11 +9,11 @@
             /* Animation */
             /* width: 200px;
           height: 200px; */
-            margin: 0 auto;
+            /* margin: 0 auto; */
         }
 
         .zoom:hover {
-            transform: scale(1.5);
+            transform: scale(2);
             /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
         }
     </style>
@@ -71,13 +71,12 @@
                             <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
                                 <!-- Swiper -->
                                 <div class="swiper-container zoom-top">
-                                    <div class="swiper-wrapper">
+                                    <div class="swiper-wrapper" style="width: 440px; height: 515px; ;">
                                         <% product.imagePaths.forEach((imagePath, index)=> { %>
-                                            <div class="swiper-slide">
-
-                                                <img class="img-responsive m-auto zoom" src="<%= imagePath %>"
+                                            
+                                            <div class="swiper-slide d-flex align-items-center justify-content-center">
+                                                <img class="img-responsive zoom" src="<%= imagePath %>"
                                                     alt="<%= product.productName %> Image <%= index + 1 %>">
-
                                             </div>
                                             <% }); %>
                                     </div>
