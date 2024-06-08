@@ -23,6 +23,16 @@ const loadVerifyOtp = async (req, res) => {
                 pass: process.env.USER_PASS
             }
         })
+        
+        const otpSave = new Otp({
+            userMail: newUser.email,
+            otp: otpGen
+        })
+        
+        const otpSaving = await otpSave.save()
+        if(!otpSaving){
+            return console.log("Error in otp saving")
+        }
 
         const emailToSend = {
             from: process.env.EMAIL_USER,
@@ -39,21 +49,14 @@ const loadVerifyOtp = async (req, res) => {
             }
         })
 
-        const otpSave = new Otp({
-            userMail: newUser.email,
-            otp: otpGen
-        })
-
-        const otpSaving = await otpSave.save()
-        if(!otpSaving){
-            return console.log("Error in otp saving")
-        }
-
         const otpSchema = Otp.schema;
         const ttlValue = otpSchema.obj.exprAt.expires
         
 
         const timeToSend = otpSaving.exprAt.getTime()
+
+        console.log("ttlExpireValue:", ttlValue)
+        console.log("timeToSend: ", timeToSend)
         // console.log(timeToSend) //! to remove
 
         res.render('user/otppage', {timeToSend,ttlValue})

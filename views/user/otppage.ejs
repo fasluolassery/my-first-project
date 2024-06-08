@@ -1,24 +1,24 @@
 <%- include('../layout/userMeta.ejs') %>
-</head>
+    </head>
 
-<body>
-    <div class="main-wrapper">
-<%- include('../layout/userHead.ejs') %>
-        <!-- OffCanvas Menu End -->
-        <!-- breadcrumb-area start -->
-        <div class="breadcrumb-area">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-12 text-center">
-                        <h2 class="breadcrumb-title">Verify Email</h2>
+    <body>
+        <div class="main-wrapper">
+            <%- include('../layout/userHead.ejs') %>
+                <!-- OffCanvas Menu End -->
+                <!-- breadcrumb-area start -->
+                <div class="breadcrumb-area">
+                    <div class="container">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-12 text-center">
+                                <h2 class="breadcrumb-title">Verify Email</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- breadcrumb-area end -->
-        <!-- login area start -->
+                <!-- breadcrumb-area end -->
+                <!-- login area start -->
 
-        <!-- <div class="login-register-area pt-100px pb-100px">
+                <!-- <div class="login-register-area pt-100px pb-100px">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-7 col-md-12 ml-auto mr-auto">
@@ -43,222 +43,223 @@
             </div>
         </div> -->
 
-        <div class="login-register-area pt-100px pb-100px">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7 col-md-12 ml-auto mr-auto">
-                        <div class="login-register-wrapper">
-                            <div class="verify-email-box">
-                                <div id="errorMessages" class="text-danger"></div>
-                                <div class="email-icon"><i class="fas fa-envelope"></i></div>
-                                <p class="verify-email-text">Please enter the 4 digit code sent to you</p>
-                                <form action="/verifyOTP" method="post" class="otp-form">
-                                    <input type="text" name="otp1" maxlength="1" class="otp-input" id="otp1" />
-                                    <input type="text" name="otp2" maxlength="1" class="otp-input" id="otp2" />
-                                    <input type="text" name="otp3" maxlength="1" class="otp-input" id="otp3" />
-                                    <input type="text" name="otp4" maxlength="1" class="otp-input" id="otp4" />
-                                </form>
-                                <div id="otpTimer" class="otp-timer"></div>
-                                <p class="resend-text">Didn't receive an email? <a href="/verifyOTP" id="resendLink"
-                                        class="resend-link" disabled>Resend</a></p>
+                <div class="login-register-area pt-100px pb-100px">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                                <div class="login-register-wrapper">
+                                    <div class="verify-email-box">
+                                        <div id="errorMessages" class="text-danger"></div>
+                                        <div class="email-icon"><i class="fas fa-envelope"></i></div>
+                                        <p class="verify-email-text">Please enter the 4 digit code sent to you</p>
+                                        <form action="/verifyOTP" method="post" class="otp-form" id="otpForm">
+                                            <input type="text" name="otp1" maxlength="1" class="otp-input" id="otp1" />
+                                            <input type="text" name="otp2" maxlength="1" class="otp-input" id="otp2" />
+                                            <input type="text" name="otp3" maxlength="1" class="otp-input" id="otp3" />
+                                            <input type="text" name="otp4" maxlength="1" class="otp-input" id="otp4" />
+                                        </form>
+                                        <div id="otpTimer" class="otp-timer"></div>
+                                        <p class="resend-text">Didn't receive an email? <a href="/verifyOTP"
+                                                id="resendLink" class="resend-link" disabled>Resend</a></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+
+
+                <!-- login area end -->
+                <!-- Footer Area Start -->
+                <%- include('../layout/userFooter.ejs') %>
+
+                    <!-- Footer Area End -->
         </div>
-
-
-
-        <!-- login area end -->
-        <!-- Footer Area Start -->
-<%- include('../layout/userFooter.ejs') %>
-        
-        <!-- Footer Area End -->
-    </div>
-    <!-- Global Vendor, plugins JS -->
-    <!-- JS Files
+        <!-- Global Vendor, plugins JS -->
+        <!-- JS Files
     ============================================ -->
-    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
-    <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
-    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
-    <script src="assets/js/plugins/swiper-bundle.min.js"></script>
-    <script src="assets/js/plugins/scrollUp.js"></script>
-    <script src="assets/js/plugins/venobox.min.js"></script>
-    <script src="assets/js/plugins/jquery-ui.min.js"></script>
-    <script src="assets/js/plugins/mailchimp-ajax.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
+        <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+        <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+        <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+        <script src="assets/js/plugins/scrollUp.js"></script>
+        <script src="assets/js/plugins/venobox.min.js"></script>
+        <script src="assets/js/plugins/jquery-ui.min.js"></script>
+        <script src="assets/js/plugins/mailchimp-ajax.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 
 
-    <script>
+        <script>
 
-        document.getElementById('resendLink').addEventListener('click', function (event) {
-            if (this.hasAttribute('disabled')) {
-                event.preventDefault(); // Prevent the default action (i.e., following the link)
+            document.getElementById('resendLink').addEventListener('click', function (event) {
+                if (this.hasAttribute('disabled')) {
+                    event.preventDefault(); // Prevent the default action (i.e., following the link)
+                }
+            });
+
+            const Time = parseInt("<%= timeToSend %>"); // Convert to number
+            const ttlSeconds = parseInt("<%= ttlValue %>"); // Convert to number
+
+            console.log(Time, typeof Time); // Log to check values
+            console.log(ttlSeconds, typeof ttlSeconds); // Log to check values
+
+            const expirationTime = Time + (ttlSeconds * 1000);
+
+            console.log(expirationTime); // Log to check value
+
+            // Store expiration time in localStorage
+            localStorage.setItem('otpExpirationTime', expirationTime);
+
+            function updateTimer() {
+                const expirationTime = parseInt(localStorage.getItem('otpExpirationTime'));
+                const currentTime = Date.now();
+                const timeDifference = expirationTime - currentTime;
+
+                // Check if time is expired
+                if (timeDifference <= 0) {
+                    document.getElementById('otpTimer').innerText = 'OTP expired';
+                    document.getElementById('resendLink').removeAttribute('disabled');
+                    return;
+                }
+
+                // Calculate remaining time
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+                // Format and display remaining time
+                const timerDisplay = `${minutes}m ${seconds}s`;
+                document.getElementById('otpTimer').innerText = timerDisplay;
+
+                // Update timer every second
+                setTimeout(updateTimer, 1000);
             }
-        });
 
-        const Time = parseInt("<%= timeToSend %>"); // Convert to number
-        const ttlSeconds = parseInt("<%= ttlValue %>"); // Convert to number
+            // Initial call to update timer
+            updateTimer();
+        </script>
 
-        console.log(Time, typeof Time); // Log to check values
-        console.log(ttlSeconds, typeof ttlSeconds); // Log to check values
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const otpInputs = document.querySelectorAll('#otpForm input');
 
-        const expirationTime = Time + (ttlSeconds * 1000);
+                otpInputs.forEach((input, index) => {
+                    input.addEventListener('input', function () {
+                        if (input.value.length === input.maxLength && index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                    });
 
-        console.log(expirationTime); // Log to check value
+                    input.addEventListener('keydown', function (event) {
+                        if (event.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                    });
+                });
 
-        // Store expiration time in localStorage
-        localStorage.setItem('otpExpirationTime', expirationTime);
+                document.getElementById('otp4').addEventListener('input', () => {
+                    const otp = Array.from(otpInputs).map(input => input.value.trim()).join('');
 
-        function updateTimer() {
-            const expirationTime = parseInt(localStorage.getItem('otpExpirationTime'));
-            const currentTime = Date.now();
-            const timeDifference = expirationTime - currentTime;
-
-            // Check if time is expired
-            if (timeDifference <= 0) {
-                document.getElementById('otpTimer').innerText = 'OTP expired';
-                document.getElementById('resendLink').removeAttribute('disabled');
-                return;
-            }
-
-            // Calculate remaining time
-            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-
-            // Format and display remaining time
-            const timerDisplay = `${minutes}m ${seconds}s`;
-            document.getElementById('otpTimer').innerText = timerDisplay;
-
-            // Update timer every second
-            setTimeout(updateTimer, 1000);
-        }
-
-        // Initial call to update timer
-        updateTimer();
-    </script>
-
-    <script>
-
-        const otpFour = document.getElementById('otp4')
-        otpFour.addEventListener('input', () => {
-
-
-            const otp_one = document.getElementById('otp1').value.trim()
-            const otp_two = document.getElementById('otp2').value.trim()
-            const otp_three = document.getElementById('otp3').value.trim()
-            const otp_four = document.getElementById('otp4').value.trim()
-
-            const otp = otp_one + otp_two + otp_three + otp_four
-
-            axios.post('/verifyotp', { otp: otp })
-                .then(res => {
-                    if (res.data.next) {
-                        Swal.fire({
-                                icon:"success",
-                                title: " Your registration is complete.",
-                                text:" Welcome aboard! Start exploring now!",
-                                // showDenyButton: true,
-                                // showCancelButton: true,
-                                confirmButtonColor: '#0056b3',
-                                confirmButtonText: "Back to Home",
-                                // denyButtonText: `Don't save`
-                            }).then((result) => {
-                                /* Read more about isConfirmed, isDenied below */
-                                if (result.isConfirmed) {
-                                    // Swal.fire("Saved!", "", "success");
-                                    window.location.href = '/'
+                    if (otp.length === otpInputs.length) { // Ensure all inputs are filled before sending
+                        axios.post('/verifyotp', { otp: otp })
+                            .then(res => {
+                                if (res.data.next) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Your registration is complete.",
+                                        text: "Welcome aboard! Start exploring now!",
+                                        confirmButtonColor: '#0056b3',
+                                        confirmButtonText: "Back to Home",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = '/'
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "It seems like the OTP you entered is incorrect. Please double-check and try again.",
+                                        showCancelButton: true,
+                                        showConfirmButton: false,
+                                        cancelButtonText: "OK",
+                                    }).then((result) => {
+                                        if (result.dismiss === Swal.DismissReason.cancel) {
+                                            otpInputs.forEach(input => input.value = '');
+                                            otpInputs[0].focus();
+                                        }
+                                    });
                                 }
-                            });
-                        // window.location.href = '/'
-                    }else{
-                        Swal.fire({
-                                icon:"error",
-                                title: "Oops...",
-                                text:"It seems like the OTP you entered is incorrect. Please double-check and try again.",
-                                // showDenyButton: true,
-                                // showCancelButton: true,
-                                confirmButtonColor: '#0056b3',
-                                confirmButtonText: "ok",
-                                // denyButtonText: `Don't save`
-                            }).then((result) => {
-                                /* Read more about isConfirmed, isDenied below */
-                                if (result.isConfirmed) {
-                                    // Swal.fire("Saved!", "", "success");
-                                    window.location.href = '/verifyotp'
-                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
                             });
                     }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        })
+                });
+            });
+        </script>
 
-    </script>
+        <script>
 
-    <script>
+            // const Time = parseInt("<%= timeToSend %>")
 
-        // const Time = parseInt("<%= timeToSend %>")
+            // console.log(Time) //! to remove
+            // console.log(typeof Time) //! to remove
 
-        // console.log(Time) //! to remove
-        // console.log(typeof Time) //! to remove
+            // const ttlSeconds = parseInt("<%= ttlValue %>")
 
-        // const ttlSeconds = parseInt("<%= ttlValue %>")
+            // console.log(ttlSeconds) //! to remove
+            // console.log(typeof ttlSeconds) //! to remove
 
-        // console.log(ttlSeconds) //! to remove
-        // console.log(typeof ttlSeconds) //! to remove
-
-        // const expirationTime = new Date(Time + (ttlSeconds * 1000));
-        // localStorage.setItem('otpExpirationTime', expirationTime);
+            // const expirationTime = new Date(Time + (ttlSeconds * 1000));
+            // localStorage.setItem('otpExpirationTime', expirationTime);
 
 
 
-        // console.log(expirationTime)
-        // function updateTimer() {
-        //     const currentTime = new Date();
-        //     const timeDifference = expirationTime - currentTime;
+            // console.log(expirationTime)
+            // function updateTimer() {
+            //     const currentTime = new Date();
+            //     const timeDifference = expirationTime - currentTime;
 
-        //     // Check if time is expired
-        //     if (timeDifference <= 0) {
-        //         document.getElementById('otpTimer').innerText = 'OTP expired';
-        //         return;
-        //     }
+            //     // Check if time is expired
+            //     if (timeDifference <= 0) {
+            //         document.getElementById('otpTimer').innerText = 'OTP expired';
+            //         return;
+            //     }
 
-        //     // Calculate remaining time
-        //     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-        //     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            //     // Calculate remaining time
+            //     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            //     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
-        //     // Format and display remaining time
-        //     const timerDisplay = `${minutes}m ${seconds}s`;
-        //     document.getElementById('otpTimer').innerText = timerDisplay;
+            //     // Format and display remaining time
+            //     const timerDisplay = `${minutes}m ${seconds}s`;
+            //     document.getElementById('otpTimer').innerText = timerDisplay;
 
-        //     // Update timer every second
-        //     setTimeout(updateTimer, 1000);
-        // }
+            //     // Update timer every second
+            //     setTimeout(updateTimer, 1000);
+            // }
 
-        // // Initial call to update timer
-        // updateTimer();
+            // // Initial call to update timer
+            // updateTimer();
 
-    </script>
+        </script>
 
-    <!-- Minify Version -->
-    <!-- <script src="assets/js/vendor.min.js"></script>
+        <!-- Minify Version -->
+        <!-- <script src="assets/js/vendor.min.js"></script>
     <script src="assets/js/plugins.min.js"></script>
     <script src="assets/js/main.min.js"></script> -->
 
-    <!--Main JS (Common Activation Codes)-->
-    <script src="assets/js/main.js"></script>
-</body>
+        <!--Main JS (Common Activation Codes)-->
+        <script src="assets/js/main.js"></script>
+    </body>
 
 
-<!-- Mirrored from htmldemo.net/hmart/hmart/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 09 May 2024 13:12:24 GMT -->
+    <!-- Mirrored from htmldemo.net/hmart/hmart/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 09 May 2024 13:12:24 GMT -->
 
-</html>
+    </html>
