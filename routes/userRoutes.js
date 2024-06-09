@@ -10,6 +10,7 @@ const homeController = require('../controllers/HomeController')
 const otpController = require('../controllers/OtpController')
 const emailController = require('../controllers/EmailController')
 const productController = require('../controllers/ProductController')
+const cartController = require('../controllers/CartController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -17,18 +18,21 @@ const sessionCheckUser = require('../middlewares/sessionCheck')
 
 userRouter.get('/', homeController.loadHome)
 userRouter.get('/home', homeController.loadHome)
-userRouter.get('/login', authController.loadRegister)
+userRouter.get('/login', sessionCheckUser.isLogout, authController.loadRegister)
 userRouter.get('/verifyotp', emailController.loadVerifyOtp)
-userRouter.get('/products', sessionCheckUser.sessionCheck,productController.loadProductsUser)
-userRouter.get('/productview', sessionCheckUser.sessionCheck,productController.loadSingleProductUser)
+userRouter.get('/products', sessionCheckUser.isLogin,productController.loadProductsUser)
+userRouter.get('/productview', sessionCheckUser.isLogin,productController.loadSingleProductUser)
 userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
+userRouter.get('/cart', cartController.loadCart)
+userRouter.get('/logout', homeController.logout)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)
 userRouter.post('/verifyotp', otpController.userVerifyOtp)
 userRouter.post('/login', userValidation.validateLogin, authController.userLoginDetails)
-
+userRouter.post('/addtocart', cartController.getProductsToAdd)
+userRouter.post('/addToCartFromSingle', cartController.addToCartSingle)
 
 // userRouter.post('')
 

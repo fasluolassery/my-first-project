@@ -1,5 +1,11 @@
 <%- include('../layout/adminhead.ejs') %>
-</head>
+    <style>
+        .swal-title {
+            color: red;
+            /* Change the title text color */
+        }
+    </style>
+    </head>
 
 
     <body class="dark">
@@ -10,7 +16,8 @@
                     <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
                 </a>
                 <div>
-                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
                 </div>
             </div>
             <nav>
@@ -66,10 +73,10 @@
                 </ul>
             </nav>
         </aside>
-        
-        
-        
-        
+
+
+
+
         <main class="main-wrap">
             <header class="main-header navbar">
                 <div class="col-search">
@@ -142,7 +149,8 @@
                 <div class="content-header">
                     <h2 class="content-title">Users list</h2>
                     <div>
-                        <a href="/admin/createuser" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+                        <a href="/admin/createuser" class="btn btn-primary"><i class="material-icons md-plus"></i>
+                            Create new</a>
                     </div>
                 </div>
                 <div class="card mb-4">
@@ -183,7 +191,7 @@
                                 </thead>
                                 <tbody>
                                     <% users.forEach(user=> { %>
-                                        <!-- Table content goes here -->    
+                                        <!-- Table content goes here -->
                                         <tr>
                                             <td class="col-lg-3">
                                                 <div class="itemside">
@@ -218,20 +226,18 @@
                                                     <button id="block-btn-<%= user.id %>"
                                                         style="height: 35px; width: 80px;"
                                                         class="btn btn-sm btn-outline-danger rounded font-sm mt-15 block-btn justify-content-center"
-                                                        data-id="<%= user.id %>"
-                                                        onclick="blockUser('<%= user.id %>')">
+                                                        data-id="<%= user.id %>" onclick="blockUser('<%= user.id %>')">
                                                         <i class="material-icons md-block"></i> Block
-                                                    </button> 
-                                                <% } else { %>
-                                                    <button id="block-btn-<%= user.id %>"
-                                                        class="btn btn-sm btn-brand rounded font-sm mt-15 unblock-btn justify-content-center"
-                                                        style="height: 35px; width: 80px;"
-                                                        data-id="<%= user.id %>"
-                                                        onclick="blockUser('<%= user.id %>')">
-                                                        <i class="material-icons md-check_circle"></i> Unblock
                                                     </button>
-                                                <% } %>
-                                                
+                                                    <% } else { %>
+                                                        <button id="block-btn-<%= user.id %>"
+                                                            class="btn btn-sm btn-brand rounded font-sm mt-15 unblock-btn justify-content-center"
+                                                            style="height: 35px; width: 80px;" data-id="<%= user.id %>"
+                                                            onclick="blockUser('<%= user.id %>','<%= user.isBlock %>')">
+                                                            <i class="material-icons md-check_circle"></i> Unblock
+                                                        </button>
+                                                        <% } %>
+
                                             </td>
                                         </tr>
                                         <% }) %>
@@ -282,34 +288,66 @@
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <style>
+            .swal-title {
+                color: rgb(46, 104, 46);
+            }
+        </style>
 
         <script>
             function blockUser(userId) {
+
+
+                Swal.fire({
+                    icon: "question",
+                    title: "<span style='color: black;'>Do you want to save changes?</span>",
+                    // text: "Verification email sent! Kindly check your inbox.",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3BB77E',
+                    confirmButtonText: 'Yes',
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        // Swal.fire("Saved!", "", "success");
+                        axios.post(`/admin/blockuser/${userId}`)
+                            .then(response => {
+                                if (response.data.success) {
+                                    console.log(response.data.success);
+                                    Swal.fire({
+                                        title: "<span style='color: #3BB77E;'>Success!</span>",
+                                        html: "<span style='color: black;'>Your changes have been saved successfully.</span>",
+                                        icon: "success",
+                                        confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                        confirmButtonText: "OK"
+                                    });
+                                    let button = document.getElementById(`block-btn-${userId}`);
+                                    if (button.classList.contains('btn-outline-danger')) {
+                                        button.classList.remove('btn-outline-danger');
+                                        button.classList.add('btn-brand');
+                                        button.innerHTML = '<i class="material-icons md-check_circle"></i> Unblock';
+                                    } else {
+                                        button.classList.remove('btn-brand');
+                                        button.classList.add('btn-outline-danger');
+                                        button.innerHTML = '<i class="material-icons md-block"></i> Block';
+                                    }
+                                } else {
+                                    alert("An error occurred");
+                                }
+                            })
+                            .catch(error => {
+                                console.log("Error in blocking and unblocking");
+                            });
+                    }
+                });
+
                 console.log(userId);
-                axios.post(`/admin/blockuser/${userId}`)
-                    .then(response => {
-                        if (response.data.success) {
-                            console.log(response.data.success);
-                            let button = document.getElementById(`block-btn-${userId}`);
-                            if (button.classList.contains('btn-outline-danger')) {
-                                button.classList.remove('btn-outline-danger');
-                                button.classList.add('btn-brand');
-                                button.innerHTML = '<i class="material-icons md-check_circle"></i> Unblock';
-                            } else {
-                                button.classList.remove('btn-brand');
-                                button.classList.add('btn-outline-danger');
-                                button.innerHTML = '<i class="material-icons md-block"></i> Block';
-                            }
-                        } else {
-                            alert("An error occurred");
-                        }
-                    })
-                    .catch(error => {
-                        console.log("Error in blocking and unblocking");
-                    });
             }
         </script>
-        
+
     </body>
 
     </html>

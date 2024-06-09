@@ -377,7 +377,11 @@
     ------------------------------ */
 
     var paragraph = document.getElementById("numericParagraph");
-    var numericString = paragraph.textContent;
+    var numericString
+    if(paragraph){
+        
+        numericString = paragraph.textContent;
+    }
     var numericValue = parseFloat(numericString);
     
     const errorMessageInStock = document.getElementById('errorMessageInStock')

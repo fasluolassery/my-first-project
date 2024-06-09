@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel')
 
 // middleware/sessionCheck.js
-const sessionCheck = async (req, res, next) => {
+const isLogin = async (req, res, next) => {
   try {
     if (req.session.user) {
 
@@ -50,6 +50,23 @@ const sessionCheck = async (req, res, next) => {
 
 };
 
+
+
+
+const isLogout = async (req, res, next) => {
+  try{
+    if(!req.session.user){
+      next()
+    }else{
+      res.redirect('/home')
+    }
+
+  }catch(err){
+    console.log("Error in isLogout: ", err.message)
+  }
+}
+
 module.exports = {
-  sessionCheck
+  isLogin,
+  isLogout
 };

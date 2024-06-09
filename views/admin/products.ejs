@@ -235,35 +235,64 @@
         <!-- Main Script -->
         <script src="assets/js/main.js" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
         <script>
             function unlistProducts(productId) {
-                axios.post(`/admin/unlistproduct/${productId}`)
-                    .then(res => {
-                        if (res.data.success) {
-                            let button = document.getElementById(`unlist-button-${productId}`);
-                            let status = document.getElementById(`unlist-status-${productId}`);
-                            if (button.classList.contains('btn-outline-danger')) {
-                                status.classList.remove('badge-soft-success');
-                                status.classList.add('badge-soft-danger');
-                                status.innerHTML = 'Unlisted';
-                                button.classList.remove('btn-outline-danger');
-                                button.classList.add('btn-brand');
-                                button.innerHTML = '<i class="fas fa-check"></i> List';
-                            } else {
-                                status.classList.remove('badge-soft-danger');
-                                status.classList.add('badge-soft-success');
-                                status.innerHTML = 'Listed';
-                                button.classList.remove('btn-brand');
-                                button.classList.add('btn-outline-danger');
-                                button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.log("error in sending product id");
-                    });
+
+                Swal.fire({
+                    icon: "question",
+                    title: "<span style='color: black;'>Do you want to save changes?</span>",
+                    // text: "Verification email sent! Kindly check your inbox.",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3BB77E',
+                    confirmButtonText: 'Yes',
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        // Swal.fire("Saved!", "", "success");
+
+                        axios.post(`/admin/unlistproduct/${productId}`)
+                            .then(res => {
+                                if (res.data.success) {
+                                    Swal.fire({
+                                        title: "<span style='color: #3BB77E;'>Success!</span>",
+                                        html: "<span style='color: black;'>Your changes have been saved successfully.</span>",
+                                        icon: "success",
+                                        confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                        confirmButtonText: "OK"
+                                    });
+                                    let button = document.getElementById(`unlist-button-${productId}`);
+                                    let status = document.getElementById(`unlist-status-${productId}`);
+                                    if (button.classList.contains('btn-outline-danger')) {
+                                        status.classList.remove('badge-soft-success');
+                                        status.classList.add('badge-soft-danger');
+                                        status.innerHTML = 'Unlisted';
+                                        button.classList.remove('btn-outline-danger');
+                                        button.classList.add('btn-brand');
+                                        button.innerHTML = '<i class="fas fa-check"></i> List';
+                                    } else {
+                                        status.classList.remove('badge-soft-danger');
+                                        status.classList.add('badge-soft-success');
+                                        status.innerHTML = 'Listed';
+                                        button.classList.remove('btn-brand');
+                                        button.classList.add('btn-outline-danger');
+                                        button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.log("error in sending product id");
+                            });
+
+                    }
+                });
+
+
             }
         </script>
 

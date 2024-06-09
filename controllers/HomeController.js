@@ -9,6 +9,16 @@ const loadHome = async (req, res) => {
     }
 };
 
+const logout = async (req, res) => {
+    try{
+        const des = req.session.destroy()
+        res.redirect('/home')
+    }catch(err){
+        console.log("Error at logout: ", err.message)
+    }
+}
+
 module.exports = {
-    loadHome
+    loadHome,
+    logout
 };

@@ -125,8 +125,8 @@
                                         <button type="button" class="btn btn-primary justify-content-center"
                                             id="updateCategoryButton" hidden onclick="updateCategory()">Update
                                             category</button>
-                                        <button type="button" class="btn btn-outline-danger mt-2 justify-content-center" hidden
-                                            id="cancelUpdateButton" onclick="">Cancel</button>
+                                        <button type="button" class="btn btn-outline-danger mt-2 justify-content-center"
+                                            hidden id="cancelUpdateButton" onclick="">Cancel</button>
                                     </div>
                                 </form>
                             </div>
@@ -153,7 +153,10 @@
 
                                                     <td>
                                                         <!-- Toggle button -->
-                                                        <button class="btn btn-secondary justify-content-center" style="height: 31px; width: 80px;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                        <button class="btn btn-secondary justify-content-center"
+                                                            style="height: 31px; width: 80px;" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                                            aria-expanded="false" aria-controls="collapseExample">
                                                             Description
                                                         </button>
                                                         <!-- Collapsible content -->
@@ -238,6 +241,8 @@
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         <script>
             function displayError(errorMessage) {
@@ -346,31 +351,55 @@
 
             function unlistCategory(categoryId) {
 
-                axios.post(`/admin/unlistcategory/${categoryId}`)
-                    .then(res => {
-                        if (res.data.success) {
-                            let button = document.getElementById(`unlist-button-${categoryId}`);
-                            let status = document.getElementById(`unlist-status-${categoryId}`);
-                            if (button.classList.contains('btn-outline-danger')) {
-                                status.classList.remove('badge-soft-success');
-                                status.classList.add('badge-soft-danger');
-                                status.innerHTML = 'Unlisted';
-                                button.classList.remove('btn-outline-danger');
-                                button.classList.add('btn-brand');
-                                button.innerHTML = '<i class="fas fa-check"></i> List';
-                            } else {
-                                status.classList.remove('badge-soft-danger');
-                                status.classList.add('badge-soft-success');
-                                status.innerHTML = 'Listed';
-                                button.classList.remove('btn-brand');
-                                button.classList.add('btn-outline-danger');
-                                button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.log("error in sending category id");
-                    });
+                Swal.fire({
+                    icon: "question",
+                    title: "<span style='color: black;'>Do you want to save changes?</span>",
+                    // text: "Verification email sent! Kindly check your inbox.",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3BB77E',
+                    confirmButtonText: 'Yes',
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        // Swal.fire("Saved!", "", "success");
+                        axios.post(`/admin/unlistcategory/${categoryId}`)
+                            .then(res => {
+                                if (res.data.success) {
+                                    Swal.fire({
+                                        title: "<span style='color: #3BB77E;'>Success!</span>",
+                                        html: "<span style='color: black;'>Your changes have been saved successfully.</span>",
+                                        icon: "success",
+                                        confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                        confirmButtonText: "OK"
+                                    });
+                                    let button = document.getElementById(`unlist-button-${categoryId}`);
+                                    let status = document.getElementById(`unlist-status-${categoryId}`);
+                                    if (button.classList.contains('btn-outline-danger')) {
+                                        status.classList.remove('badge-soft-success');
+                                        status.classList.add('badge-soft-danger');
+                                        status.innerHTML = 'Unlisted';
+                                        button.classList.remove('btn-outline-danger');
+                                        button.classList.add('btn-brand');
+                                        button.innerHTML = '<i class="fas fa-check"></i> List';
+                                    } else {
+                                        status.classList.remove('badge-soft-danger');
+                                        status.classList.add('badge-soft-success');
+                                        status.innerHTML = 'Listed';
+                                        button.classList.remove('btn-brand');
+                                        button.classList.add('btn-outline-danger');
+                                        button.innerHTML = '<i class="fas fa-ban"></i> Unlist';
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.log("error in sending category id");
+                            });
+                    }
+                });
+
+
             }
 
         </script>
