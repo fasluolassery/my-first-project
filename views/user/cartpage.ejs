@@ -278,16 +278,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% cartItems.forEach(item=> { %>
-                                                    <tr id="items-<%= item.id %>">
+                                                <% cartItems.forEach(item => { %>
+                                                    <tr id="items-<%= item.id %>" data-stock="<%= item.stock %>">
                                                         <td class="product-thumbnail">
                                                             <a href="#"><img class="img-responsive ml-15px" src="<%= item.imagePaths[0] %>" alt="" /></a>
                                                         </td>
-                                                        <td class="product-name"><a href="#">
-                                                            <%= item.productName %>
-                                                        </a></td>
+                                                        <td class="product-name"><a href="#"><%= item.productName %></a></td>
                                                         <td class="product-price-cart">
-                                                            <span class="amount" data-price="<%= item.price %>">$<%= item.price %></span>
+                                                            <span class="amount" data-price="<%= item.price %>">₹<%= item.price %></span>
                                                         </td>
                                                         <td class="product-quantity">
                                                             <div class="cart-plus-minus">
@@ -297,12 +295,13 @@
                                                                 <p class="error-message text-danger mt-1" style="display: none;"></p>
                                                             </div>
                                                         </td>
-                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">$<%= item.price %></td>
+                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%= item.price %></td>
                                                         <td class="product-remove">
                                                             <a onclick="removeitemFromCart('<%= item.id %>')"><i class="fa fa-times"></i></a>
                                                         </td>
                                                     </tr>
                                                 <% }) %>
+                                                
                                                 
                                                         <!-- <tr>
                                             <td class="product-thumbnail">
@@ -349,14 +348,14 @@
                                                 </div>
                                                 <div class="cart-clear">
                                                     <!-- <button>Update Shopping Cart</button> -->
-                                                    <a href="#">Clear Shopping Cart</a>
+                                                    <!-- <a href="#">Clear Shopping Cart</a> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-6 mb-lm-30px">
+                                    <!-- <div class="col-lg-4 col-md-6 mb-lm-30px">
                                         <div class="cart-tax">
                                             <div class="title-wrap">
                                                 <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax
@@ -399,7 +398,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-6 mb-lm-30px">
                                         <div class="discount-code-wrapper">
                                             <div class="title-wrap">
@@ -419,17 +418,17 @@
                                             <div class="title-wrap">
                                                 <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                             </div>
-                                            <h5>Total products <span>$260.00</span></h5>
+                                            <h5>Total products <span id="total-products-amount">₹0.00</span></h5>
                                             <div class="total-shipping">
                                                 <h5>Total shipping</h5>
                                                 <ul>
-                                                    <li><input type="checkbox" /> Standard <span>$20.00</span></li>
-                                                    <li><input type="checkbox" /> Express <span>$30.00</span></li>
+                                                    <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
                                                 </ul>
                                             </div>
-                                            <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
+                                            <h4 class="grand-totall-title">Grand Total <span id="grand-total-amount">₹0.00</span></h4>
                                             <a href="checkout.html">Proceed to Checkout</a>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -597,29 +596,49 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const minQty = 1;
                 const maxQty = 5;
-
+            
                 function updateSubtotal(itemId) {
                     const input = document.getElementById(`quantityValue-${itemId}`);
                     const quantity = parseInt(input.value);
                     const priceElement = document.querySelector(`#items-${itemId} .product-price-cart .amount`);
                     const price = parseFloat(priceElement.getAttribute('data-price'));
                     const subtotalElement = document.getElementById(`subtotal-${itemId}`);
-                    subtotalElement.textContent = `$${(quantity * price).toFixed(2)}`;
+                    subtotalElement.textContent = `₹${(quantity * price).toFixed(2)}`;
+                    
+                    // Update the total
+                    updateGrandTotal();
                 }
-
+            
+                function updateGrandTotal() {
+                    let grandTotal = 0;
+                    document.querySelectorAll('.product-subtotal').forEach(subtotalElement => {
+                        const subtotal = parseFloat(subtotalElement.textContent.replace('₹', ''));
+                        grandTotal += subtotal;
+                    });
+            
+                    // Set the total and grand total
+                    document.getElementById('total-products-amount').textContent = `₹${grandTotal.toFixed(2)}`;
+                    const shipping = parseFloat(document.getElementById('total-shipping-amount').textContent.replace('₹', ''));
+                    document.getElementById('grand-total-amount').textContent = `₹${(grandTotal + shipping).toFixed(2)}`;
+                }
+            
                 function handleButtonClick(event) {
                     const button = event.target;
                     const itemId = button.getAttribute('data-id');
                     const input = document.getElementById(`quantityValue-${itemId}`);
                     const errorMessage = button.closest('.cart-plus-minus').querySelector('.error-message');
+                    const itemRow = document.getElementById(`items-${itemId}`);
+                    const stock = parseInt(itemRow.getAttribute('data-stock'));
                     let currentQty = parseInt(input.value);
-
+            
                     if (button.classList.contains('inc')) {
-                        if (currentQty < maxQty) {
+                        if (currentQty < maxQty && currentQty < stock) {
                             input.value = currentQty + 1;
                             errorMessage.style.display = 'none';
-                        } else {
+                        } else if (currentQty >= maxQty) {
                             showError(`*Max limit reached`, errorMessage);
+                        } else if (currentQty >= stock) {
+                            showError(`*Only ${stock} in stock`, errorMessage);
                         }
                     } else if (button.classList.contains('dec')) {
                         if (currentQty > minQty) {
@@ -627,24 +646,24 @@
                             errorMessage.style.display = 'none';
                         }
                     }
-
+            
                     // Update the subtotal for the item
                     updateSubtotal(itemId);
                 }
-
+            
                 function showError(message, errorMessage) {
                     errorMessage.textContent = message;
                     errorMessage.style.display = 'block';
                 }
-
+            
                 document.querySelectorAll('.inc.qtybutton').forEach(button => {
                     button.addEventListener('click', handleButtonClick);
                 });
-
+            
                 document.querySelectorAll('.dec.qtybutton').forEach(button => {
                     button.addEventListener('click', handleButtonClick);
                 });
-
+            
                 // Attach change event listener to quantity inputs
                 document.querySelectorAll('.cart-plus-minus-box').forEach(input => {
                     input.addEventListener('change', (event) => {
@@ -652,9 +671,13 @@
                         updateSubtotal(itemId);
                     });
                 });
+            
+                // Initial calculation of the grand total
+                updateGrandTotal();
             });
-
-        </script>
+            </script>
+            
+            
 
 
         <script>

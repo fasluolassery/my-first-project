@@ -711,7 +711,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-body text-center">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="reloadAfter()"><i
                                     class="pe-7s-close"></i></button>
                             <div class="tt-modal-messages">
                                 <i class="pe-7s-check mb-3"></i> Added to cart successfully!
@@ -826,6 +826,11 @@
                 <script src="assets/js/main.js"></script>
 
                 <script>
+
+                    function reloadAfter(){
+                        window.location.reload()
+                    }
+
                     function addToCartFromSingle(productId) {
 
                         // const quantity = document.getElementById('singleProductQuantity').value
@@ -860,7 +865,7 @@
                                         denyButtonColor: '#266bf9'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            window.location.href = '/cart';
+                                            window.location.href = '/cart/?id=<%= user %>';
                                         }
                                     });
                                 }else{

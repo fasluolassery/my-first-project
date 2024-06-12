@@ -210,15 +210,29 @@ const loadSingleProductUser = async (req, res) => {
             throw new Error('Product not found');
         }
 
-        // Create breadcrumb data based on the product's category
         const breadcrumbs = [
             { name: 'Home', url: '/' },
             { name: findProduct.category, url: `/category/${findProduct.category.toLowerCase()}` },
             { name: findProduct.productName, url: `/product?id=${findProduct._id}` }
         ];
 
-        // Pass breadcrumbs to the template
-        res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
+        let findUser
+        if (user) {
+            
+            findUser = await userModel.findOne({ email: user })
+            const userId = findUser.id
+            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
+            
+
+            const userCartItems = findCart.items.map(pro => pro.productId)
+            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: userId, userCartItems: userCartItems });
+
+        }else{
+
+            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
+
+        }
+
     } catch (err) {
         console.log("Error loading single product", err.message);
         res.status(500).send("Internal Server Error");

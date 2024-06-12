@@ -8,12 +8,13 @@ const loadCart = async (req, res) => {
 
         const findUserCartItems = await cartModel.findOne({ userId: userId }).populate('items.productId')
         const userCartItems = findUserCartItems.items.map(pro => pro.productId)
-        console.log(userCartItems)
+        // console.log(userCartItems) //!to remove
         if (userCartItems.length > 0) {
+            const itIsCart = true
 
-            res.render('user/cartpage', { cartItems: userCartItems, user: userId })
+            res.render('user/cartpage', { cartItems: userCartItems, user: userId, itIsCart: itIsCart})
         } else {
-            res.render('user/emtycart')
+            res.render('user/emtycart', {user: userId})
         }
 
     } catch (err) {
@@ -25,7 +26,7 @@ const loadCart = async (req, res) => {
 const getProductsToAdd = async (req, res) => {
     try {
         const { productId } = req.body;
-        // console.log(productId)
+        // console.log(productId) //! to remove
 
 
         if (!req.session.user) {
