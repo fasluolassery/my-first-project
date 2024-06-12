@@ -3,15 +3,41 @@ const findOrCreate = require('mongoose-findorcreate')
 
 // User schema
 const userSchema = new mongoose.Schema({
-    username: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    googleId: {type: String},
-    phone: {type: Number},
-    password: {type: String, required: true},
-    createdAt: {type: Date, default: Date.now},
-    isVerified: {type: Boolean, default: false},
-    isAdmin: {type: Boolean, default: false},
-    isBlock: {type: Boolean, default: false}
+    username: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    googleId: {
+        type: String
+    },
+    phone: {
+        type: Number
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    isBlock: {
+        type: Boolean,
+        default: false
+    }
 });
 
 userSchema.plugin(findOrCreate)

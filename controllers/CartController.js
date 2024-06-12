@@ -4,7 +4,18 @@ const userModel = require('../models/userModel')
 
 const loadCart = async (req, res) => {
     try {
-        res.render('user/cartpage')
+        const userId = req.query.id
+
+        const findUserCartItems = await cartModel.findOne({ userId: userId }).populate('items.productId')
+        const userCartItems = findUserCartItems.items.map(pro => pro.productId)
+        console.log(userCartItems)
+        if (userCartItems.length > 0) {
+
+            res.render('user/cartpage', { cartItems: userCartItems, user: userId })
+        } else {
+            res.render('user/emtycart')
+        }
+
     } catch (err) {
         console.log("Error loading Cart page: ", err.message)
     }
@@ -14,6 +25,7 @@ const loadCart = async (req, res) => {
 const getProductsToAdd = async (req, res) => {
     try {
         const { productId } = req.body;
+        // console.log(productId)
 
 
         if (!req.session.user) {
@@ -25,6 +37,10 @@ const getProductsToAdd = async (req, res) => {
 
         const findUserData = await userModel.findOne({ email: user })
 
+        if (!findUserData) {
+            console.log("User session out")
+            return res.send({ status: 1 })
+        }
 
         let userCart = await cartModel.findOne({ userId: findUserData.id });
 
@@ -64,76 +80,32 @@ const getProductsToAdd = async (req, res) => {
     }
 }
 
-const addToCartSingle = async (req, res) => {
+const removeProduct = async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
-        const { user } = req.session;
 
-        const findUserData = await userModel.findOne({ email: user });
+        const { userId, productId } = req.body;
+        const findUserCart = await cartModel.findOne({ userId: userId });
+        const findProductIndex = findUserCart.items.findIndex(item => item.productId == productId);
 
-        if (!findUserData) {
-            console.log("User session out to add product to cart");
-            return res.send({ status: 1});
+        if (findProductIndex !== -1) {
+            const updatedCart = await cartModel.updateOne(
+                { userId: userId },
+                { $pull: { items: { productId: productId } } }
+            );
+            if (updatedCart) {
+                res.send({ status: 2 })
+            }
         }
 
-        let userCart = await cartModel.findOne({ userId: findUserData.id });
 
-        if (!userCart) {
-            // Create a new cart if none exists and the quantity is within limit
-            if (quantity > 6) {
-                return res.send({ status: 3 });
-            }
 
-            const newCart = new cartModel({
-                userId: findUserData.id,
-                items: [{ productId, quantity }]
-            });
-
-            const saveCart = await newCart.save();
-
-            if (saveCart) {
-                return res.send({ status: 2 });
-            }
-        } else {
-            // Check if the product already exists in the cart
-            const existingProductIndex = userCart.items.findIndex(item => item.productId.toString() === productId);
-
-            if (existingProductIndex !== -1) {
-                // If the product exists, update its quantity
-                const newQuantity = userCart.items[existingProductIndex].quantity + quantity;
-
-                if (newQuantity > 6) {
-                    // If new quantity exceeds 6, send a message
-                    return res.send({ status: 3 });
-                }
-
-                userCart.items[existingProductIndex].quantity = newQuantity;
-            } else {
-                // If the product doesn't exist, check if adding it exceeds total allowed items
-                const totalItemsInCart = userCart.items.length;
-
-                if (totalItemsInCart >= 6) {
-                    return res.send({ status: 3 });
-                }
-
-                userCart.items.push({ productId, quantity });
-            }
-
-            // Save the updated cart
-            await userCart.save();
-
-            return res.send({ status: 4 });
-        }
     } catch (err) {
-        console.log("Error at single add to cart: ", err.message);
-        // return res.status(500).send({ status: 5, message: "Failed to add product to cart" });
+        console.log("Error in removing product from cart: ", err)
     }
-};
-
-
+}
 
 module.exports = {
     getProductsToAdd,
     loadCart,
-    addToCartSingle,
+    removeProduct
 }

@@ -376,56 +376,46 @@
         Cart Plus Minus Button
     ------------------------------ */
 
-    var paragraph = document.getElementById("numericParagraph");
-    var numericString
-    if(paragraph){
+    // var paragraph = document.getElementById("numericParagraph");
+    // var numericString
+    // if(paragraph){
         
-        numericString = paragraph.textContent;
-    }
-    var numericValue = parseFloat(numericString);
+    //     numericString = paragraph.textContent;
+    // }
+    // var numericValue = parseFloat(numericString);
     
-    const errorMessageInStock = document.getElementById('errorMessageInStock')
+    // const errorMessageInStock = document.getElementById('errorMessageInStock')
 
-    var CartPlusMinus = $(".cart-plus-minus");
-    CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
-    CartPlusMinus.append('<div class="inc qtybutton">+</div>');
+    // var CartPlusMinus = $(".cart-plus-minus");
+    // CartPlusMinus.prepend('<div class="dec qtybutton">-</div>');
+    // CartPlusMinus.append('<div class="inc qtybutton">+</div>');
 
-    $(".qtybutton").on("click", function () {
-        var $button = $(this);
-        var inputField = $button.parent().find("input");
-        var oldValue = parseFloat(inputField.val());
-        var maxQuantity = 5 
-        var stockQuantity = numericValue; 
+    // $(".qtybutton").on("click", function () {
+    //     var $button = $(this);
+    //     var inputField = $button.parent().find("input");
+    //     var oldValue = parseFloat(inputField.val());
+    //     var maxQuantity = 5 
+    //     var stockQuantity = numericValue; 
 
-        // Calculate the new value based on the button clicked
-        var newVal;
-        if ($button.text() === "+") {
-            // Limit the increment to a maximum of 5 and available stock
-            newVal = Math.min(oldValue + 1, 5, stockQuantity);
-        } else {
-            // Don't allow decrementing below 1
-            newVal = Math.max(oldValue - 1, 1);
-        }
+    //     var newVal;
+    //     if ($button.text() === "+") {
+    //         newVal = Math.min(oldValue + 1, 5, stockQuantity);
+    //     } else {
+    //         newVal = Math.max(oldValue - 1, 1);
+    //     }
 
-        // if(){
-        //     errorMessageInStock.style.display = "block"
-        // }else{
-        //     errorMessageInStock.style.display = "none"
-        // }
+       
 
-        // Check if the new value exceeds the maximum quantity
-        if (newVal >= maxQuantity ) {
-            errorMessageInStock.style.display = "block"
-            // return;
-        }else if(newVal >= stockQuantity){
-            errorMessageInStock.style.display = "block"
-        }else{
-            errorMessageInStock.style.display = "none"
-        }
+    //     if (newVal >= maxQuantity ) {
+    //         errorMessageInStock.style.display = "block"
+    //     }else if(newVal >= stockQuantity){
+    //         errorMessageInStock.style.display = "block"
+    //     }else{
+    //         errorMessageInStock.style.display = "none"
+    //     }
 
-        // Update the input field with the new value
-        inputField.val(newVal);
-    });
+    //     inputField.val(newVal);
+    // });
 
     /*------------------------------
             Single Product Slider

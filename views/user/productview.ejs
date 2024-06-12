@@ -170,17 +170,17 @@
                                     </div>
                                     <% if(product.stock>= 1) {%>
                                         <div class="pro-details-quality mt-2">
-                                            <div class="cart-plus-minus">
+                                            <!-- <div class="cart-plus-minus">
                                                 <input class="cart-plus-minus-box" type="text" name="qtybutton"
                                                     id="singleProductQuantity" value="1" />
+                                            </div> -->
+                                            <div class="pro-details-compare-wishlist pro-details-wishlist">
+                                                <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                                             </div>
                                             <div class="pro-details-cart">
                                                 <button class="add-cart"
                                                     onclick="addToCartFromSingle('<%= product.id %>')"> Add To
                                                     Cart</button>
-                                            </div>
-                                            <div class="pro-details-compare-wishlist pro-details-wishlist">
-                                                <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                                             </div>
                                             <div class="pro-details-compare-wishlist pro-details-wishlist">
                                                 <a href="compare.html"><i class="pe-7s-refresh-2"></i></a>
@@ -701,6 +701,38 @@
             </div>
         </div>
         <!-- Modal end -->
+
+
+
+
+        
+            <div class="modal customize-class fade" id="exampleModal-Cart-<%= product.id %>" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                    class="pe-7s-close"></i></button>
+                            <div class="tt-modal-messages">
+                                <i class="pe-7s-check mb-3"></i> Added to cart successfully!
+                            </div>
+                            <div class="tt-modal-product">
+                                <div class="tt-img">
+                                    <img src="<%= product.imagePaths[0] %>" alt="<%= product.productName %>">
+                                </div>
+                                <h2 class="tt-title mt-3"><a href="#">
+                                        <%= product.productName %>
+                                    </a></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+
+
+
         <!-- Modal Cart -->
 
 
@@ -796,26 +828,47 @@
                 <script>
                     function addToCartFromSingle(productId) {
 
-                        const quantity = document.getElementById('singleProductQuantity').value
+                        // const quantity = document.getElementById('singleProductQuantity').value
 
-                        const productAddData = {
-                            productId: productId,
-                            quantity: quantity
-                        }
-                        axios.post('/addToCartFromSingle', productAddData)
+                        // const productAddData = {
+                        //     productId: productId,
+                        //     quantity: quantity
+                        // }
+                        
+                        axios.post('/addtocart', {productId: productId})
                             .then(res => {
                                 if (res.data.status === 1) {
                                     Swal.fire({
-                                        title: "<span style='color: black;'>Session expired. Please log in again</span>",
+                                        title: "<span style='color: black;'>You're not logged in</span>",
                                         text: "Please login to continue.",
                                         confirmButtonColor: '#266bf9',
                                         confirmButtonText: "Login",
-                                        // showCancelButton: true,
+                                        showCancelButton: true,
                                     }).then((result) => {
                                         if (result.isConfirmed) {
                                             window.location.href = '/login';
                                         }
                                     });
+                                } else if (res.data.status === 3) {
+                                    Swal.fire({
+                                        title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
+                                        text: "Feel free to adjust the quantity in your cart if you'd like more.",
+                                        confirmButtonColor: '#266bf9',
+                                        confirmButtonText: "Go to cart",
+                                        showDenyButton: true,
+                                        denyButtonText: `ok`,
+                                        denyButtonColor: '#266bf9'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = '/cart';
+                                        }
+                                    });
+                                }else{
+                                    // Trigger the modal manually if the user is logged in and item is added to the cart
+                                    const modalId = `#exampleModal-Cart-${productId}`;
+                                    const modalElement = document.querySelector(modalId);
+                                    const modalInstance = new bootstrap.Modal(modalElement);
+                                    modalInstance.show();
                                 }
                             })
                             .catch(err => {

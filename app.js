@@ -42,6 +42,7 @@ const port = process.env.PORT || 7777;
 // -----------------------------------
 
 app.use('/public', express.static('public'));
+app.use('/cart', express.static('public'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public/admin')));
 app.use(express.static(path.join(__dirname, 'public/user')));

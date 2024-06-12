@@ -1,5 +1,7 @@
 const Product = require('../models/productModel');
-const Category = require('../models/categoryModel')
+const Category = require('../models/categoryModel');
+const userModel = require('../models/userModel')
+const cartModel = require('../models/cartModel')
 
 
 //!Admin
@@ -170,9 +172,25 @@ const loadProductsUser = async (req, res) => {
     try {
         const findAllProducts = await Product.find({isBlock: false})
         const findAllCategories = await Category.find({isBlock: false})
+        const { user } = req.session
+
+        let findUser
+        if (user) {
+            
+            findUser = await userModel.findOne({ email: user })
+            const userId = findUser.id
+            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
+            
+
+            const userCartItems = findCart.items.map(pro => pro.productId)
+            res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId , userCartItems: userCartItems});
+
+        }else{
+
+            res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: user})
+        }
 
         // console.log(findAllProducts)
-        res.render('user/products', { products: findAllProducts, categories: findAllCategories})
     } catch (err) {
         console.log("Error loading products page in user side", err.message)
     }
@@ -186,6 +204,8 @@ const loadSingleProductUser = async (req, res) => {
         const findRelatedProducts = await Product.find({category: findProduct.category})
         // console.log(findRelatedProducts) //!to remove
 
+        const { user } = req.session
+
         if (!findProduct) {
             throw new Error('Product not found');
         }
@@ -198,7 +218,7 @@ const loadSingleProductUser = async (req, res) => {
         ];
 
         // Pass breadcrumbs to the template
-        res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts });
+        res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
     } catch (err) {
         console.log("Error loading single product", err.message);
         res.status(500).send("Internal Server Error");

@@ -24,21 +24,16 @@ userRouter.get('/products', sessionCheckUser.isLogin,productController.loadProdu
 userRouter.get('/productview', sessionCheckUser.isLogin,productController.loadSingleProductUser)
 userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
-userRouter.get('/cart', cartController.loadCart)
-userRouter.get('/logout', homeController.logout)
+userRouter.get('/cart', sessionCheckUser.isLogin,cartController.loadCart)
+userRouter.get('/logout', sessionCheckUser.isLogin,homeController.logout)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)
 userRouter.post('/verifyotp', otpController.userVerifyOtp)
 userRouter.post('/login', userValidation.validateLogin, authController.userLoginDetails)
 userRouter.post('/addtocart', cartController.getProductsToAdd)
-userRouter.post('/addToCartFromSingle', cartController.addToCartSingle)
+userRouter.post('/removeProductFromCart', cartController.removeProduct)
 
-// userRouter.post('')
-
-// userRouter.get('/profile', ensureAuthenticated, (req, res) => {
-//     res.render('profile', { user: req.user });
-// });
 
 
 module.exports = userRouter
