@@ -5,36 +5,20 @@ const isLogin = async (req, res, next) => {
   try {
     if (req.session.user) {
 
-      if (typeof req.session.user === 'string') {
+      console.log(req.session.user)
 
-        const findUser = await userModel.findOne({ email: req.session.user })
+      const findUser = await userModel.findOne({ email: req.session.user })
 
-        if (!findUser.isBlock) {
+      if (!findUser.isBlock) {
 
-          // User is logged in
-          next();
+        // User is logged in
+        next();
 
-        } else {
+      } else {
 
-          const errorMessage = "*your account has been temporarily blocked";
-          res.render('user/registerpage', { error: errorMessage })
+        const errorMessage = "*your account has been temporarily blocked";
+        res.render('user/registerpage', { error: errorMessage })
 
-        }
-
-      } else if (typeof req.session.user === 'object') {
-        // console.log(req.session.user)
-        const findUser = await userModel.findOne({ email: req.session.user.email })
-
-        if (!findUser.isBlock) {
-
-          next()
-
-        } else {
-
-          const errorMessage = "*your account has been temporarily blocked";
-          res.render('user/registerpage', { error: errorMessage })
-
-        }
       }
 
     } else {
@@ -54,14 +38,14 @@ const isLogin = async (req, res, next) => {
 
 
 const isLogout = async (req, res, next) => {
-  try{
-    if(!req.session.user){
+  try {
+    if (!req.session.user) {
       next()
-    }else{
+    } else {
       res.redirect('/home')
     }
 
-  }catch(err){
+  } catch (err) {
     console.log("Error in isLogout: ", err.message)
   }
 }

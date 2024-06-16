@@ -1,6 +1,6 @@
-const cartModel = require('../models/cartModel');
-const Products = require('../models/productModel')
-const userModel = require('../models/userModel')
+const cartModel = require('../../models/cartModel');
+const Products = require('../../models/productModel')
+const userModel = require('../../models/userModel')
 
 const loadHome = async (req, res) => {
     try {
@@ -8,16 +8,23 @@ const loadHome = async (req, res) => {
         const { user } = req.session
         let findUser
         if (user) {
-            
+
             findUser = await userModel.findOne({ email: user })
             const userId = findUser.id
             const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
-            
 
-            const userCartItems = findCart.items.map(pro => pro.productId)
-            res.render('user/homepage', { products: findAllProducts, user: userId , userCartItems: userCartItems});
+            if (findCart) {
 
-        }else{
+                const userCartItems = findCart.items.map(pro => pro.productId)
+                res.render('user/homepage', { products: findAllProducts, user: userId });
+
+            }else{
+
+            res.render('user/homepage', { products: findAllProducts, user: userId });
+
+            }
+
+        } else {
 
             res.render('user/homepage', { products: findAllProducts, user: user });
         }
@@ -30,7 +37,7 @@ const loadHome = async (req, res) => {
 const logout = async (req, res) => {
     try {
         const des = req.session.destroy()
-        res.redirect('/home')
+        res.redirect('/login')
     } catch (err) {
         console.log("Error at logout: ", err.message)
     }

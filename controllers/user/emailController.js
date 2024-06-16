@@ -1,12 +1,12 @@
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
-const Otp = require('../models/otpModel');
-const User = require('../models/userModel')
+const Otp = require('../../models/otpModel');
+const User = require('../../models/userModel')
 
 
 const loadVerifyOtp = async (req, res) => {
     try{
-        const newUser = req.session.user
+        const newUser = req.session.userData
 
         console.log(newUser.email) //! to remove
         // const findMail = await User.findOne({email: newUser.email})
@@ -55,8 +55,8 @@ const loadVerifyOtp = async (req, res) => {
 
         const timeToSend = otpSaving.exprAt.getTime()
 
-        console.log("ttlExpireValue:", ttlValue)
-        console.log("timeToSend: ", timeToSend)
+        // console.log("ttlExpireValue:", ttlValue)
+        // console.log("timeToSend: ", timeToSend)
         // console.log(timeToSend) //! to remove
 
         res.render('user/otppage', {timeToSend,ttlValue})

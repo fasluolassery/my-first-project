@@ -13,7 +13,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/GadgetGalaxy')
 .then(() => console.log("Connected to Mongo DB"))
-.catch(( error ) => console.log("Error connecting to Mongo DB", error));
+.catch(( error ) => console.log("Error connecting to Mongo DB", error)); //! to do
 // ---------------------------------------------------------------------
 
 const app = express();
@@ -42,7 +42,7 @@ const port = process.env.PORT || 7777;
 // -----------------------------------
 
 app.use('/public', express.static('public'));
-app.use('/cart', express.static('public'))
+app.use('/cart', express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public/admin')));
 app.use(express.static(path.join(__dirname, 'public/user')));

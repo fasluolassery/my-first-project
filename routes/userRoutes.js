@@ -4,13 +4,14 @@ const passport = require('passport')
 const { ensureAuthenticated } = require('../middlewares/authMiddleware')    
 // ---------------------------------------------------------------------
 
-const userValidation = require('../middlewares/userValidation')
-const authController = require('../controllers/AuthController')
-const homeController = require('../controllers/HomeController')
-const otpController = require('../controllers/OtpController')
-const emailController = require('../controllers/EmailController')
-const productController = require('../controllers/ProductController')
-const cartController = require('../controllers/CartController')
+const userValidation = require('../config/userValidation')
+const authController = require('../controllers/user/authController')
+const homeController = require('../controllers/user/homeController')
+const otpController = require('../controllers/user/otpController')
+const emailController = require('../controllers/user/emailController')
+const productController = require('../controllers/user/productController')
+const cartController = require('../controllers/user/cartController')
+const userController = require('../controllers/user/userController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -24,7 +25,8 @@ userRouter.get('/products', sessionCheckUser.isLogin,productController.loadProdu
 userRouter.get('/productview', sessionCheckUser.isLogin,productController.loadSingleProductUser)
 userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
-userRouter.get('/cart', sessionCheckUser.isLogin,cartController.loadCart)
+userRouter.get('/cart', sessionCheckUser.isLogin, cartController.loadCart)
+userRouter.get('/myAccount', sessionCheckUser.isLogin, userController.loadUserAccount)
 userRouter.get('/logout', sessionCheckUser.isLogin,homeController.logout)
 
 
@@ -33,6 +35,7 @@ userRouter.post('/verifyotp', otpController.userVerifyOtp)
 userRouter.post('/login', userValidation.validateLogin, authController.userLoginDetails)
 userRouter.post('/addtocart', cartController.getProductsToAdd)
 userRouter.post('/removeProductFromCart', cartController.removeProduct)
+userRouter.post('/editUser', userController.editUser)
 
 
 

@@ -2,12 +2,12 @@ const express = require('express')
 const adminRouter = express()
 // -------------------------------
 
-const adminValidation = require('../middlewares/adminValidation')
-const authController = require('../controllers/AuthController')
-const userController = require('../controllers/UserController')
-const categoryController = require('../controllers/CategoryController')
-const productController = require('../controllers/ProductController')
-const upload = require('../middlewares/multerConfig')
+const adminValidation = require('../config/adminValidation')
+const authController = require('../controllers/admin/authController')
+const userController = require('../controllers/admin/userController')
+const categoryController = require('../controllers/admin/categoryController')
+const productController = require('../controllers/admin/productController')
+const upload = require('../config/multerConfig')
 
 
 

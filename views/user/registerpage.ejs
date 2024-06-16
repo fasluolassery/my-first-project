@@ -58,7 +58,7 @@
                                                         </div>                                                        
                                                         <div id="errorMessagesLoginEmail" class="text-danger"></div>
                                                         <input type="email" name="usernamelogin" class="form-control"
-                                                            placeholder="Email" id="userMailLogin" required value="kuttippa-one@gmail.com"/>
+                                                            placeholder="Email" id="userMailLogin" required value="kuttippaone@gmail.com"/>
                                                         <div id="errorMessagesLoginPassword" class="text-danger"></div>
                                                         <input type="password" name="userpasswordlogin"
                                                             placeholder="Password" id="userPasswordLogin" required value="kuttippa"/>
@@ -101,7 +101,7 @@
                                                             type="email" required />
                                                         <div id="errorMessagesPhone" class="text-danger"></div>
                                                         <input type="tel" name="userPhone" id="userPhone"
-                                                            placeholder="Phone" required value="0123456789"/>
+                                                            placeholder="Phone" required value="1234567890"/>
                                                         <div id="errorMessagesPassword" class="text-danger"></div>
                                                         <input type="password" name="userPassword" id="userPassword"
                                                             placeholder="Password" required value="kuttippa"/>
@@ -422,7 +422,7 @@
                                     window.location.href = '/home'
                                 }, 800)
                             } else if (res.data.next == 0) {
-                                displayErrorLoginEmail("*User not found");
+                                displayErrorLoginEmail("*User not found, Please register to continue");
                             } else if (res.data.next == 100) {
                                 displayErrorLoginEmail("*Incorrect password");
                             } else if (res.data.next == 200) {

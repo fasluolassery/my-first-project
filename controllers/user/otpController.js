@@ -1,7 +1,7 @@
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
-const User = require('../models/userModel');
-const Otp = require('../models/otpModel');
+const User = require('../../models/userModel');
+const Otp = require('../../models/otpModel');
 
 const userVerifyOtp = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ const userVerifyOtp = async (req, res) => {
         // console.log(realOtp) //! to remove
 
         if (userTypedOtp === realOtp) {
-            const otpVerifyUser = req.session.user
+            const otpVerifyUser = req.session.userData
 
             const saveNewUser = new User({
                 username: otpVerifyUser.username,
@@ -22,8 +22,11 @@ const userVerifyOtp = async (req, res) => {
                 isVerified: true
             })
 
-            const saving = saveNewUser.save()
+            const saving = await saveNewUser.save()
             if(saving){
+                
+                req.session.userId = saving.id
+
                 console.log("user saved successfully")
                 res.send({next: 1})
             }

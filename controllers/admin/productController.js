@@ -1,7 +1,7 @@
-const Product = require('../models/productModel');
-const Category = require('../models/categoryModel');
-const userModel = require('../models/userModel')
-const cartModel = require('../models/cartModel')
+const Product = require('../../models/productModel');
+const Category = require('../../models/categoryModel');
+const userModel = require('../../models/userModel')
+const cartModel = require('../../models/cartModel')
 
 
 //!Admin
@@ -17,7 +17,7 @@ const loadProducts = async (req, res) => {
 
 const loadCreateProducts = async (req, res) => {
     try {
-        const findAllCategories = await Category.find({isBlock: false})
+        const findAllCategories = await Category.find({ isBlock: false })
         // console.log(findAllCategories) //! to remove
         res.render('admin/createproduct', { categories: findAllCategories })
     } catch (error) {
@@ -37,7 +37,7 @@ const loadEditProduct = async (req, res) => {
             return console.log("there is no product")
         }
 
-        res.render('admin/editproduct', { product: findProduct , categories: findAllCategories})
+        res.render('admin/editproduct', { product: findProduct, categories: findAllCategories })
     } catch (err) {
         console.log("Error loading edit product", err.message)
     }
@@ -49,12 +49,12 @@ const createProducts = async (req, res) => {
         // console.log(productDetails) //! to remove
 
         //! to do 
-        const findCategory = await Category.find({categoryName: productDetails.category})
+        const findCategory = await Category.find({ categoryName: productDetails.category })
         // console.log(findCategory) //! to remove
 
         const existingProduct = await Product.findOne({ productName: productDetails.title })
         if (existingProduct) {
-            res.send({success: 0})
+            res.send({ success: 0 })
             return console.log("product already there")
         }
 
@@ -146,8 +146,8 @@ const editProducts = async (req, res) => {
 
         // Retain existing images if no new file is uploaded
         for (let i = 0; i < 3; i++) {
-            if (!newImageFiles.some(file => file.originalname === `image${i+1}`)) {
-                if (existingImagePaths.includes(`image${i+1}`)) {
+            if (!newImageFiles.some(file => file.originalname === `image${i + 1}`)) {
+                if (existingImagePaths.includes(`image${i + 1}`)) {
                     findProduct.imagePaths[i] = findProduct.imagePaths[i];
                 }
             }
@@ -166,81 +166,6 @@ const editProducts = async (req, res) => {
     }
 };
 
-
-//!User
-const loadProductsUser = async (req, res) => {
-    try {
-        const findAllProducts = await Product.find({isBlock: false})
-        const findAllCategories = await Category.find({isBlock: false})
-        const { user } = req.session
-
-        let findUser
-        if (user) {
-            
-            findUser = await userModel.findOne({ email: user })
-            const userId = findUser.id
-            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
-            
-
-            const userCartItems = findCart.items.map(pro => pro.productId)
-            res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId , userCartItems: userCartItems});
-
-        }else{
-
-            res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: user})
-        }
-
-        // console.log(findAllProducts)
-    } catch (err) {
-        console.log("Error loading products page in user side", err.message)
-    }
-}
-
-const loadSingleProductUser = async (req, res) => {
-    try {
-        const productId = req.query.id;
-        const findProduct = await Product.findOne({ _id: productId });
-
-        const findRelatedProducts = await Product.find({category: findProduct.category})
-        // console.log(findRelatedProducts) //!to remove
-
-        const { user } = req.session
-
-        if (!findProduct) {
-            throw new Error('Product not found');
-        }
-
-        const breadcrumbs = [
-            { name: 'Home', url: '/' },
-            { name: findProduct.category, url: `/category/${findProduct.category.toLowerCase()}` },
-            { name: findProduct.productName, url: `/product?id=${findProduct._id}` }
-        ];
-
-        let findUser
-        if (user) {
-            
-            findUser = await userModel.findOne({ email: user })
-            const userId = findUser.id
-            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
-            
-
-            const userCartItems = findCart.items.map(pro => pro.productId)
-            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: userId, userCartItems: userCartItems });
-
-        }else{
-
-            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
-
-        }
-
-    } catch (err) {
-        console.log("Error loading single product", err.message);
-        res.status(500).send("Internal Server Error");
-    }
-};
-
-
-
 module.exports = {
     loadProducts,
     loadCreateProducts,
@@ -248,6 +173,4 @@ module.exports = {
     unlistProducts,
     editProducts,
     loadEditProduct,
-    loadProductsUser,
-    loadSingleProductUser,
-};
+}

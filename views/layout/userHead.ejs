@@ -62,8 +62,8 @@
                         </a>
                         <!-- Single Wedge End -->
                         <% if(typeof itIsCart == 'undefined') {%>
-                        <a href="#offcanvas-cart"
-                            class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
+                        <a href="/cart"
+                            class="header-action-btn header-action-btn-cart pr-0">
                             <i class="pe-7s-shopbag"></i>
                             <!-- <span class="header-action-num">01</span> -->
                             <!-- <span class="cart-amount">€30.00</span> -->
@@ -230,7 +230,6 @@
                                 <div class="content">
                                     <a href="single-product.html" class="title"><%= item.productName %></a>
                                     <span class="quantity-price">1 x <span class="amount">₹<%= item.price %></span></span>
-                                    <!-- <a href="#" class="remove">×</a> -->
                                 </div>
                             </li>
 

@@ -1,18 +1,25 @@
-const productModel = require('../models/productModel')
-const cartModel = require('../models/cartModel')
-const userModel = require('../models/userModel')
+const productModel = require('../../models/productModel')
+const cartModel = require('../../models/cartModel')
+const userModel = require('../../models/userModel')
 
 const loadCart = async (req, res) => {
     try {
         const userId = req.query.id
 
         const findUserCartItems = await cartModel.findOne({ userId: userId }).populate('items.productId')
-        const userCartItems = findUserCartItems.items.map(pro => pro.productId)
-        // console.log(userCartItems) //!to remove
-        if (userCartItems.length > 0) {
-            const itIsCart = true
+        
+        if(findUserCartItems){
 
-            res.render('user/cartpage', { cartItems: userCartItems, user: userId, itIsCart: itIsCart})
+            const userCartItems = findUserCartItems.items.map(pro => pro.productId)
+            // console.log(userCartItems) //!to remove
+            if (userCartItems.length > 0) {
+                const itIsCart = true
+    
+                res.render('user/cartpage', { cartItems: userCartItems, user: userId, itIsCart: itIsCart})
+        }else{
+            res.render('user/emtycart', {user: userId})
+        }
+
         } else {
             res.render('user/emtycart', {user: userId})
         }
