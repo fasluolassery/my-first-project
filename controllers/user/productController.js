@@ -4,42 +4,21 @@ const userModel = require('../../models/userModel')
 const cartModel = require('../../models/cartModel')
 
 
-const loadProductsUser = async (req, res) => {
+const loadProductsUser = async (req, res, next) => {
     try {
         const findAllProducts = await Product.find({ isBlock: false })
         const findAllCategories = await Category.find({ isBlock: false })
-        const { user } = req.session
+        const { user, userId } = req.session
 
-        let findUser
-        if (user) {
-
-            findUser = await userModel.findOne({ email: user })
-            const userId = findUser.id
-            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
-
-            if (findCart) {
-
-                const userCartItems = findCart.items.map(pro => pro.productId)
-                res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId, userCartItems: userCartItems });
-
-            } else {
-
-                res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId })
-
-            }
-
-        } else {
-
-            res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: user })
-        }
+        res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId })
 
         // console.log(findAllProducts)
-    } catch (err) {
-        console.log("Error loading products page in user side", err.message)
+    } catch (error) {
+        next(error)
     }
 }
 
-const loadSingleProductUser = async (req, res) => {
+const loadSingleProductUser = async (req, res, next) => {
     try {
         const productId = req.query.id;
         const findProduct = await Product.findOne({ _id: productId });
@@ -47,7 +26,7 @@ const loadSingleProductUser = async (req, res) => {
         const findRelatedProducts = await Product.find({ category: findProduct.category })
         // console.log(findRelatedProducts) //!to remove
 
-        const { user } = req.session
+        const { user, userId } = req.session
 
         if (!findProduct) {
             throw new Error('Product not found');
@@ -59,42 +38,18 @@ const loadSingleProductUser = async (req, res) => {
             { name: findProduct.productName, url: `/product?id=${findProduct._id}` }
         ];
 
-        let findUser
-        if (user) {
+        res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: userId });
+        
 
-            findUser = await userModel.findOne({ email: user })
-            const userId = findUser.id
-            const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
-
-
-            if (findCart) {
-
-                const userCartItems = findCart.items.map(pro => pro.productId)
-                res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: userId, userCartItems: userCartItems });
-
-            }else{
-
-            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
-
-
-            }
-
-        } else {
-
-            res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: user });
-
-        }
-
-    } catch (err) {
-        console.log("Error loading single product", err.message);
-        res.status(500).send("Internal Server Error");
+    } catch (error) {
+        next(error)
     }
 };
 
 
 
 module.exports = {
-   
+
     loadProductsUser,
     loadSingleProductUser,
 };

@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const User = require('../../models/userModel');
 const Otp = require('../../models/otpModel');
 
-const userVerifyOtp = async (req, res) => {
+const userVerifyOtp = async (req, res, next) => {
     try {
         const realOtp = req.session.userOtp
         const userTypedOtp = req.body.otp
@@ -36,7 +36,7 @@ const userVerifyOtp = async (req, res) => {
             res.send({ next: 0 })
         }
     } catch (error) {
-        console.log("Error otp checking and saving User:", error.message)
+        next(error)
     }
 }
 

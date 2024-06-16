@@ -5,6 +5,7 @@ const flash = require('express-flash')
 const passport = require('./config/passport')
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes')
+const errorHandler = require('./middlewares/errorHandler')
 const nocache = require('nocache');
 
 require('dotenv').config();
@@ -65,6 +66,8 @@ app.use('/admin', adminRoutes);
 // app.use((req, res) => {
 //     res.status(404).render('user/404');
 // });
+
+app.use(errorHandler)
 
 // Start server
 app.listen(port, () => {

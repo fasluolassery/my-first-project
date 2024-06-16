@@ -2,7 +2,7 @@ const productModel = require('../../models/productModel')
 const cartModel = require('../../models/cartModel')
 const userModel = require('../../models/userModel')
 
-const loadCart = async (req, res) => {
+const loadCart = async (req, res, next) => {
     try {
         const userId = req.query.id
 
@@ -24,13 +24,14 @@ const loadCart = async (req, res) => {
             res.render('user/emtycart', {user: userId})
         }
 
-    } catch (err) {
-        console.log("Error loading Cart page: ", err.message)
+    } catch (error) {
+        next(error)
     }
 }
 
 
-const getProductsToAdd = async (req, res) => {
+
+const getProductsToAdd = async (req, res, next) => {
     try {
         const { productId } = req.body;
         // console.log(productId) //! to remove
@@ -83,12 +84,14 @@ const getProductsToAdd = async (req, res) => {
         }
 
 
-    } catch (err) {
-        console.log("Error in adding products to cart: ", err.message)
+    } catch (error) {
+        next(error)
     }
 }
 
-const removeProduct = async (req, res) => {
+
+
+const removeProduct = async (req, res, next) => {
     try {
 
         const { userId, productId } = req.body;
@@ -105,10 +108,8 @@ const removeProduct = async (req, res) => {
             }
         }
 
-
-
-    } catch (err) {
-        console.log("Error in removing product from cart: ", err)
+    } catch (error) {
+        next(error)
     }
 }
 

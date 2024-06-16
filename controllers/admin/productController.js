@@ -4,28 +4,27 @@ const userModel = require('../../models/userModel')
 const cartModel = require('../../models/cartModel')
 
 
-//!Admin
-const loadProducts = async (req, res) => {
+const loadProducts = async (req, res, next) => {
     try {
         const findAllProducts = await Product.find()
         // console.log(findAllProducts)   //! to remove
         res.render('admin/products', { products: findAllProducts })
     } catch (error) {
-        console.log("Error in loading products:", error.message)
+        next(error)
     }
 }
 
-const loadCreateProducts = async (req, res) => {
+const loadCreateProducts = async (req, res, next) => {
     try {
         const findAllCategories = await Category.find({ isBlock: false })
         // console.log(findAllCategories) //! to remove
         res.render('admin/createproduct', { categories: findAllCategories })
     } catch (error) {
-        console.log("Error in loading create product page")
+        next(error)
     }
 }
 
-const loadEditProduct = async (req, res) => {
+const loadEditProduct = async (req, res, next) => {
     try {
         const productId = req.query.id
         const findProduct = await Product.findOne({ _id: productId })
@@ -38,12 +37,12 @@ const loadEditProduct = async (req, res) => {
         }
 
         res.render('admin/editproduct', { product: findProduct, categories: findAllCategories })
-    } catch (err) {
-        console.log("Error loading edit product", err.message)
+    } catch (error) {
+        next(error)
     }
 }
 
-const createProducts = async (req, res) => {
+const createProducts = async (req, res, next) => {
     try {
         const productDetails = req.body;
         // console.log(productDetails) //! to remove
@@ -86,11 +85,11 @@ const createProducts = async (req, res) => {
             res.send({ success: 1 })
         }
     } catch (error) {
-        console.log("Error creating new product", error.message);
+        next(error)
     }
 };
 
-const unlistProducts = async (req, res) => {
+const unlistProducts = async (req, res, next) => {
     try {
         const productId = req.params.id
         // console.log(productId) //!to remove
@@ -111,11 +110,11 @@ const unlistProducts = async (req, res) => {
             res.send({ success: false })
         }
     } catch (error) {
-        console.log("Error in unlisting Products", error.message)
+        next(error)
     }
 }
 
-const editProducts = async (req, res) => {
+const editProducts = async (req, res, next) => {
     try {
         const productInfo = req.body;
         const newImageFiles = req.files;
@@ -160,9 +159,8 @@ const editProducts = async (req, res) => {
         } else {
             res.status(500).send({ success: 0, message: 'Failed to update product' });
         }
-    } catch (err) {
-        console.error("Error updating product", err.message);
-        res.status(500).send({ success: 0, message: 'Error updating product' });
+    } catch (error) {
+        next(error)
     }
 };
 

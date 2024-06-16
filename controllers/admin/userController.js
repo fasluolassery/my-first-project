@@ -1,25 +1,25 @@
 const User = require('../../models/userModel');
 const bcrypt = require('bcrypt')
 
-const loadUsers = async (req, res) => {
+const loadUsers = async (req, res, next) => {
     try {
         const allUsers = await User.find()
 
         res.render('admin/users', { users: allUsers })
     } catch (error) {
-        console.log("Error loading users", error.message)
+        next(error)
     }
 }
 
-const loadCreateUser = async (req, res) => {
+const loadCreateUser = async (req, res, next) => {
     try {
         res.render('admin/createuser')
     } catch (error) {
-        console.log("Error loading createUser", error.message)
+        next(error)
     }
 }
 
-const blockUser = async (req, res) => {
+const blockUser = async (req, res, next) => {
     try {
         const userId = req.params.id
         const user = await User.findOne({ _id: userId })
@@ -33,11 +33,11 @@ const blockUser = async (req, res) => {
             res.send({ success: false })
         }
     } catch (error) {
-        console.log("Error in block user", error.message)
+        next(error)
     }
 }
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
     try {
         const { userName, userEmail, userPhone, userPassword } = req.body
 
@@ -65,7 +65,7 @@ const createUser = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message)
+        next(error)
     }
 }
 

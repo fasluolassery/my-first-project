@@ -1,19 +1,19 @@
 const { validationResult } = require('express-validator');
 
-const loadAdminLogin = async (req, res) => {
+const loadAdminLogin = async (req, res, next) => {
     try {
         res.render('admin/adminlogin');
     } catch (error) {
-        console.log("Error loading admin login:", error.message);
+        next(error)
     }
 };
 
-const verifyAdminLogin = async (req, res) => {
-    try{
+const verifyAdminLogin = async (req, res, next) => {
+    try {
         const AdminValidationErrors = validationResult(req)
-        
-        if(!AdminValidationErrors.isEmpty()){
-            return console.log('error',validationErrors.array())
+
+        if (!AdminValidationErrors.isEmpty()) {
+            return console.log('error', validationErrors.array())
         }
 
         const adminCredential = {
@@ -23,29 +23,29 @@ const verifyAdminLogin = async (req, res) => {
 
         const { loginEmail, loginPassword } = req.body
 
-        if(loginEmail !== adminCredential.adminMail){
-            res.send( {next: 0 } )
+        if (loginEmail !== adminCredential.adminMail) {
+            res.send({ next: 0 })
             return console.log("Error: Admin Not Found")
         }
 
-        if(loginPassword !== adminCredential.adminPassword){
-            res.send( {next: 100} )
+        if (loginPassword !== adminCredential.adminPassword) {
+            res.send({ next: 100 })
             return console.log("Error: Incorrect password")
         }
 
         req.session.admin = loginEmail
-        res.send( { next:1 } )
+        res.send({ next: 1 })
 
-    }catch(error){
-        console.log("Error verifying admin", error.message)
+    } catch (error) {
+        next(error)
     }
 }
 
-const loadAdminDashboard = async (req, res) => {
-    try{
+const loadAdminDashboard = async (req, res, next) => {
+    try {
         res.render('admin/admindashboard')
-    }catch(error){
-        console.log("Error loading admin dashboard", error.message)
+    } catch (error) {
+        next(error)
     }
 }
 

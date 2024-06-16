@@ -735,7 +735,7 @@
 
         <!-- Modal Cart -->
 
-
+            <% if(typeof relatedProducts != 'undefined') {%>
         <% relatedProducts.forEach(rp=> { %>
             <div class="modal customize-class fade" id="exampleModal-Cart-<%= rp.id %>" tabindex="-1"
                 aria-hidden="true">
@@ -760,6 +760,7 @@
                 </div>
             </div>
             <% }) %>
+            <% } %>
 
 
                 <!-- Modal wishlist -->

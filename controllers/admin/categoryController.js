@@ -1,21 +1,21 @@
 const Category = require('../../models/categoryModel');
 
-const loadCategory = async (req, res) => {
+const loadCategory = async (req, res, next) => {
     try {
         const findAllCategories = await Category.find()
         res.render('admin/category', { categories: findAllCategories })
     } catch (error) {
-        console.log("Error in loading category:", error.message)
+        next(error)
     }
 }
 
-const getCategoryDetails = async (req, res) => {
+const getCategoryDetails = async (req, res, next) => {
     try {
         const categoryDetails = req.body
         // console.log(categoryDetails) //!to remove
         const existingCategory = await Category.findOne({ categoryName: categoryDetails.categoryName.toLowerCase() })
 
-        if(existingCategory){
+        if (existingCategory) {
             if (categoryDetails.categoryName.toLowerCase() == existingCategory.categoryName.toLowerCase()) {
                 res.send({ next: 100 })
                 return console.log("Category already there")
@@ -35,11 +35,11 @@ const getCategoryDetails = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log("Error getting category Details", error.message)
+        next(error)
     }
 }
 
-const unlistCategory = async (req, res) => {
+const unlistCategory = async (req, res, next) => {
     try {
         const categoryId = req.params.id
         const findCategory = await Category.findOne({ _id: categoryId })
@@ -59,12 +59,12 @@ const unlistCategory = async (req, res) => {
             res.send({ success: false })
         }
     } catch (error) {
-        console.log("Error in unlisting Category", error.message)
+        next(error)
     }
 }
 
 
-const updateCategory = async (req, res) => {
+const updateCategory = async (req, res, next) => {
     try {
         const updateCategoryDetails = req.body
         // console.log(updateCategoryDetails) //! to remove
@@ -73,7 +73,7 @@ const updateCategory = async (req, res) => {
 
         const existingCategory = await Category.findOne({ categoryName: updateCategoryDetails.categoryName.toLowerCase() })
 
-        if(existingCategory){
+        if (existingCategory) {
             if (updateCategoryDetails.categoryName.toLowerCase() == existingCategory.categoryName.toLowerCase()) {
                 res.send({ next: 100 })
                 return console.log("Category already there")
@@ -90,8 +90,8 @@ const updateCategory = async (req, res) => {
         await findCategory.save()
         res.send({ next: 1 })
 
-    } catch (err) {
-        console.log("Error updating category")
+    } catch (error) {
+        next(error)
     }
 }
 

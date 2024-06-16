@@ -152,7 +152,7 @@
                             <div class="col">
                                 <div class="row mb-n-30px">
 
-
+                                <% if(typeof products != 'undefined') {%>
                                     <% products.forEach(product=> { %>
                                         <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                             <div class="product">
@@ -198,6 +198,7 @@
                                             </div>
                                         </div>
                                         <% }) %>
+                                        <% } %>
 
 
 
@@ -540,6 +541,7 @@
         <!-- Modal end -->
         <!-- Modal Cart -->
 
+        <% if(typeof products != 'undefined') {%>
         <% products.forEach(product=> { %>
             <div class="modal customize-class fade" id="exampleModal-Cart-<%= product.id %>" tabindex="-1"
                 aria-hidden="true">
@@ -564,6 +566,7 @@
                 </div>
             </div>
             <% }) %>
+            <% } %>
 
 
 

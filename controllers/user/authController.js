@@ -3,36 +3,36 @@ const bcrypt = require("bcrypt");
 const User = require('../../models/userModel');
 const Otp = require('../../models/otpModel');
 
-const loadRegister = async (req, res) => {
+const loadRegister = async (req, res, next) => {
     try {
         res.render('user/registerpage');
     } catch (error) {
-        console.log("Error rendering login page:", error.message);
+        next(error)
     }
 };
 
-const userRegisterDetails = async (req, res) => {
-    try{
-    
+const userRegisterDetails = async (req, res, next) => {
+    try {
+
         const validationErrors = validationResult(req)
-        
-        if(!validationErrors.isEmpty()){
-            return console.log('error',validationErrors.array())
+
+        if (!validationErrors.isEmpty()) {
+            return console.log('error', validationErrors.array())
         }
-        
-        const {userName, userEmail, userPassword, userPhone} = req.body
-        
-        const existingUser = await User.findOne({email:userEmail})
-        
-        if(existingUser){
-            res.send({status:"Email is already registered"})
+
+        const { userName, userEmail, userPassword, userPhone } = req.body
+
+        const existingUser = await User.findOne({ email: userEmail })
+
+        if (existingUser) {
+            res.send({ status: "Email is already registered" })
             return console.log("Email is already registered")
         }
-        
+
         const hashedPassword = await bcrypt.hash(userPassword, 10)
 
-        const user ={
-            username:userName,
+        const user = {
+            username: userName,
             email: userEmail,
             phone: userPhone,
             password: hashedPassword
@@ -40,21 +40,21 @@ const userRegisterDetails = async (req, res) => {
 
         req.session.userData = user
         req.session.user = userEmail
-        
-        res.send({status:"success"})
 
-    }catch(error){
-        console.log("Error saving users:", error.message)
+        res.send({ status: "success" })
+
+    } catch (error) {
+        next(error)
     }
 }
 
-const userLoginDetails = async (req, res) => {
-    try{
+const userLoginDetails = async (req, res, next) => {
+    try {
 
         const validationErrors = validationResult(req)
-        
-        if(!validationErrors.isEmpty()){
-            return console.log('error',validationErrors.array())
+
+        if (!validationErrors.isEmpty()) {
+            return console.log('error', validationErrors.array())
         }
 
         const { loginEmail, loginPassword } = req.body
@@ -62,10 +62,10 @@ const userLoginDetails = async (req, res) => {
         // console.log(loginEmail) //! to remove
         // console.log(loginPassword) //! to remove
 
-        const checkUser = await User.findOne({email:loginEmail})
+        const checkUser = await User.findOne({ email: loginEmail })
 
-        if(!checkUser){
-            res.send( { next: 0 } )
+        if (!checkUser) {
+            res.send({ next: 0 })
             return console.log("user not found")
         }
 
@@ -73,32 +73,32 @@ const userLoginDetails = async (req, res) => {
 
         const passMatch = await bcrypt.compare(loginPassword, checkUser.password)
 
-        if(!passMatch){
-            res.send( { next: 100} )
+        if (!passMatch) {
+            res.send({ next: 100 })
             return console.log("Incorrect password")
         }
         // console.log(checkUser.isBlock)
-        if(checkUser.isBlock){
-            res.send( {next: 200})
+        if (checkUser.isBlock) {
+            res.send({ next: 200 })
             return console.log("your account has been temporarily blocked")
         }
-        
+
         req.session.user = loginEmail
         req.session.userId = checkUser.id
 
-        res.send( { next: 1 } )
+        res.send({ next: 1 })
 
-    }catch(error){
-        console.log("Error login users:", error.message)
+    } catch (error) {
+        next(error)
     }
 }
 
-const userLoginGoogle = async (req, res) => {
-    try{
+const userLoginGoogle = async (req, res, next) => {
+    try {
         console.log("the callback reached here")
         res.redirect('/')
-    }catch(err){
-        console.log("Error at googleAuth login", err.message)
+    } catch (error) {
+        next(error)
     }
 }
 
