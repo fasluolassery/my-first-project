@@ -4,7 +4,7 @@ const userModel = require('../../models/userModel')
 
 const loadCart = async (req, res, next) => {
     try {
-        const userId = req.query.id
+        const { userId } = req.session
 
         const findUserCartItems = await cartModel.findOne({ userId: userId }).populate('items.productId')
         

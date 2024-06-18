@@ -5,7 +5,7 @@ const isLogin = async (req, res, next) => {
   try {
     if (req.session.user) {
 
-      console.log(req.session.user)
+      // console.log(req.session.user)
 
       const findUser = await userModel.findOne({ email: req.session.user })
 

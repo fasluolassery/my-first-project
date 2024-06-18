@@ -10,9 +10,9 @@ const loadHome = async (req, res, next) => {
         const findAllProducts = await Products.find({isBlock: false})
         if(user){
             
-            res.render('user/homepage', {Products: findAllProducts, user: userId})
+            res.render('user/homepage', {products: findAllProducts, user: userId})
         }else{
-            res.render('user/homepage', {Products: findAllProducts})
+            res.render('user/homepage', {products: findAllProducts})
         }
 
     } catch (error) {
@@ -20,7 +20,7 @@ const loadHome = async (req, res, next) => {
     }
 };
 
-const logout = async (req, resh, next) => {
+const logout = async (req, res, next) => {
     try {
         const des = req.session.destroy()
         res.redirect('/login')

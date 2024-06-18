@@ -642,7 +642,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-body text-center">
-                                <button type="button" onclick="backreload()" class="btn-close" data-bs-dismiss="modal"
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"><i class="pe-7s-close"></i></button>
                                 <div class="tt-modal-messages">
                                     <i class="pe-7s-check mb-3"></i> Added to cart successfully!
@@ -732,9 +732,6 @@
                         <script src="assets/js/main.js"></script>
 
                         <script>
-                            function backreload() {
-                                window.location.reload()
-                            }
 
                             function addToCartFromProducts(productId, event) {
                                 event.preventDefault(); // Prevent the default action of the button (i.e., opening the modal)

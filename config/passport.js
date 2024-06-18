@@ -22,7 +22,8 @@ passport.use(new GoogleStrategy({
           email: useremail,
           googleId: id,
           phone: 9876543210,
-          password: id
+          password: id,
+          isVerified: true
         });
 
         const saving = await user.save();

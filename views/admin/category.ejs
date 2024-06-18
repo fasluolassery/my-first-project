@@ -281,7 +281,7 @@
 
                 const minLength = 3; // Minimum length of category name
                 const maxLength = 50; // Maximum length of category name
-                const allowedCharacters = /^[a-zA-Z0-9\s]+$/; // Regular expression to allow alphanumeric characters and spaces
+                const allowedCharacters = /^[a-zA-Z0-9-,\s]+$/; // Regular expression to allow alphanumeric characters and spaces
 
                 // Check if category name is present and within length limits
                 if (!categoryName || categoryName.length < minLength || categoryName.length > maxLength) {
@@ -291,7 +291,7 @@
 
                 // Check if category name contains only allowed characters
                 if (!allowedCharacters.test(categoryName)) {
-                    displayErrorName("*Category name can only contain letters, numbers, and spaces.");
+                    displayErrorName("*Can't use some special characters");
                     return false
                 }
 

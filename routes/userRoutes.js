@@ -36,7 +36,8 @@ userRouter.post('/login', userValidation.validateLogin, authController.userLogin
 userRouter.post('/addtocart', cartController.getProductsToAdd)
 userRouter.post('/removeProductFromCart', cartController.removeProduct)
 userRouter.post('/editUser', userController.editUser)
-
+userRouter.post('/changepassword', userController.changePass)
+userRouter.post('/addressadd', userController.addAddress)
 
 
 module.exports = userRouter

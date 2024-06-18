@@ -157,10 +157,30 @@
                                 <div class="tab-content dashboard_content" data-aos="fade-up" data-aos-delay="200">
                                     <div class="tab-pane fade show active" id="dashboard">
                                         <h4>Dashboard </h4>
-                                        <p>From your account dashboard. you can easily check &amp; view your <a
-                                                href="#orders">recent
-                                                orders</a>, manage your <a href="#">shipping and billing addresses</a>
-                                            and <a href="#">Edit your password and account details.</a></p>
+                                        <div class="row mt-3">
+
+
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card p-3">
+                                                    <p class="mb-2"><strong id="nameStrong">
+                                                            <%= userDetails.username %>
+                                                        </strong></p>
+                                                    <address>
+                                                        <strong>
+                                                            <%= userDetails.email %>
+                                                        </strong><br>
+                                                        <strong id="phoneStrong">
+                                                            <%= userDetails.phone %>
+                                                        </strong>
+                                                        <!-- <span><strong>ZIP:</strong> 98101</span><br>
+                                                        <span><strong>Country:</strong> USA</span> -->
+                                                    </address>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
                                     </div>
                                     <!-- <div class="tab-pane fade" id="orders">
                                         <h4>Orders</h4>
@@ -230,7 +250,7 @@
                                     <div class="tab-pane" id="address">
                                         <p>The following addresses will be used on the checkout page by default.</p>
                                         <h5 class="billing-address">Billing address</h5>
-                                        <a href="/myAccount#address" onclick="addAddress()" class="view">Add</a>
+                                        <a href="/myAccount#address" onclick="addAddress(event)" class="view">Add</a>
                                         <div class="row mt-3">
 
 
@@ -245,7 +265,7 @@
                                                     </address>
                                                 </div>
                                             </div>
-                                            
+
 
 
                                         </div>
@@ -259,28 +279,11 @@
                                             <div class="login_form_container">
                                                 <div class="account_login_form">
                                                     <form>
-                                                        <!-- <p>Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginActive">Log in instead!</a></p> -->
-                                                        <!-- <div class="input-radio">
-                                                    <span class="custom-radio"><input type="radio" value="1"
-                                                        name="id_gender"> Mr.</span>
-                                                    <span class="custom-radio"><input type="radio" value="1"
-                                                        name="id_gender"> Mrs.</span>
-                                                </div> <br> -->
                                                         <div class="default-form-box mb-20">
                                                             <div id="errorName" class="text-danger"></div>
                                                             <label>First Name</label>
                                                             <input type="text" id="user-name"
                                                                 value="<%= userDetails.username %>">
-                                                        </div>
-                                                        <!-- <div class="default-form-box mb-20">
-                                                    <label>Last Name</label>
-                                                    <input type="text" name="last-name">
-                                                </div> -->
-                                                        <div class="default-form-box mb-20">
-                                                            <label>Email</label>
-                                                            <span>
-                                                                <%= userDetails.email %>
-                                                            </span>
                                                         </div>
                                                         <div class="default-form-box mb-20">
                                                             <div id="errorPhone" class="text-danger"></div>
@@ -288,28 +291,38 @@
                                                             <input type="text" id="user-phone"
                                                                 value="<%= userDetails.phone %>">
                                                         </div>
-                                                        <!-- <div class="default-form-box mb-20">
-                                                    <label>Birthdate</label>
-                                                    <input type="date" name="birthday">
-                                                </div>
-                                                <span class="example">
-                                                (E.g.: 05/31/1970)
-                                            </span>
-                                                <br>
-                                                <label class="checkbox-default" for="offer">
-                                                    <input type="checkbox" id="offer">
-                                                    <span>Receive offers from our partners</span>
-                                                </label>
-                                                <br>
-                                                <label class="checkbox-default checkbox-default-more-text" for="newsletter">
-                                                    <input type="checkbox" id="newsletter">
-                                                    <span>Sign up for our newsletter<br><em>You may unsubscribe at any
-                                                        moment. For that purpose, please find our contact info in the
-                                                        legal notice.</em></span>
-                                                </label> -->
                                                         <div class="save_button mt-3">
                                                             <button class="btn"
-                                                                onclick="editUserDetails(event)">Save</button>
+                                                                onclick="editUserDetails(event)">Change</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr><br>
+
+                                        <h3>Change Password </h3>
+                                        <div class="login">
+                                            <div class="login_form_container">
+                                                <div class="account_login_form">
+                                                    <form>
+                                                        <div class="default-form-box mb-20">
+                                                            <div id="errorpass" class="text-danger"></div>
+                                                            <label>Current Password</label>
+                                                            <div id="errorMessagesOldPassword" class="text-danger">
+                                                            </div>
+                                                            <input type="password" id="user-oldPass">
+                                                        </div>
+                                                        <div class="default-form-box mb-20">
+                                                            <div id="errorpass" class="text-danger"></div>
+                                                            <label>New Password</label>
+                                                            <div id="errorMessagesNewPassword" class="text-danger">
+                                                            </div>
+                                                            <input type="password" id="user-newPass">
+                                                        </div>
+                                                        <div class="save_button mt-3">
+                                                            <button class="btn"
+                                                                onclick="ChangePassword(event)">Change</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -603,6 +616,11 @@
                             .then(res => {
                                 if (res.data.status === 2) {
                                     Swal.fire("Saved!", "", "success");
+                                    const nameStrong = document.getElementById('nameStrong')
+                                    const phoneStrong = document.getElementById('phoneStrong')
+
+                                    nameStrong.innerHTML = name
+                                    phoneStrong.innerHTML = phone
                                 }
                             })
                             .catch(err => {
@@ -636,42 +654,156 @@
 
         </script>
 
+        <script>
+            function displayErrorOldPassword(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesOldPassword');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorNewPassword(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagesNewPassword');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function passwordValidation() {
+                const oldPassword = document.getElementById('user-oldPass').value
+                const newPassword = document.getElementById('user-newPass').value
+
+                document.getElementById('errorMessagesOldPassword').innerHTML = '';
+                document.getElementById('errorMessagesNewPassword').innerHTML = '';
+
+                if (oldPassword === '') {
+                    displayErrorOldPassword('*Please enter your password');
+                    return false;
+                } else if (oldPassword.length < 6) {
+                    displayErrorOldPassword('*Password must be at least 6 characters long');
+                    return false;
+                }
+
+                if (newPassword === '') {
+                    displayErrorNewPassword('*Please enter your password');
+                    return false;
+                } else if (newPassword.length < 6) {
+                    displayErrorNewPassword('*Password must be at least 6 characters long');
+                    return false;
+                }
+
+                return true
+            }
+
+            document.getElementById('user-oldPass').addEventListener('input', passwordValidation)
+            document.getElementById('user-newPass').addEventListener('input', passwordValidation)
+
+            function ChangePassword(event) {
+                event.preventDefault()
+
+                if (!passwordValidation()) {
+                    return console.log("Password validation failed")
+                }
+
+                Swal.fire({
+                    icon: "question",
+                    title: "Are you sure?",
+                    text: "",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#0056b3',
+                    confirmButtonText: "Change",
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        // Swal.fire("Saved!", "", "success");
+                        const oldPassword = document.getElementById('user-oldPass').value
+                        const newPassword = document.getElementById('user-newPass').value
+
+                        axios.post('/changepassword', { oldPass: oldPassword, newPass: newPassword })
+                            .then(res => {
+                                if (res.data.status == 7) {
+                                    Swal.fire("Saved!", "", "success");
+                                } else if (res.data.status == 1) {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "Password you entered is incorrect. try again.",
+                                        showCancelButton: true,
+                                        showConfirmButton: false,
+                                        cancelButtonText: "OK",
+                                    }).then((result) => {
+                                        // if (result.dismiss === Swal.DismissReason.cancel) {
+                                        //     otpInputs.forEach(input => input.value = '');
+                                        //     otpInputs[0].focus();
+                                        // }
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+
+                    }
+                });
+
+
+
+            }
+        </script>
+
 
         <script>
-            function addAddress() {
+            function addAddress(event) {
+                event.preventDefault()
+
                 // Get the parent container
                 const addressContainer = document.getElementById('address');
 
                 // Create a form structure for the new address
                 const formHtml = `
-            <form id="address-form" class="mt-3">
-                <div class="mb-3">
-                    <label for="name" class="form-label"><strong>Name</strong></label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="street" class="form-label"><strong>Street</strong></label>
-                    <input type="text" class="form-control" id="street" placeholder="Enter street" required>
-                </div>
-                <div class="mb-3">
-                    <label for="city" class="form-label"><strong>City</strong></label>
-                    <input type="text" class="form-control" id="city" placeholder="Enter city" required>
-                </div>
-                <div class="mb-3">
-                    <label for="state" class="form-label"><strong>State</strong></label>
-                    <input type="text" class="form-control" id="state" placeholder="Enter state" required>
-                </div>
-                <div class="mb-3">
-                    <label for="zip" class="form-label"><strong>ZIP</strong></label>
-                    <input type="text" class="form-control" id="zip" placeholder="Enter ZIP code" required>
-                </div>
-                <div class="mb-3">
-                    <label for="country" class="form-label"><strong>Country</strong></label>
-                    <input type="text" class="form-control" id="country" placeholder="Enter country" required>
-                </div>
-                <button type="button" class=" btn-primary" style="border-color: blue; background-color: aliceblue;" onclick="saveAddress()">Save</button>
-                <a href="/myAccount"><button type="button" class=" btn-primary" style="border-color: red; background-color: aliceblue;">cancel</button></a>
-            </form>
+                <h3>Address details</h3><hr>
+                    <div class="login" id="address">
+                        <div class="login_form_container">
+                            <div class="account_login_form">
+                                <form>
+                                    <div class="default-form-box mb-20">
+                                        <label>Street</label>
+                                        <div ="errorMessagesOldPassword" class="text-danger"></div>
+                                        <input type="text" id="street">
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>City</label>
+                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <input type="text" id="city">
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>State</label>
+                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <input type="text" id="state">
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>Zip</label>
+                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <input type="text" id="zip">
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>Country</label>
+                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <input type="text" id="country">
+                                    </div>
+                                    <div class="save_button mt-3 d-flex">
+                                        <button class="btn me-2"
+                                            onclick="saveAddress(event)">Add</button>
+                                            <button class="btn"
+                                            onclick="cancelAddress(event)">Cancel</button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
         `;
 
                 // Replace the current content with the form
@@ -679,8 +811,9 @@
             }
 
             function saveAddress() {
+                event.preventDefault()
                 // Retrieve input values
-                const name = document.getElementById('name').value;
+                // const name = document.getElementById('name').value;
                 const street = document.getElementById('street').value;
                 const city = document.getElementById('city').value;
                 const state = document.getElementById('state').value;
@@ -688,9 +821,32 @@
                 const country = document.getElementById('country').value;
 
                 // Display a message or handle the new address
-                alert(`Address Saved: ${name}, ${street}, ${city}, ${state}, ${zip}, ${country}`);
+                // alert(`Address Saved: ${street}, ${city}, ${state}, ${zip}, ${country}`);
+
+                const addressData = {
+                    street: street,
+                    city: city,
+                    state: state,
+                    zip: zip,
+                    country: country
+                }
+
+                axios.post('/addressadd', addressData)
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
+
+            function cancelAddress(event) {
+                window.location.reload()
+            }
+
+
         </script>
+
     </body>
 
 
