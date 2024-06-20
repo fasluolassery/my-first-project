@@ -248,24 +248,44 @@
 
 
                                     <div class="tab-pane" id="address">
-                                        <p>The following addresses will be used on the checkout page by default.</p>
-                                        <h5 class="billing-address">Billing address</h5>
+                                        <!-- <p>The following addresses will be used on the checkout page by default.</p> -->
+                                        <h5 class="billing-address">Address Details</h5>
                                         <a href="/myAccount#address" onclick="addAddress(event)" class="view">Add</a>
                                         <div class="row mt-3">
 
-
-                                            <div class="col-md-6 col-lg-3 mb-3">
-                                                <div class="card p-3">
-                                                    <p class="mb-2"><strong>Michael M Hoskins</strong></p>
-                                                    <address>
-                                                        <span><strong>City:</strong> Seattle</span><br>
-                                                        <span><strong>State:</strong> Washington(WA)</span><br>
-                                                        <span><strong>ZIP:</strong> 98101</span><br>
-                                                        <span><strong>Country:</strong> USA</span>
-                                                    </address>
-                                                </div>
-                                            </div>
-
+                                            <% if (typeof addresses != 'undefined' && addresses.length > 0) { %>
+                                                <% addresses.forEach((add, index) => { %>
+                                                  <div class="col-md-6 col-lg-4 mb-3">
+                                                    <div class="card p-3 position-relative">
+                                                      <!-- Cross Remove Button -->
+                                                      <button class="btn-close position-absolute top-0 end-0 m-2 remove-address" 
+                                                              aria-label="Close" onclick="removeAddress(event, '<%= index %>')"></button>
+                                                      
+                                                      <p class="mb-2"><strong>
+                                                        <%= userDetails.username %>
+                                                      </strong></p>
+                                                      <address>
+                                                        <span><strong>Street:</strong>
+                                                          <%= add.street %>
+                                                        </span><br>
+                                                        <span><strong>City:</strong>
+                                                          <%= add.city %>
+                                                        </span><br>
+                                                        <span><strong>State:</strong>
+                                                          <%= add.state %>
+                                                        </span><br>
+                                                        <span><strong>ZIP:</strong>
+                                                          <%= add.zip %>
+                                                        </span><br>
+                                                        <span><strong>Country:</strong>
+                                                          <%= add.country %>
+                                                        </span>
+                                                      </address>
+                                                    </div>
+                                                  </div>
+                                                <% }) %>
+                                              <% } %>
+                                              
 
 
                                         </div>
@@ -770,27 +790,27 @@
                                 <form>
                                     <div class="default-form-box mb-20">
                                         <label>Street</label>
-                                        <div ="errorMessagesOldPassword" class="text-danger"></div>
+                                        <div ="errorMessageStreet" class="text-danger"></div>
                                         <input type="text" id="street">
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>City</label>
-                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <div ="errorMessageCity" class="text-danger"></div>
                                         <input type="text" id="city">
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>State</label>
-                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <div ="errorMessageState" class="text-danger"></div>
                                         <input type="text" id="state">
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>Zip</label>
-                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <div ="errorMessageZip" class="text-danger"></div>
                                         <input type="text" id="zip">
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>Country</label>
-                                        <div ="errorMessagesNewPassword" class="text-danger"></div>
+                                        <div ="errorMessageCountry" class="text-danger"></div>
                                         <input type="text" id="country">
                                     </div>
                                     <div class="save_button mt-3 d-flex">
@@ -808,10 +828,117 @@
 
                 // Replace the current content with the form
                 addressContainer.innerHTML = formHtml;
+
             }
+
+            // function displayErrorStreet(errorMessage) {
+            //     const errorDiv = document.getElementById('errorMessageStreet');
+            //     const errorParagraph = document.createElement('p');
+            //     errorParagraph.textContent = errorMessage;
+            //     errorDiv.appendChild(errorParagraph);
+            // }
+
+            // function displayErrorCity(errorMessage) {
+            //     const errorDiv = document.getElementById('errorMessageCity');
+            //     const errorParagraph = document.createElement('p');
+            //     errorParagraph.textContent = errorMessage;
+            //     errorDiv.appendChild(errorParagraph);
+            // }
+
+            // function displayErrorState(errorMessage) {
+            //     const errorDiv = document.getElementById('errorMessageState');
+            //     const errorParagraph = document.createElement('p');
+            //     errorParagraph.textContent = errorMessage;
+            //     errorDiv.appendChild(errorParagraph);
+            // }
+
+            // function displayErrorCountry(errorMessage) {
+            //     const errorDiv = document.getElementById('errorMessageCountry');
+            //     const errorParagraph = document.createElement('p');
+            //     errorParagraph.textContent = errorMessage;
+            //     errorDiv.appendChild(errorParagraph);
+            // }
+
+            // function displayErrorZip(errorMessage) {
+            //     const errorDiv = document.getElementById('errorMessageZip');
+            //     const errorParagraph = document.createElement('p');
+            //     errorParagraph.textContent = errorMessage;
+            //     errorDiv.appendChild(errorParagraph);
+            // }
+
+            // function isValidZip(zip) {
+            //     // Regular expression for validating phone number format
+            //     const phoneRegex = /^[+-]?(\d+(\.\d*)?|\.\d+)$/;
+            //     return phoneRegex.test(zip);
+            // }
+
+            // function isAlphabetic(value){
+            //     const regex = /^[A-Za-z]+$/;
+            //     return regex.test(value)
+            // }
+
+            // function addressValidation(){
+            //     const street = document.getElementById('street').value;
+            //     const city = document.getElementById('city').value;
+            //     const state = document.getElementById('state').value;
+            //     const zip = document.getElementById('zip').value;
+            //     const country = document.getElementById('country').value;
+
+                
+
+
+            //     if (street === '') {
+            //         displayErrorStreet('*Please enter your street');
+            //         return false;
+            //     }else if (!isAlphabetic(street)) {
+            //         displayErrorStreet('*Please enter a valid street');
+            //         return false;
+            //     }
+
+            //     if (city === '') {
+            //         displayErrorCity('*Please enter your city');
+            //         return false;
+            //     }else if (!isAlphabetic(city)) {
+            //         displayErrorCity('*Please enter a valid city');
+            //         return false;
+            //     }
+
+            //     if (state === '') {
+            //         displayErrorState('*Please enter your state');
+            //         return false;
+            //     }else if (!isAlphabetic(state)) {
+            //         displayErrorState('*Please enter a valid state');
+            //         return false;
+            //     }
+
+            //     if (country === '') {
+            //         displayErrorCountry('*Please enter your country');
+            //         return false;
+            //     }else if (!isAlphabetic(country)) {
+            //         displayErrorCountry('*Please enter a valid country');
+            //         return false;
+            //     }
+
+            //     if (zip === '') {
+            //         displayErrorZip('*Please enter your zip');
+            //         return false;
+            //     } else if (!isValidZip(zip)) {
+            //         displayErrorZip('*Please enter a valid zip');
+            //         return false;
+            //     }
+
+            //     return true
+            // }
+
+            
 
             function saveAddress() {
                 event.preventDefault()
+
+                // if(!addressValidation()){
+                //     return console.log("error in address validation")
+                // }
+
                 // Retrieve input values
                 // const name = document.getElementById('name').value;
                 const street = document.getElementById('street').value;
@@ -833,7 +960,22 @@
 
                 axios.post('/addressadd', addressData)
                     .then(res => {
-                        console.log(res)
+                        if (res.data.status === 7) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "address added",
+                                text: "",
+                                // showDenyButton: true,
+                                // showCancelButton: true,
+                                confirmButtonColor: '#0056b3',
+                                confirmButtonText: "Ok",
+                                // denyButtonText: `Don't save`
+                            }).then((result) => {
+                                if (result.isConfirmed){
+                                    window.location.reload()
+                                }
+                            })
+                        }
                     })
                     .catch(err => {
                         console.log(err)
@@ -845,6 +987,52 @@
             }
 
 
+        </script>
+
+        <script>
+            function removeAddress(event, index){
+                event.preventDefault()
+
+                Swal.fire({
+                    icon: "question",
+                    title: "Are you sure?",
+                    text: "",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#0056b3',
+                    confirmButtonText: "ok",
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        axios.post('/addressremove', {indexOfAddress: index})
+                    .then(res => {
+                        if(res.data.status == 7){
+                            Swal.fire({
+                                icon: "success",
+                                title: "address removed",
+                                text: "",
+                                // showDenyButton: true,
+                                // showCancelButton: true,
+                                confirmButtonColor: '#0056b3',
+                                confirmButtonText: "Ok",
+                                // denyButtonText: `Don't save`
+                            }).then((result) => {
+                                if (result.isConfirmed){
+                                    window.location.reload()
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                    }
+                })
+
+
+                
+
+            }
         </script>
 
     </body>

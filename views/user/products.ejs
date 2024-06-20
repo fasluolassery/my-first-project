@@ -54,26 +54,44 @@
                                         </button>
                                     </div>
                                     <!-- Right Side Start -->
+
+
+
+
                                     <div class="select-shoing-wrap d-flex align-items-center">
                                         <div class="shot-product">
                                             <p>Sort By:</p>
                                         </div>
                                         <!-- Single Wedge End -->
                                         <div class="header-bottom-set dropdown">
-                                            <button class="dropdown-toggle header-action-btn"
-                                                data-bs-toggle="dropdown">Default <i
-                                                    class="fa fa-angle-down"></i></button>
+                                            <button id="sortButton" class="dropdown-toggle header-action-btn"
+                                                data-bs-toggle="dropdown">
+                                                Default <i class="fa fa-angle-down"></i>
+                                            </button>
                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                <li><a class="dropdown-item" href="#">Name, A to Z</a></li>
-                                                <li><a class="dropdown-item" href="#">Name, Z to A</a></li>
-                                                <li><a class="dropdown-item" href="#">Price, low to high</a></li>
-                                                <li><a class="dropdown-item" href="#">Price, high to low</a></li>
-                                                <li><a class="dropdown-item" href="#">Sort By new</a></li>
-                                                <li><a class="dropdown-item" href="#">Sort By old</a></li>
+                                                <li><a class="dropdown-item" href="#"
+                                                        onclick="sorting(event, 0, 'Default')">Default</a></li>
+                                                <li><a class="dropdown-item" href="#"
+                                                        onclick="sorting(event, 1, 'Name, A to Z')">Name, A to Z</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#"
+                                                        onclick="sorting(event, 2, 'Name, Z to A')">Name, Z to A</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#"
+                                                        onclick="sorting(event, 3, 'Price, low to high')">Price, low to
+                                                        high</a></li>
+                                                <li><a class="dropdown-item" href="#"
+                                                        onclick="sorting(event, 4, 'Price, high to low')">Price, high to
+                                                        low</a></li>
                                             </ul>
                                         </div>
+
                                         <!-- Single Wedge Start -->
                                     </div>
+
+
+
+
                                     <!-- Right Side End -->
                                 </div>
                                 <!-- Shop Top Area End -->
@@ -85,7 +103,6 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane fade show active" id="shop-grid">
                                                     <div class="row mb-n-30px">
-
 
 
                                                         <% products.forEach(product=> { %>
@@ -642,8 +659,8 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-body text-center">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"><i class="pe-7s-close"></i></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                        class="pe-7s-close"></i></button>
                                 <div class="tt-modal-messages">
                                     <i class="pe-7s-check mb-3"></i> Added to cart successfully!
                                 </div>
@@ -773,6 +790,117 @@
                                         console.log(err);
                                     });
                             }
+                        </script>
+
+                        <script>
+                            function sorting(event, index, text) {
+                                event.preventDefault();
+
+                                // Update the button text
+                                const sortButton = document.getElementById('sortButton');
+                                sortButton.innerHTML = `${text} <i class="fa fa-angle-down"></i>`;
+
+                                axios.post('/sortProducts', { index: index })
+                                    .then(res => {
+                                        const products = res.data.products;
+                                        updateProductList(products);
+                                        updateProductGrid(products);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    });
+                            }
+
+
+                            function updateProductList(products) {
+                                const listElement = document.getElementById('shop-list');
+
+                                if (!listElement) {
+                                    console.error('Element with id "shop-list" not found.');
+                                    return;
+                                }
+
+                                listElement.innerHTML = ''; // Clear the existing product list
+
+                                products.forEach(product => {
+                                    listElement.innerHTML += `
+                                                <div class="shop-list-wrapper mb-30px">
+                                                    <div class="row">
+                                                        <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
+                                                            <div class="product">
+                                                                <div class="thumb">
+                                                                    <a href="productview?id=${product._id}" class="image">
+                                                                        <img src="${product.imagePaths[0]}" alt="${product.productName}" />
+                                                                        ${product.imagePaths[1] ? `<img class="hover-image" src="${product.imagePaths[1]}" alt="${product.productName}" />` : `<img class="hover-image" src="${product.imagePaths[0]}" alt="${product.productName}" />`}
+                                                                    </a>
+                                                                    ${product.isNew ? `<span class="badges"><span class="new">New</span></span>` : ''}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-7 col-lg-7 col-xl-8">
+                                                            <div class="content-desc-wrap">
+                                                                <div class="content">
+                                                                    <span class="category"><a href="#">${product.category}</a></span>
+                                                                    <h5 class="title"><a href="productview?id=${product._id}">${product.productName}</a></h5>
+                                                                    <p>${product.description}</p>
+                                                                </div>
+                                                                <div class="box-inner">
+                                                                    <span class="price">
+                                                                        <span class="new">₹${product.price.toFixed(2)}</span>
+                                                                    </span>
+                                                                    <div class="actions">
+                                                                        <button title="Add To Cart" class="action add-to-cart" onclick="addToCartFromProducts('${product._id}', event)"><i class="pe-7s-shopbag"></i></button>
+                                                                        <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i class="pe-7s-like"></i></button>
+                                                                        <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></button>
+                                                                        <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i class="pe-7s-refresh-2"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                });
+                            }
+
+                            function updateProductGrid(products) {
+                                const gridElement = document.getElementById('shop-grid');
+
+                                if (!gridElement) {
+                                    console.error('Element with id "shop-grid" not found.');
+                                    return;
+                                }
+
+                                gridElement.querySelector('.row').innerHTML = ''; // Clear the existing product grid
+
+                                products.forEach(product => {
+                                    gridElement.querySelector('.row').innerHTML += `
+                                                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
+                                                        <div class="product">
+                                                            ${product.isNew ? `<span class="badges"><span class="new">New</span></span>` : ''}
+                                                            <div class="thumb">
+                                                                <a href="productview?id=${product._id}" class="image">
+                                                                    <img src="${product.imagePaths[0]}" alt="${product.productName}" />
+                                                                    ${product.imagePaths[1] ? `<img class="hover-image" src="${product.imagePaths[1]}" alt="${product.productName}" />` : `<img class="hover-image" src="${product.imagePaths[0]}" alt="${product.productName}" />`}
+                                                                </a>
+                                                            </div>
+                                                            <div class="content">
+                                                                <span class="category mt-3"><a href="#">${product.category}</a></span>
+                                                                <h5 class="title"><a href="productview?id=${product._id}">${product.productName}</a></h5>
+                                                                <span class="price">
+                                                                    <span class="new">₹${product.price.toFixed(2)}</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="actions">
+                                                                <button title="Add To Cart" class="action add-to-cart" onclick="addToCartFromProducts('${product._id}', event)"><i class="pe-7s-shopbag"></i></button>
+                                                                <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i class="pe-7s-like"></i></button>
+                                                                <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></button>
+                                                                <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i class="pe-7s-refresh-2"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>`;
+                                });
+                            }
+
                         </script>
     </body>
 

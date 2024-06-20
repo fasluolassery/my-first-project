@@ -46,10 +46,41 @@ const loadSingleProductUser = async (req, res, next) => {
     }
 };
 
+const sortProducts = async (req, res, next) => {
+    try{
+        const { index } = req.body
+       if(index == 1){
+        const findProducts = await Product.find().sort({ productName: 1})
+
+        res.send({products: findProducts})
+       }else if(index == 2){
+        const findProducts = await Product.find().sort({ productName: -1})
+
+        res.send({products: findProducts})
+       }else if(index == 3){
+        const findProducts = await Product.find().sort({ price: 1})
+
+        res.send({products: findProducts})
+       }else if(index == 4){
+        const findProducts = await Product.find().sort({ price: -1})
+
+        res.send({products: findProducts})
+       }else if(!index){
+        const findProducts = await Product.find()
+
+        res.send({products: findProducts})
+       }
+    }catch(error){
+        next(error)
+    }
+}
+
 
 
 module.exports = {
 
     loadProductsUser,
     loadSingleProductUser,
+    sortProducts,
+
 };

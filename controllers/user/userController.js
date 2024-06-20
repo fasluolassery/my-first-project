@@ -9,7 +9,15 @@ const loadUserAccount = async (req, res, next) => {
 
         const findUserDetails = await User.findOne({ _id: userId })
 
-        res.render('user/useraccount', { userDetails: findUserDetails, user: userId })
+        const findAddress = await addressModel.findOne({ userId: userId })
+        if(!findAddress){
+            res.render('user/useraccount', {userDetails: findUserDetails, user: userId })
+        }
+        // console.log(findAddress.addresses)
+        const addresses = findAddress.addresses
+
+
+        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses })
     } catch (error) {
         next(error)
     }
@@ -40,20 +48,20 @@ const editUser = async (req, res, next) => {
 }
 
 const changePass = async (req, res, next) => {
-    try{
+    try {
 
         const { userId } = req.session
         const { oldPass, newPass } = req.body
 
-        const findUser = await User.findOne({_id: userId})
-        
+        const findUser = await User.findOne({ _id: userId })
+
         const { password } = findUser
-        
+
         const PassMatch = await bcrypt.compare(oldPass, password)
 
-        if(!PassMatch){
+        if (!PassMatch) {
             console.log("entered Password is incorrect")
-            return res.send({status: 1})
+            return res.send({ status: 1 })
         }
 
         const newPassHash = await bcrypt.hash(newPass, 10)
@@ -61,40 +69,77 @@ const changePass = async (req, res, next) => {
         findUser.password = newPassHash
         await findUser.save()
 
-        if(findUser){
+        if (findUser) {
             console.log("Password changed success")
-            res.send({status: 7})
+            res.send({ status: 7 })
         }
-        
-    }catch(error){
+
+    } catch (error) {
         next(error)
     }
 }
 
 const addAddress = async (req, res, next) => {
-    try{
+    try {
         //!handle errors
         const { street, city, state, zip, country } = req.body
         const { userId } = req.session
-        const createAdd = new addressModel({
 
-            userId: userId,
-            street: street,
-            city: city,
-            state: state,
-            zip: zip,
-            country: country
-        })
+        const checkExistingAddress = await addressModel.findOne({ userId: userId })
 
-        const saveAdd = await createAdd.save()
-        if(saveAdd){
-            console.log("big success")
+        if (!checkExistingAddress) {
+
+            const createAdd = new addressModel({
+
+                userId: userId,
+                addresses: [{ street, city, state, zip, country }]
+
+            })
+
+            const saveAdd = await createAdd.save()
+            if (saveAdd) {
+                console.log("new Address added")
+                res.send({status: 7})
+            }
+
         }
 
+        checkExistingAddress.addresses.push({street, city, state, zip, country})
+
+        const updateAddress = await checkExistingAddress.save()
+        if(updateAddress){
+            console.log("added new address")
+            res.send({status: 7})
+        }
+
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+const removeAddress = async (req, res, next) => {
+    try{
+        const { indexOfAddress } = req.body
+
+        const { userId } = req.session
+        
+        const findAddresses = await addressModel.findOne({ userId: userId })
+
+        findAddresses.addresses.splice(indexOfAddress, 1)
+
+        const saveRemove = await findAddresses.save()
+
+        if(saveRemove){
+            console.log("address remove success")
+            res.send({status: 7})
+        }
     }catch(error){
         next(error)
     }
 }
+
 
 
 module.exports = {
@@ -103,5 +148,7 @@ module.exports = {
     editUser,
     changePass,
     addAddress,
+    removeAddress,
+    
 
 };
