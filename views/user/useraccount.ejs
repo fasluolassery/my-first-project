@@ -790,28 +790,28 @@
                                 <form>
                                     <div class="default-form-box mb-20">
                                         <label>Street</label>
-                                        <div ="errorMessageStreet" class="text-danger"></div>
-                                        <input type="text" id="street">
+                                        <div id="errorMessageStreet" class="text-danger"></div>
+                                        <input type="text" id="street" required>
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>City</label>
-                                        <div ="errorMessageCity" class="text-danger"></div>
-                                        <input type="text" id="city">
+                                        <div id="errorMessageCity" class="text-danger"></div>
+                                        <input type="text" id="city" required>
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>State</label>
-                                        <div ="errorMessageState" class="text-danger"></div>
-                                        <input type="text" id="state">
+                                        <div id="errorMessageState" class="text-danger"></div>
+                                        <input type="text" id="state" required>
                                     </div>
                                     <div class="default-form-box mb-20">
                                         <label>Zip</label>
-                                        <div ="errorMessageZip" class="text-danger"></div>
-                                        <input type="text" id="zip">
+                                        <div id="errorMessageZip" class="text-danger"></div>
+                                        <input type="text" id="zip" required>
                                     </div>
-                                    <div class="default-form-box mb-20">
+                                    <div class="default-form-box mb-20" required>
                                         <label>Country</label>
-                                        <div ="errorMessageCountry" class="text-danger"></div>
-                                        <input type="text" id="country">
+                                        <div id="errorMessageCountry" class="text-danger"></div>
+                                        <input type="text" id="country" required>
                                     </div>
                                     <div class="save_button mt-3 d-flex">
                                         <button class="btn me-2"
@@ -829,115 +829,124 @@
                 // Replace the current content with the form
                 addressContainer.innerHTML = formHtml;
 
+                document.getElementById('street').addEventListener('input', addressValidation)
+                document.getElementById('city').addEventListener('input', addressValidation)
+                document.getElementById('state').addEventListener('input', addressValidation)
+                document.getElementById('zip').addEventListener('input', addressValidation)
+                document.getElementById('country').addEventListener('input', addressValidation)
+
             }
 
-            // function displayErrorStreet(errorMessage) {
-            //     const errorDiv = document.getElementById('errorMessageStreet');
-            //     const errorParagraph = document.createElement('p');
-            //     errorParagraph.textContent = errorMessage;
-            //     errorDiv.appendChild(errorParagraph);
-            // }
+            function displayErrorStreet(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageStreet');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
 
-            // function displayErrorCity(errorMessage) {
-            //     const errorDiv = document.getElementById('errorMessageCity');
-            //     const errorParagraph = document.createElement('p');
-            //     errorParagraph.textContent = errorMessage;
-            //     errorDiv.appendChild(errorParagraph);
-            // }
+            function displayErrorCity(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageCity');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
 
-            // function displayErrorState(errorMessage) {
-            //     const errorDiv = document.getElementById('errorMessageState');
-            //     const errorParagraph = document.createElement('p');
-            //     errorParagraph.textContent = errorMessage;
-            //     errorDiv.appendChild(errorParagraph);
-            // }
+            function displayErrorState(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageState');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
 
-            // function displayErrorCountry(errorMessage) {
-            //     const errorDiv = document.getElementById('errorMessageCountry');
-            //     const errorParagraph = document.createElement('p');
-            //     errorParagraph.textContent = errorMessage;
-            //     errorDiv.appendChild(errorParagraph);
-            // }
+            function displayErrorCountry(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageCountry');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
 
-            // function displayErrorZip(errorMessage) {
-            //     const errorDiv = document.getElementById('errorMessageZip');
-            //     const errorParagraph = document.createElement('p');
-            //     errorParagraph.textContent = errorMessage;
-            //     errorDiv.appendChild(errorParagraph);
-            // }
+            function displayErrorZip(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageZip');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
 
-            // function isValidZip(zip) {
-            //     // Regular expression for validating phone number format
-            //     const phoneRegex = /^[+-]?(\d+(\.\d*)?|\.\d+)$/;
-            //     return phoneRegex.test(zip);
-            // }
+            function isValidZip(zip) {
+                // Regular expression for validating phone number format
+                const phoneRegex = /^[+-]?(\d+(\.\d*)?|\.\d+)$/;
+                return phoneRegex.test(zip);
+            }
 
-            // function isAlphabetic(value){
-            //     const regex = /^[A-Za-z]+$/;
-            //     return regex.test(value)
-            // }
+            function isAlphabetic(value){
+                const regex = /^[A-Za-z]+$/;
+                return regex.test(value)
+            }
 
-            // function addressValidation(){
-            //     const street = document.getElementById('street').value;
-            //     const city = document.getElementById('city').value;
-            //     const state = document.getElementById('state').value;
-            //     const zip = document.getElementById('zip').value;
-            //     const country = document.getElementById('country').value;
+            function addressValidation(){
+                const street = document.getElementById('street').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const zip = document.getElementById('zip').value;
+                const country = document.getElementById('country').value;
 
+
+            document.getElementById('errorMessageStreet').innerHTML = '';
+            document.getElementById('errorMessageCity').innerHTML = '';
+            document.getElementById('errorMessageState').innerHTML = '';
+            document.getElementById('errorMessageCountry').innerHTML = '';
+            document.getElementById('errorMessageZip').innerHTML = '';
                 
 
+                if (street === '') {
+                    displayErrorStreet('*Please enter your street');
+                    return false;
+                }else if (!isAlphabetic(street)) {
+                    displayErrorStreet('*Please enter a valid street');
+                    return false;
+                }
 
-            //     if (street === '') {
-            //         displayErrorStreet('*Please enter your street');
-            //         return false;
-            //     }else if (!isAlphabetic(street)) {
-            //         displayErrorStreet('*Please enter a valid street');
-            //         return false;
-            //     }
+                if (city === '') {
+                    displayErrorCity('*Please enter your city');
+                    return false;
+                }else if (!isAlphabetic(city)) {
+                    displayErrorCity('*Please enter a valid city');
+                    return false;
+                }
 
-            //     if (city === '') {
-            //         displayErrorCity('*Please enter your city');
-            //         return false;
-            //     }else if (!isAlphabetic(city)) {
-            //         displayErrorCity('*Please enter a valid city');
-            //         return false;
-            //     }
+                if (state === '') {
+                    displayErrorState('*Please enter your state');
+                    return false;
+                }else if (!isAlphabetic(state)) {
+                    displayErrorState('*Please enter a valid state');
+                    return false;
+                }
 
-            //     if (state === '') {
-            //         displayErrorState('*Please enter your state');
-            //         return false;
-            //     }else if (!isAlphabetic(state)) {
-            //         displayErrorState('*Please enter a valid state');
-            //         return false;
-            //     }
+                if (zip === '') {
+                    displayErrorZip('*Please enter your zip');
+                    return false;
+                } else if (!isValidZip(zip)) {
+                    displayErrorZip('*Please enter a valid zip');
+                    return false;
+                }
 
-            //     if (country === '') {
-            //         displayErrorCountry('*Please enter your country');
-            //         return false;
-            //     }else if (!isAlphabetic(country)) {
-            //         displayErrorCountry('*Please enter a valid country');
-            //         return false;
-            //     }
+                if (country === '') {
+                    displayErrorCountry('*Please enter your country');
+                    return false;
+                }else if (!isAlphabetic(country)) {
+                    displayErrorCountry('*Please enter a valid country');
+                    return false;
+                }
 
-            //     if (zip === '') {
-            //         displayErrorZip('*Please enter your zip');
-            //         return false;
-            //     } else if (!isValidZip(zip)) {
-            //         displayErrorZip('*Please enter a valid zip');
-            //         return false;
-            //     }
-
-            //     return true
-            // }
-
-            
+                return true
+            }
 
             function saveAddress() {
                 event.preventDefault()
 
-                // if(!addressValidation()){
-                //     return console.log("error in address validation")
-                // }
+                if(!addressValidation()){
+                    return console.log("error in address validation")
+                }
 
                 // Retrieve input values
                 // const name = document.getElementById('name').value;
