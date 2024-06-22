@@ -281,29 +281,44 @@
 
 
                                             <tbody>
-                                                <% cartItems.forEach(item => { %>
+                                                <% cartItems.forEach(item=> { %>
                                                     <tr id="item" data-stock="<%= item.stock %>">
                                                         <td class="product-thumbnail">
-                                                            <a href="#"><img class="img-responsive ml-15px" src="<%= item.imagePaths[0] %>" alt="" /></a>
+                                                            <a href="#"><img class="img-responsive ml-15px"
+                                                                    src="<%= item.imagePaths[0] %>" alt="" /></a>
                                                         </td>
-                                                        <td class="product-name"><a href="#"><%= item.productName %></a></td>
+                                                        <td class="product-name"><a href="#">
+                                                                <%= item.productName %>
+                                                            </a></td>
                                                         <td class="product-price-cart">
-                                                            <span class="amount" data-price="<%= item.price %>">₹<%= item.price %></span>
+                                                            <span class="amount" data-price="<%= item.price %>">₹<%=
+                                                                    item.price %></span>
                                                         </td>
                                                         <td class="product-quantity">
                                                             <div class="cart-plus-minus">
-                                                                <div class="dec qtybutton" data-id="<%= item.id %>" onclick="quantityDec(event, '<%= item.id %>')">-</div>
-                                                                <input class="cart-plus-minus-box" id="quantityValue-<%= item.id %>" type="text" name="qtybutton" value="1" />
-                                                                <div class="inc qtybutton" data-id="<%= item.id %>" onclick="quantityInc(event, '<%= item.id %>')">+</div>
-                                                                <p class="error-message text-danger mt-1" id="errMsgQnt-<%= item.id %>" style="display: none;"></p>
+                                                                <div class="dec qtybutton" data-id="<%= item.id %>"
+                                                                    onclick="quantityDec(event, '<%= item.id %>')">-
+                                                                </div>
+                                                                <input class="cart-plus-minus-box"
+                                                                    id="quantityValue-<%= item.id %>" type="text"
+                                                                    name="qtybutton" value="1" />
+                                                                <div class="inc qtybutton" data-id="<%= item.id %>"
+                                                                    onclick="quantityInc(event, '<%= item.id %>')">+
+                                                                </div>
+                                                                <p class="error-message text-danger mt-1"
+                                                                    id="errMsgQnt-<%= item.id %>"
+                                                                    style="display: none;"></p>
                                                             </div>
                                                         </td>
-                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%= item.price %></td>
+                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%=
+                                                                item.price %>
+                                                        </td>
                                                         <td class="product-remove">
-                                                            <a onclick="removeitemFromCart('<%= item.id %>')"><i class="fa fa-times"></i></a>
+                                                            <a onclick="removeitemFromCart('<%= item.id %>')"><i
+                                                                    class="fa fa-times"></i></a>
                                                         </td>
                                                     </tr>
-                                                <% }) %>
+                                                    <% }) %>
                                             </tbody>
 
 
@@ -326,7 +341,7 @@
                                     </div>
                                 </form>
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-4 col-md-6 mb-lm-30px">
                                         <div class="discount-code-wrapper">
                                             <div class="title-wrap">
@@ -353,10 +368,11 @@
                                                     <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
                                                 </ul>
                                             </div>
-                                            <h4 class="grand-totall-title">Grand Total <span id="grand-total-amount">₹0.00</span></h4>
+                                            <h4 class="grand-totall-title">Grand Total <span
+                                                    id="grand-total-amount">₹0.00</span></h4>
                                             <a href="/checkout">Proceed to Checkout</a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -522,50 +538,31 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                // Function to calculate total amount
-                function calculateTotalAmount() {
-                    let totalAmount = 0;
-                    
-                    // Select all product rows
-                    const rows = document.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const quantity = parseInt(row.querySelector('.cart-plus-minus-box').value);
-                        const price = parseFloat(row.querySelector('.amount').dataset.price);
-                        
-                        // Calculate subtotal
-                        totalAmount += quantity * price;
-                    });
-                    
-                    // Update total amount in the DOM
-                    document.getElementById('total-products-amount').innerText = `₹${totalAmount.toFixed(2)}`;
-                    // Assuming you have a static shipping cost of ₹40.00
-                    const totalShippingAmount = 40.00;
-                    const grandTotal = totalAmount + totalShippingAmount;
-                    document.getElementById('grand-total-amount').innerText = `₹${grandTotal.toFixed(2)}`;
-                }
-        
-                // Call the function once to initialize the total amount
-                calculateTotalAmount();
-                
-                // Attach event listeners to quantity increment and decrement buttons
-                document.querySelectorAll('.qtybutton').forEach(button => {
-                    button.addEventListener('click', () => {
-                        calculateTotalAmount();
-                    });
-                });
-        
-                // Also attach to input change in case user manually changes the quantity
-                document.querySelectorAll('.cart-plus-minus-box').forEach(input => {
-                    input.addEventListener('input', () => {
-                        calculateTotalAmount();
-                    });
-                });
-            });
+                axios.post('/checkoutTotal')
+                    .then(res => {
+                        const productsDeatails = res.data.productsDeatails
+                        let total = 0
+
+                        productsDeatails.forEach(item => {
+                            // console.log(typeof item.productId.price)
+                            // console.log(parseInt(item.productId.price))
+                            // console.log( parseInt(item.quantity))
+                            total += item.productId.price * item.quantity
+                        });
+
+                        const totalDiv = document.getElementById('total-products-amount')
+                        const grandTotal = document.getElementById('grand-total-amount')
+                        totalDiv.innerHTML = `₹${total}`
+                        grandTotal.innerHTML = `₹${total + 40}`
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
         </script>
 
         <script>
-            function quantityInc(event, itemId){
+            function quantityInc(event, itemId) {
                 event.preventDefault()
 
                 const inputValue = document.getElementById(`quantityValue-${itemId}`).value
@@ -579,10 +576,33 @@
 
                 axios.post('/addProductQuantity', productQuantity)
                     .then(res => {
-                        if(res.data.quantity){
+                        if (res.data.quantity) {
                             const input = document.getElementById(`quantityValue-${itemId}`)
+                            const subtotal = document.getElementById(`subtotal-${itemId}`)
                             input.value = res.data.quantity
-                        }else if(res.data.error){
+                            subtotal.innerText = `₹${res.data.productSubtotal}`
+
+                            axios.post('/checkoutTotal')
+                                .then(res => {
+                                    const productsDeatails = res.data.productsDeatails
+                                    let total = 0
+
+                                    productsDeatails.forEach(item => {
+                                        // console.log(typeof item.productId.price)
+                                        // console.log(parseInt(item.productId.price))
+                                        // console.log( parseInt(item.quantity))
+                                        total += item.productId.price * item.quantity
+                                    });
+
+                                    const totalDiv = document.getElementById('total-products-amount')
+                                    const grandTotal = document.getElementById('grand-total-amount')
+                                    totalDiv.innerHTML = `₹${total}`
+                                    grandTotal.innerHTML = `₹${total + 40}`
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        } else if (res.data.error) {
                             const errordiv = document.getElementById(`errMsgQnt-${itemId}`)
                             errordiv.style.display = 'block'
                             errordiv.innerHTML = res.data.error
@@ -596,12 +616,12 @@
         </script>
 
         <script>
-            function quantityDec(event, productId){
+            function quantityDec(event, productId) {
                 event.preventDefault()
 
                 const inputValue = document.getElementById(`quantityValue-${productId}`).value
 
-                if(inputValue <= 1){
+                if (inputValue <= 1) {
                     return console.log("can't change the minimun")
                 }
 
@@ -614,11 +634,34 @@
 
                 axios.post('/decProductQuantity', productQuantity)
                     .then(res => {
-                        if(res.data.quantity){
+                        if (res.data.quantity) {
                             const input = document.getElementById(`quantityValue-${productId}`)
                             input.value = res.data.quantity
                             const errordiv = document.getElementById(`errMsgQnt-${productId}`)
                             errordiv.style.display = 'none'
+                            const subtotal = document.getElementById(`subtotal-${productId}`)
+                            subtotal.innerText = `₹${res.data.productSubtotal}`
+
+                            axios.post('/checkoutTotal')
+                                .then(res => {
+                                    const productsDeatails = res.data.productsDeatails
+                                    let total = 0
+
+                                    productsDeatails.forEach(item => {
+                                        // console.log(typeof item.productId.price)
+                                        // console.log(parseInt(item.productId.price))
+                                        // console.log( parseInt(item.quantity))
+                                        total += item.productId.price * item.quantity
+                                    });
+
+                                    const totalDiv = document.getElementById('total-products-amount')
+                                    const grandTotal = document.getElementById('grand-total-amount')
+                                    totalDiv.innerHTML = `₹${total}`
+                                    grandTotal.innerHTML = `₹${total + 40}`
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
                         }
                     })
                     .catch(err => {
@@ -627,7 +670,7 @@
 
             }
         </script>
-        
+
         <script>
             function removeitemFromCart(productId) {
                 const userId = '<%= user %>'

@@ -157,7 +157,8 @@ const addQuantity = async (req, res, next) => {
         const saveIncQuantity = await findProductCart.save()
         if( saveIncQuantity ){
             // console.log("quantity addedd to the cart, product at addquantity")
-            return res.send({quantity: quantity})
+            const productSubtotal = quantity * productStock.price
+            return res.send({quantity: quantity, productSubtotal: productSubtotal})
         }
 
     }catch(error){
@@ -198,7 +199,8 @@ const decQuantity = async (req, res, next) => {
         const saveDecQuantity = await findProductCart.save()
         if( saveDecQuantity ){
             // console.log("quantity decrement at the cart, product at addquantity")
-            return res.send({quantity: quantity})
+            const productSubtotal = quantity * productStock.price
+            return res.send({quantity: quantity, productSubtotal: productSubtotal})
         }
     }catch(error){
         next(error)

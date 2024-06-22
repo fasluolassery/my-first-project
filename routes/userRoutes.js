@@ -13,6 +13,7 @@ const productController = require('../controllers/user/productController')
 const cartController = require('../controllers/user/cartController')
 const userController = require('../controllers/user/userController')
 const checkoutController = require('../controllers/user/checkoutController')
+const orderController = require('../controllers/user/orderController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -45,7 +46,7 @@ userRouter.post('/addressadd', userController.addAddress)
 userRouter.post('/addressremove', userController.removeAddress)
 userRouter.post('/sortProducts', productController.sortProducts)
 userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
-
+userRouter.post('/placeOrder', orderController.placeOrder)
 
 
 module.exports = userRouter
