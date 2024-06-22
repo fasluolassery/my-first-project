@@ -12,6 +12,7 @@ const emailController = require('../controllers/user/emailController')
 const productController = require('../controllers/user/productController')
 const cartController = require('../controllers/user/cartController')
 const userController = require('../controllers/user/userController')
+const checkoutController = require('../controllers/user/checkoutController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -27,7 +28,8 @@ userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profil
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
 userRouter.get('/cart', sessionCheckUser.isLogin, cartController.loadCart)
 userRouter.get('/myAccount', sessionCheckUser.isLogin, userController.loadUserAccount)
-userRouter.get('/logout', sessionCheckUser.isLogin,homeController.logout)
+userRouter.get('/logout', sessionCheckUser.isLogin, homeController.logout)
+userRouter.get('/checkout', sessionCheckUser.isLogin, checkoutController.loadCheckout)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)
@@ -35,6 +37,7 @@ userRouter.post('/verifyotp', otpController.userVerifyOtp)
 userRouter.post('/login', userValidation.validateLogin, authController.userLoginDetails)
 userRouter.post('/addtocart', cartController.getProductsToAdd)
 userRouter.post('/removeProductFromCart', cartController.removeProduct)
+userRouter.post('/addProductQuantity', cartController.addQuantity)
 userRouter.post('/editUser', userController.editUser)
 userRouter.post('/changepassword', userController.changePass)
 userRouter.post('/addressadd', userController.addAddress)

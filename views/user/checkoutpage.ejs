@@ -94,7 +94,7 @@
                         </div>
                         <div class="foot">
                             <div class="buttons mt-30px">
-                                <a href="/cart" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
+                                <a href="cart.html" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
                                 <a href="checkout.html" class="btn btn-outline-dark current-btn">checkout</a>
                             </div>
                         </div>
@@ -246,196 +246,237 @@
                     <div class="container">
                         <div class="row align-items-center justify-content-center">
                             <div class="col-12 text-center">
-                                <h2 class="breadcrumb-title">Cart</h2>
+                                <h2 class="breadcrumb-title">Checkout</h2>
                                 <!-- breadcrumb-list start -->
                                 <!-- <ul class="breadcrumb-list">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                    <li class="breadcrumb-item active">Cart</li>
-                                </ul> -->
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Checkout</li>
+                        </ul> -->
                                 <!-- breadcrumb-list end -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- breadcrumb-area end -->
-                <!-- Cart Area Start -->
-                <div class="cart-main-area pt-100px pb-100px">
+                <!-- checkout area start -->
+                <div class="checkout-area pt-100px pb-100px">
                     <div class="container">
-                        <h3 class="cart-page-title">Your cart items</h3>
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <form action="#">
-                                    <div class="table-content table-responsive cart-table-content">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Image</th>
-                                                    <th>Product Name</th>
-                                                    <th>Until Price</th>
-                                                    <th>Qty</th>
-                                                    <th>Subtotal</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% cartItems.forEach(item => { %>
-                                                    <tr id="items-<%= item.id %>" data-stock="<%= item.stock %>">
-                                                        <td class="product-thumbnail">
-                                                            <a href="#"><img class="img-responsive ml-15px" src="<%= item.imagePaths[0] %>" alt="" /></a>
-                                                        </td>
-                                                        <td class="product-name"><a href="#"><%= item.productName %></a></td>
-                                                        <td class="product-price-cart">
-                                                            <span class="amount" data-price="<%= item.price %>">₹<%= item.price %></span>
-                                                        </td>
-                                                        <td class="product-quantity">
-                                                            <div class="cart-plus-minus">
-                                                                <div class="dec qtybutton" data-id="<%= item.id %>" id="quantityAddButton">-</div>
-                                                                <input class="cart-plus-minus-box" id="quantityValue-<%= item.id %>" type="text" name="qtybutton" value="1" />
-                                                                <div class="inc qtybutton" data-id="<%= item.id %>" onclick="quantityAdd(event, '<%= item.id %>')">+</div>
-                                                                <p class="error-message text-danger mt-1" style="display: none;"></p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%= item.price %></td>
-                                                        <td class="product-remove">
-                                                            <a onclick="removeitemFromCart('<%= item.id %>')"><i class="fa fa-times"></i></a>
-                                                        </td>
-                                                    </tr>
+
+
+                            <div class="col-lg-4">
+                                <div class="billing-info-wrap">
+                                    <h3>Billing Details</h3>
+
+                                    <div class="mt-1">
+                                        <% if (typeof addresses != 'undefined' && addresses.length > 0) { %>
+                                            <ul class="list-group">
+                                                <% addresses.forEach((add, index) => { %>
+                                                    <li class="list-group-item position-relative d-flex align-items-start">
+                                                        <!-- Radio Button -->
+                                                        <input class="w-auto h-auto me-3" type="radio" name="addressSelection" id="address<%= index %>"
+                                                               value="<%= index %>" checked>
+                                    
+                                                        <div class="flex-grow-1 ms-4">
+                                                            <address class="mb-0">
+                                                                <span><strong>Street:</strong> <%= add.street %></span><br>
+                                                                <span><strong>City:</strong> <%= add.city %></span><br>
+                                                                <span><strong>State:</strong> <%= add.state %></span><br>
+                                                                <span><strong>ZIP:</strong> <%= add.zip %></span><br>
+                                                                <span><strong>Country:</strong> <%= add.country %></span>
+                                                            </address>
+                                                        </div>
+                                                        
+                                                        <!-- Cross Remove Button
+                                                        <button class="btn-close position-absolute top-0 end-0 m-2 remove-address"
+                                                                aria-label="Close"
+                                                                onclick="removeAddress(event, '<%= index %>')"></button> -->
+                                                    </li>
                                                 <% }) %>
-                                                
-                                                
-                                                        <!-- <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/2.webp" alt="" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">Bluetooth Headphone</a></td>
-                                            <td class="product-price-cart"><span class="amount">$50.00</span></td>
-                                            <td class="product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                                </div>
-                                            </td>
-                                            <td class="product-subtotal">$80.00</td>
-                                            <td class="product-remove">
-                                                <a href="#"><i class="fa fa-pencil"></i></a>
-                                                <a href="#"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/3.webp" alt="" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">Smart Music Box</a></td>
-                                            <td class="product-price-cart"><span class="amount">$70.00</span></td>
-                                            <td class="product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                                </div>
-                                            </td>
-                                            <td class="product-subtotal">$90.00</td>
-                                            <td class="product-remove">
-                                                <a href="#"><i class="fa fa-pencil"></i></a>
-                                                <a href="#"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr> -->
-                                            </tbody>
-                                        </table>
+                                            </ul>
+                                        <% } %>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="cart-shiping-update-wrapper">
-                                                <div class="cart-shiping-update">
-                                                    <a href="/products">Continue Shopping</a>
-                                                </div>
-                                                <div class="cart-clear">
-                                                    <!-- <button>Update Shopping Cart</button> -->
-                                                    <!-- <a href="#">Clear Shopping Cart</a> -->
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="checkout-account mt-25">
+                                        <input class="checkout-toggle w-auto h-auto" type="checkbox" />
+                                        <label>Ship to a different address?</label>
                                     </div>
-                                </form>
-                                <div class="row">
-                                    <!-- <div class="col-lg-4 col-md-6 mb-lm-30px">
-                                        <div class="cart-tax">
-                                            <div class="title-wrap">
-                                                <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax
-                                                </h4>
+                                    <div class="different-address open-toggle mt-30px">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>First Name</label>
+                                                    <input type="text" />
+                                                </div>
                                             </div>
-                                            <div class="tax-wrapper">
-                                                <p>Enter your destination to get a shipping estimate.</p>
-                                                <div class="tax-select-wrapper">
-                                                    <div class="tax-select">
-                                                        <label>
-                                                            * Country
-                                                        </label>
-                                                        <select class="email s-email s-wid">
-                                                            <option>Bangladesh</option>
-                                                            <option>Albania</option>
-                                                            <option>Åland Islands</option>
-                                                            <option>Afghanistan</option>
-                                                            <option>Belgium</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="tax-select">
-                                                        <label>
-                                                            * Region / State
-                                                        </label>
-                                                        <select class="email s-email s-wid">
-                                                            <option>Bangladesh</option>
-                                                            <option>Albania</option>
-                                                            <option>Åland Islands</option>
-                                                            <option>Afghanistan</option>
-                                                            <option>Belgium</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="tax-select mb-25px">
-                                                        <label>
-                                                            * Zip/Postal Code
-                                                        </label>
-                                                        <input type="text" />
-                                                    </div>
-                                                    <button class="cart-btn-2" type="submit">Get A Quote</button>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>Last Name</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="billing-info mb-4">
+                                                    <label>Company Name</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="billing-select mb-4">
+                                                    <label>Country</label>
+                                                    <select>
+                                                        <option>Select a country</option>
+                                                        <option>Azerbaijan</option>
+                                                        <option>Bahamas</option>
+                                                        <option>Bahrain</option>
+                                                        <option>Bangladesh</option>
+                                                        <option>Barbados</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="billing-info mb-4">
+                                                    <label>Street Address</label>
+                                                    <input class="billing-address"
+                                                        placeholder="House number and street name" type="text" />
+                                                    <input placeholder="Apartment, suite, unit etc." type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="billing-info mb-4">
+                                                    <label>Town / City</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>State / County</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>Postcode / ZIP</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>Phone</label>
+                                                    <input type="text" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>Email Address</label>
+                                                    <input type="text" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> -->
-                                    <div class="col-lg-4 col-md-6 mb-lm-30px">
-                                        <div class="discount-code-wrapper">
-                                            <div class="title-wrap">
-                                                <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
-                                            </div>
-                                            <div class="discount-code">
-                                                <p>Enter your coupon code if you have one.</p>
-                                                <form>
-                                                    <input type="text" required="" name="name" />
-                                                    <button class="cart-btn-2" type="submit">Apply Coupon</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-12 mt-md-30px">
-                                        <div class="grand-totall">
-                                            <div class="title-wrap">
-                                                <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
-                                            </div>
-                                            <h5>Total products <span id="total-products-amount">₹0.00</span></h5>
-                                            <div class="total-shipping">
-                                                <h5>Total shipping</h5>
-                                                <ul>
-                                                    <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="grand-totall-title">Grand Total <span id="grand-total-amount">₹0.00</span></h4>
-                                            <a href="/checkout">Proceed to Checkout</a>
-                                        </div>
-                                        
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-5 mt-md-30px mt-lm-30px ">
+                                <div class="your-order-area">
+                                    <h3>Your order</h3>
+                                    <div class="your-order-wrap gray-bg-4">
+                                        <div class="your-order-product-info">
+                                            <div class="your-order-top">
+                                                <ul>
+                                                    <li>Product</li>
+                                                    <li>Total</li>
+                                                </ul>
+                                            </div>
+                                            <div class="your-order-middle">
+                                                <ul>
+
+                                                    <% if(typeof userCartItems != 'undefined') {%>
+                                                        <% userCartItems.forEach(item => { %>
+                                                    <li><span class="order-middle-left"><%= item.productName %> X 1</span> <span
+                                                            class="order-price">$100 </span></li>
+                                                            <% }) %>
+                                                    <% } %>
+                                                </ul>
+                                            </div>
+                                            <div class="your-order-bottom">
+                                                <ul>
+                                                    <li class="your-order-shipping">Shipping</li>
+                                                    <li>Free shipping</li>
+                                                </ul>
+                                            </div>
+                                            <div class="your-order-total">
+                                                <ul>
+                                                    <li class="order-total">Total</li>
+                                                    <li>$100</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="payment-method">
+                                            <div class="payment-accordion element-mrg">
+                                                <div id="faq" class="panel-group">
+                                                    <div class="panel panel-default single-my-account m-0">
+                                                        <div class="panel-heading my-account-title">
+                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
+                                                                    href="#my-account-1" class="collapsed"
+                                                                    aria-expanded="true">Direct bank transfer</a>
+                                                            </h4>
+                                                        </div>
+                                                        <div id="my-account-1" class="panel-collapse collapse show"
+                                                            data-bs-parent="#faq">
+                                                            <div class="panel-body">
+                                                                <p>Please send a check to Store Name, Store Street,
+                                                                    Store Town,
+                                                                    Store State / County, Store Postcode.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel panel-default single-my-account m-0">
+                                                        <div class="panel-heading my-account-title">
+                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
+                                                                    href="#my-account-2" aria-expanded="false"
+                                                                    class="collapsed">Check payments</a></h4>
+                                                        </div>
+                                                        <div id="my-account-2" class="panel-collapse collapse"
+                                                            data-bs-parent="#faq">
+                                                            <div class="panel-body">
+                                                                <p>Please send a check to Store Name, Store Street,
+                                                                    Store Town,
+                                                                    Store State / County, Store Postcode.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel panel-default single-my-account m-0">
+                                                        <div class="panel-heading my-account-title">
+                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
+                                                                    href="#my-account-3">Cash on delivery</a></h4>
+                                                        </div>
+                                                        <div id="my-account-3" class="panel-collapse collapse"
+                                                            data-bs-parent="#faq">
+                                                            <div class="panel-body">
+                                                                <p>Please send a check to Store Name, Store Street,
+                                                                    Store Town,
+                                                                    Store State / County, Store Postcode.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="Place-order mt-25">
+                                        <a class="btn-hover" href="#">Place Order</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>
-                <!-- Cart Area End -->
+                <!-- checkout area end -->
                 <!-- Footer Area Start -->
                 <div class="footer-area">
                     <div class="footer-container">
@@ -580,8 +621,6 @@
         <script src="assets/js/plugins/venobox.min.js"></script>
         <script src="assets/js/plugins/jquery-ui.min.js"></script>
         <script src="assets/js/plugins/mailchimp-ajax.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Minify Version -->
         <!-- <script src="assets/js/vendor.min.js"></script>
@@ -590,156 +629,9 @@
 
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
-
-
-        <!-- <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const minQty = 1;
-                const maxQty = 5;
-            
-                function updateSubtotal(itemId) {
-                    const input = document.getElementById(`quantityValue-${itemId}`);
-                    const quantity = parseInt(input.value);
-                    const priceElement = document.querySelector(`#items-${itemId} .product-price-cart .amount`);
-                    const price = parseFloat(priceElement.getAttribute('data-price'));
-                    const subtotalElement = document.getElementById(`subtotal-${itemId}`);
-                    subtotalElement.textContent = `₹${(quantity * price).toFixed(2)}`;
-                    
-                    // Update the total
-                    updateGrandTotal();
-                }
-            
-                function updateGrandTotal() {
-                    let grandTotal = 0;
-                    document.querySelectorAll('.product-subtotal').forEach(subtotalElement => {
-                        const subtotal = parseFloat(subtotalElement.textContent.replace('₹', ''));
-                        grandTotal += subtotal;
-                    });
-            
-                    // Set the total and grand total
-                    document.getElementById('total-products-amount').textContent = `₹${grandTotal.toFixed(2)}`;
-                    const shipping = parseFloat(document.getElementById('total-shipping-amount').textContent.replace('₹', ''));
-                    document.getElementById('grand-total-amount').textContent = `₹${(grandTotal + shipping).toFixed(2)}`;
-                }
-            
-                function handleButtonClick(event) {
-                    const button = event.target;
-                    const itemId = button.getAttribute('data-id');
-                    const input = document.getElementById(`quantityValue-${itemId}`);
-                    const errorMessage = button.closest('.cart-plus-minus').querySelector('.error-message');
-                    const itemRow = document.getElementById(`items-${itemId}`);
-                    const stock = parseInt(itemRow.getAttribute('data-stock'));
-                    let currentQty = parseInt(input.value);
-            
-                    if (button.classList.contains('inc')) {
-                        if (currentQty < maxQty && currentQty < stock) {
-                            input.value = currentQty + 1;
-                            errorMessage.style.display = 'none';
-                        } else if (currentQty >= maxQty) {
-                            showError(`*Max limit reached`, errorMessage);
-                        } else if (currentQty >= stock) {
-                            showError(`*Only ${stock} in stock`, errorMessage);
-                        }
-                    } else if (button.classList.contains('dec')) {
-                        if (currentQty > minQty) {
-                            input.value = currentQty - 1;
-                            errorMessage.style.display = 'none';
-                        }
-                    }
-            
-                    // Update the subtotal for the item
-                    updateSubtotal(itemId);
-                }
-            
-                function showError(message, errorMessage) {
-                    errorMessage.textContent = message;
-                    errorMessage.style.display = 'block';
-                }
-            
-                document.querySelectorAll('.inc.qtybutton').forEach(button => {
-                    button.addEventListener('click', handleButtonClick);
-                });
-            
-                document.querySelectorAll('.dec.qtybutton').forEach(button => {
-                    button.addEventListener('click', handleButtonClick);
-                });
-            
-                // Attach change event listener to quantity inputs
-                document.querySelectorAll('.cart-plus-minus-box').forEach(input => {
-                    input.addEventListener('change', (event) => {
-                        const itemId = input.id.split('-')[1];
-                        updateSubtotal(itemId);
-                    });
-                });
-            
-                // Initial calculation of the grand total
-                updateGrandTotal();
-            });
-            </script> -->
-
-        <script>
-            function quantityAdd(event, itemId){
-                event.preventDefault()
-
-                const inputValue = document.getElementById(`quantityValue-${itemId}`).value
-
-                const num = Number(inputValue)
-
-                const productQuantity = {
-                    productId: itemId,
-                    quantity: num + 1
-                }
-
-                axios.post('/addProductQuantity', productQuantity)
-                    .then(res => {
-                        console.log(res)
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-
-            }
-        </script>
-        
-        <script>
-            function removeitemFromCart(productId) {
-                const userId = '<%= user %>'
-
-                const userData = {
-                    userId: userId,
-                    productId: productId
-                }
-
-                Swal.fire({
-                    icon: "question",
-                    title: "<span style='color: black;'>Are you sure?</span>",
-                    // text: "Verification email sent! Kindly check your inbox.",
-                    // showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonColor: '#0056b3',
-                    confirmButtonText: 'Yes',
-                    // denyButtonText: `Don't save`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        axios.post('/removeProductFromCart', userData)
-                            .then(res => {
-                                if (res.data.status === 2) {
-                                    window.location.reload()
-                                }
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
-                    }
-                })
-
-
-
-            }
-        </script>
     </body>
 
 
-    <!-- Mirrored from htmldemo.net/hmart/hmart/cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 May 2024 11:06:53 GMT -->
+    <!-- Mirrored from htmldemo.net/hmart/hmart/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 May 2024 11:06:53 GMT -->
 
     </html>

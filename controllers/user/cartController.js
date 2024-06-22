@@ -113,8 +113,17 @@ const removeProduct = async (req, res, next) => {
     }
 }
 
+const addQuantity = async (req, res, next) => {
+    try{
+        console.log(req.body)
+    }catch(error){
+        next(error)
+    }
+}
+
 module.exports = {
     getProductsToAdd,
     loadCart,
-    removeProduct
+    removeProduct,
+    addQuantity,
 }
