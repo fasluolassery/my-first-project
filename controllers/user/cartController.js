@@ -10,6 +10,12 @@ const loadCart = async (req, res, next) => {
         
         if(findUserCartItems){
 
+            findUserCartItems.items.forEach(val => {
+                val.quantity = 1
+            })
+
+            const resetQuantityofProducts = await findUserCartItems.save()
+
             const userCartItems = findUserCartItems.items.map(pro => pro.productId)
             // console.log(userCartItems) //!to remove
             if (userCartItems.length > 0) {
@@ -115,15 +121,95 @@ const removeProduct = async (req, res, next) => {
 
 const addQuantity = async (req, res, next) => {
     try{
-        console.log(req.body)
+        let { productId, quantity} = req.body
+        const { userId } = req.session
+
+        if(!userId){
+            return console.log("userid is not here at addquantity")
+        }
+
+        const findProductCart = await cartModel.findOne({ userId: userId })
+
+        if(!findProductCart){
+            return console.log("can't find cart of user at addquantity")
+        }
+
+        const productStock = await productModel.findOne({_id: productId})
+        if(!productStock){
+            return console.log("product not found in addquantity")
+        }
+
+        if(productStock.stock < quantity){
+            return res.send({error: `*only ${productStock.stock} in stock`})
+        }
+
+        const stockCheck = findProductCart.items.forEach((val,ind) => {
+            if(val.productId == productId){
+                // console.log(val)
+                if(quantity <= productStock.stock){
+                    val.quantity = quantity
+                }else{
+                    return quantity = productStock.stock
+                }
+            }
+        })
+
+        const saveIncQuantity = await findProductCart.save()
+        if( saveIncQuantity ){
+            // console.log("quantity addedd to the cart, product at addquantity")
+            return res.send({quantity: quantity})
+        }
+
     }catch(error){
         next(error)
     }
 }
+
+const decQuantity = async (req, res, next) => {
+    try{
+        let { productId, quantity} = req.body
+        const { userId } = req.session
+
+        if(!userId){
+            return console.log("userid is not here at addquantity")
+        }
+
+        const findProductCart = await cartModel.findOne({ userId: userId })
+
+        if(!findProductCart){
+            return console.log("can't find cart of user at addquantity")
+        }
+
+        const productStock = await productModel.findOne({_id: productId})
+        if(!productStock){
+            return console.log("product not found in addquantity")
+        }
+
+        findProductCart.items.forEach((val,ind) => {
+            if(val.productId == productId){
+                if(quantity <= productStock.stock){
+                    val.quantity = quantity
+                }else{
+                    return quantity = productStock.stock
+                }
+            }
+        })
+
+        const saveDecQuantity = await findProductCart.save()
+        if( saveDecQuantity ){
+            // console.log("quantity decrement at the cart, product at addquantity")
+            return res.send({quantity: quantity})
+        }
+    }catch(error){
+        next(error)
+    }
+}
+
 
 module.exports = {
     getProductsToAdd,
     loadCart,
     removeProduct,
     addQuantity,
+    decQuantity,
 }

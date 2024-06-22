@@ -38,6 +38,7 @@ userRouter.post('/login', userValidation.validateLogin, authController.userLogin
 userRouter.post('/addtocart', cartController.getProductsToAdd)
 userRouter.post('/removeProductFromCart', cartController.removeProduct)
 userRouter.post('/addProductQuantity', cartController.addQuantity)
+userRouter.post('/decProductQuantity', cartController.decQuantity)
 userRouter.post('/editUser', userController.editUser)
 userRouter.post('/changepassword', userController.changePass)
 userRouter.post('/addressadd', userController.addAddress)

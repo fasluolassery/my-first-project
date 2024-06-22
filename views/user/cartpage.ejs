@@ -277,9 +277,12 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+
+
+
                                             <tbody>
                                                 <% cartItems.forEach(item => { %>
-                                                    <tr id="items-<%= item.id %>" data-stock="<%= item.stock %>">
+                                                    <tr id="item" data-stock="<%= item.stock %>">
                                                         <td class="product-thumbnail">
                                                             <a href="#"><img class="img-responsive ml-15px" src="<%= item.imagePaths[0] %>" alt="" /></a>
                                                         </td>
@@ -289,10 +292,10 @@
                                                         </td>
                                                         <td class="product-quantity">
                                                             <div class="cart-plus-minus">
-                                                                <div class="dec qtybutton" data-id="<%= item.id %>" id="quantityAddButton">-</div>
+                                                                <div class="dec qtybutton" data-id="<%= item.id %>" onclick="quantityDec(event, '<%= item.id %>')">-</div>
                                                                 <input class="cart-plus-minus-box" id="quantityValue-<%= item.id %>" type="text" name="qtybutton" value="1" />
-                                                                <div class="inc qtybutton" data-id="<%= item.id %>" onclick="quantityAdd(event, '<%= item.id %>')">+</div>
-                                                                <p class="error-message text-danger mt-1" style="display: none;"></p>
+                                                                <div class="inc qtybutton" data-id="<%= item.id %>" onclick="quantityInc(event, '<%= item.id %>')">+</div>
+                                                                <p class="error-message text-danger mt-1" id="errMsgQnt-<%= item.id %>" style="display: none;"></p>
                                                             </div>
                                                         </td>
                                                         <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%= item.price %></td>
@@ -301,43 +304,11 @@
                                                         </td>
                                                     </tr>
                                                 <% }) %>
-                                                
-                                                
-                                                        <!-- <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/2.webp" alt="" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">Bluetooth Headphone</a></td>
-                                            <td class="product-price-cart"><span class="amount">$50.00</span></td>
-                                            <td class="product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                                </div>
-                                            </td>
-                                            <td class="product-subtotal">$80.00</td>
-                                            <td class="product-remove">
-                                                <a href="#"><i class="fa fa-pencil"></i></a>
-                                                <a href="#"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/3.webp" alt="" /></a>
-                                            </td>
-                                            <td class="product-name"><a href="#">Smart Music Box</a></td>
-                                            <td class="product-price-cart"><span class="amount">$70.00</span></td>
-                                            <td class="product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                                </div>
-                                            </td>
-                                            <td class="product-subtotal">$90.00</td>
-                                            <td class="product-remove">
-                                                <a href="#"><i class="fa fa-pencil"></i></a>
-                                                <a href="#"><i class="fa fa-times"></i></a>
-                                            </td>
-                                        </tr> -->
                                             </tbody>
+
+
+
+
                                         </table>
                                     </div>
                                     <div class="row">
@@ -355,50 +326,7 @@
                                     </div>
                                 </form>
                                 <div class="row">
-                                    <!-- <div class="col-lg-4 col-md-6 mb-lm-30px">
-                                        <div class="cart-tax">
-                                            <div class="title-wrap">
-                                                <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax
-                                                </h4>
-                                            </div>
-                                            <div class="tax-wrapper">
-                                                <p>Enter your destination to get a shipping estimate.</p>
-                                                <div class="tax-select-wrapper">
-                                                    <div class="tax-select">
-                                                        <label>
-                                                            * Country
-                                                        </label>
-                                                        <select class="email s-email s-wid">
-                                                            <option>Bangladesh</option>
-                                                            <option>Albania</option>
-                                                            <option>Åland Islands</option>
-                                                            <option>Afghanistan</option>
-                                                            <option>Belgium</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="tax-select">
-                                                        <label>
-                                                            * Region / State
-                                                        </label>
-                                                        <select class="email s-email s-wid">
-                                                            <option>Bangladesh</option>
-                                                            <option>Albania</option>
-                                                            <option>Åland Islands</option>
-                                                            <option>Afghanistan</option>
-                                                            <option>Belgium</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="tax-select mb-25px">
-                                                        <label>
-                                                            * Zip/Postal Code
-                                                        </label>
-                                                        <input type="text" />
-                                                    </div>
-                                                    <button class="cart-btn-2" type="submit">Get A Quote</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                    
                                     <div class="col-lg-4 col-md-6 mb-lm-30px">
                                         <div class="discount-code-wrapper">
                                             <div class="title-wrap">
@@ -592,93 +520,52 @@
         <script src="assets/js/main.js"></script>
 
 
-        <!-- <script>
+        <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const minQty = 1;
-                const maxQty = 5;
-            
-                function updateSubtotal(itemId) {
-                    const input = document.getElementById(`quantityValue-${itemId}`);
-                    const quantity = parseInt(input.value);
-                    const priceElement = document.querySelector(`#items-${itemId} .product-price-cart .amount`);
-                    const price = parseFloat(priceElement.getAttribute('data-price'));
-                    const subtotalElement = document.getElementById(`subtotal-${itemId}`);
-                    subtotalElement.textContent = `₹${(quantity * price).toFixed(2)}`;
+                // Function to calculate total amount
+                function calculateTotalAmount() {
+                    let totalAmount = 0;
                     
-                    // Update the total
-                    updateGrandTotal();
-                }
-            
-                function updateGrandTotal() {
-                    let grandTotal = 0;
-                    document.querySelectorAll('.product-subtotal').forEach(subtotalElement => {
-                        const subtotal = parseFloat(subtotalElement.textContent.replace('₹', ''));
-                        grandTotal += subtotal;
+                    // Select all product rows
+                    const rows = document.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const quantity = parseInt(row.querySelector('.cart-plus-minus-box').value);
+                        const price = parseFloat(row.querySelector('.amount').dataset.price);
+                        
+                        // Calculate subtotal
+                        totalAmount += quantity * price;
                     });
-            
-                    // Set the total and grand total
-                    document.getElementById('total-products-amount').textContent = `₹${grandTotal.toFixed(2)}`;
-                    const shipping = parseFloat(document.getElementById('total-shipping-amount').textContent.replace('₹', ''));
-                    document.getElementById('grand-total-amount').textContent = `₹${(grandTotal + shipping).toFixed(2)}`;
+                    
+                    // Update total amount in the DOM
+                    document.getElementById('total-products-amount').innerText = `₹${totalAmount.toFixed(2)}`;
+                    // Assuming you have a static shipping cost of ₹40.00
+                    const totalShippingAmount = 40.00;
+                    const grandTotal = totalAmount + totalShippingAmount;
+                    document.getElementById('grand-total-amount').innerText = `₹${grandTotal.toFixed(2)}`;
                 }
-            
-                function handleButtonClick(event) {
-                    const button = event.target;
-                    const itemId = button.getAttribute('data-id');
-                    const input = document.getElementById(`quantityValue-${itemId}`);
-                    const errorMessage = button.closest('.cart-plus-minus').querySelector('.error-message');
-                    const itemRow = document.getElementById(`items-${itemId}`);
-                    const stock = parseInt(itemRow.getAttribute('data-stock'));
-                    let currentQty = parseInt(input.value);
-            
-                    if (button.classList.contains('inc')) {
-                        if (currentQty < maxQty && currentQty < stock) {
-                            input.value = currentQty + 1;
-                            errorMessage.style.display = 'none';
-                        } else if (currentQty >= maxQty) {
-                            showError(`*Max limit reached`, errorMessage);
-                        } else if (currentQty >= stock) {
-                            showError(`*Only ${stock} in stock`, errorMessage);
-                        }
-                    } else if (button.classList.contains('dec')) {
-                        if (currentQty > minQty) {
-                            input.value = currentQty - 1;
-                            errorMessage.style.display = 'none';
-                        }
-                    }
-            
-                    // Update the subtotal for the item
-                    updateSubtotal(itemId);
-                }
-            
-                function showError(message, errorMessage) {
-                    errorMessage.textContent = message;
-                    errorMessage.style.display = 'block';
-                }
-            
-                document.querySelectorAll('.inc.qtybutton').forEach(button => {
-                    button.addEventListener('click', handleButtonClick);
+        
+                // Call the function once to initialize the total amount
+                calculateTotalAmount();
+                
+                // Attach event listeners to quantity increment and decrement buttons
+                document.querySelectorAll('.qtybutton').forEach(button => {
+                    button.addEventListener('click', () => {
+                        calculateTotalAmount();
+                    });
                 });
-            
-                document.querySelectorAll('.dec.qtybutton').forEach(button => {
-                    button.addEventListener('click', handleButtonClick);
-                });
-            
-                // Attach change event listener to quantity inputs
+        
+                // Also attach to input change in case user manually changes the quantity
                 document.querySelectorAll('.cart-plus-minus-box').forEach(input => {
-                    input.addEventListener('change', (event) => {
-                        const itemId = input.id.split('-')[1];
-                        updateSubtotal(itemId);
+                    input.addEventListener('input', () => {
+                        calculateTotalAmount();
                     });
                 });
-            
-                // Initial calculation of the grand total
-                updateGrandTotal();
             });
-            </script> -->
+        </script>
 
         <script>
-            function quantityAdd(event, itemId){
+            function quantityInc(event, itemId){
                 event.preventDefault()
 
                 const inputValue = document.getElementById(`quantityValue-${itemId}`).value
@@ -692,7 +579,47 @@
 
                 axios.post('/addProductQuantity', productQuantity)
                     .then(res => {
-                        console.log(res)
+                        if(res.data.quantity){
+                            const input = document.getElementById(`quantityValue-${itemId}`)
+                            input.value = res.data.quantity
+                        }else if(res.data.error){
+                            const errordiv = document.getElementById(`errMsgQnt-${itemId}`)
+                            errordiv.style.display = 'block'
+                            errordiv.innerHTML = res.data.error
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+            }
+        </script>
+
+        <script>
+            function quantityDec(event, productId){
+                event.preventDefault()
+
+                const inputValue = document.getElementById(`quantityValue-${productId}`).value
+
+                if(inputValue <= 1){
+                    return console.log("can't change the minimun")
+                }
+
+                const num = Number(inputValue)
+
+                const productQuantity = {
+                    productId: productId,
+                    quantity: num - 1
+                }
+
+                axios.post('/decProductQuantity', productQuantity)
+                    .then(res => {
+                        if(res.data.quantity){
+                            const input = document.getElementById(`quantityValue-${productId}`)
+                            input.value = res.data.quantity
+                            const errordiv = document.getElementById(`errMsgQnt-${productId}`)
+                            errordiv.style.display = 'none'
+                        }
                     })
                     .catch(err => {
                         console.log(err)
