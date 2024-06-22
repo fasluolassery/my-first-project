@@ -44,6 +44,8 @@ userRouter.post('/changepassword', userController.changePass)
 userRouter.post('/addressadd', userController.addAddress)
 userRouter.post('/addressremove', userController.removeAddress)
 userRouter.post('/sortProducts', productController.sortProducts)
+userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
+
 
 
 module.exports = userRouter

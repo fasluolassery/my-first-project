@@ -15,12 +15,6 @@ const loadCheckout = async (req, res, next) => {
             return console.log("can't find user cart in loadcheckout")
         }
 
-        const userCartItems = findUserCart.items.map(val => val.productId)
-
-        if(!userCartItems){
-            return console.log("Can't find user cart items in loadcheckout")
-        }
-
         const findAddresses = await addressModel.findOne({ userId: userId })
 
         if(!findAddresses){
@@ -29,7 +23,24 @@ const loadCheckout = async (req, res, next) => {
 
         const addresses = findAddresses.addresses
 
-        res.render('user/checkoutpage', { addresses: addresses, userCartItems: userCartItems})
+        res.render('user/checkoutpage', { addresses: addresses, userCartItems: findUserCart.items})
+
+    }catch(error){
+        next(error)
+    }
+}
+
+const checkoutTotal = async (req, res, next) => {
+    try{
+        const { userId } = req.session
+
+        const findUserCart = await cartModel.findOne({userId: userId}).populate('items.productId')
+
+        if(!findUserCart){
+            return console.log("can't find user cart in checkout total")
+        }
+
+        res.send({productsDeatails: findUserCart.items})
 
     }catch(error){
         next(error)
@@ -37,5 +48,6 @@ const loadCheckout = async (req, res, next) => {
 }
 
 module.exports = {
-    loadCheckout
+    loadCheckout,
+    checkoutTotal,
 }

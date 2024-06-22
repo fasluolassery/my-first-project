@@ -389,34 +389,41 @@
                                                     <li>Total</li>
                                                 </ul>
                                             </div>
+
+
+
                                             <div class="your-order-middle">
                                                 <ul>
-
-                                                    <% if(typeof userCartItems != 'undefined') {%>
+                                                    <% if(typeof userCartItems != 'undefined') { %>
                                                         <% userCartItems.forEach(item => { %>
-                                                    <li><span class="order-middle-left"><%= item.productName %> X 1</span> <span
-                                                            class="order-price">$100 </span></li>
-                                                            <% }) %>
+                                                            <li>
+                                                                <span class="order-middle-left"><%= item.productId.productName %> X <%= item.quantity %></span> 
+                                                                <span class="order-price">₹<%= (item.productId.price * item.quantity).toFixed(2) %></span>
+                                                            </li>
+                                                        <% }) %>
                                                     <% } %>
                                                 </ul>
                                             </div>
                                             <div class="your-order-bottom">
                                                 <ul>
                                                     <li class="your-order-shipping">Shipping</li>
-                                                    <li>Free shipping</li>
+                                                    <li>₹40.00</li>
                                                 </ul>
                                             </div>
                                             <div class="your-order-total">
                                                 <ul>
                                                     <li class="order-total">Total</li>
-                                                    <li>$100</li>
+                                                    <li  id="ordertotal">₹0.00</li> <!-- This will be updated by JavaScript -->
                                                 </ul>
                                             </div>
+                                            
+
+
                                         </div>
                                         <div class="payment-method">
                                             <div class="payment-accordion element-mrg">
                                                 <div id="faq" class="panel-group">
-                                                    <div class="panel panel-default single-my-account m-0">
+                                                    <!-- <div class="panel panel-default single-my-account m-0">
                                                         <div class="panel-heading my-account-title">
                                                             <h4 class="panel-title"><a data-bs-toggle="collapse"
                                                                     href="#my-account-1" class="collapsed"
@@ -446,7 +453,7 @@
                                                                     Store State / County, Store Postcode.</p>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                     <div class="panel panel-default single-my-account m-0">
                                                         <div class="panel-heading my-account-title">
                                                             <h4 class="panel-title"><a data-bs-toggle="collapse"
@@ -466,7 +473,7 @@
                                         </div>
                                     </div>
                                     <div class="Place-order mt-25">
-                                        <a class="btn-hover" href="#">Place Order</a>
+                                        <a class="btn-hover" onclick="placeOrder(event)">Place Order</a>
                                     </div>
                                 </div>
                             </div>
@@ -621,6 +628,8 @@
         <script src="assets/js/plugins/venobox.min.js"></script>
         <script src="assets/js/plugins/jquery-ui.min.js"></script>
         <script src="assets/js/plugins/mailchimp-ajax.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
         <!-- Minify Version -->
         <!-- <script src="assets/js/vendor.min.js"></script>
@@ -629,6 +638,39 @@
 
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                axios.post('/checkoutTotal')
+                    .then(res => {
+                        const productsDeatails = res.data.productsDeatails
+                        let total = 0
+
+                        productsDeatails.forEach(item => {
+                            // console.log(typeof item.productId.price)
+                            // console.log(parseInt(item.productId.price))
+                            // console.log( parseInt(item.quantity))
+                            total += item.productId.price * item.quantity
+                        });
+
+                        const totalDiv = document.getElementById('ordertotal')
+                        totalDiv.innerHTML = `₹${total + 40 }`
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
+        </script>
+
+        <script>
+            function placeOrder(event){
+                event.preventDefault()
+
+                axios.post('/placeOrder', )
+
+            }
+        </script>
+        
     </body>
 
 
