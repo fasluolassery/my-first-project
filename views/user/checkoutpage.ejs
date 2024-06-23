@@ -1,5 +1,28 @@
 <%- include('../layout/userMeta.ejs') %>
 
+    <style>
+        .order-price {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+
+        /* category old new new-price*/
+        .category {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+
+        .old {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+
+        .new {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+
+        .new-price {
+            font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;
+        }
+    </style>
+
     </head>
 
     <body>
@@ -269,40 +292,56 @@
                                     <h3>Billing Details</h3>
 
                                     <div class="mt-1">
-                                        <% if (typeof addresses != 'undefined' && addresses.length > 0) { %>
+                                        <% if (typeof addresses !='undefined' && addresses.length> 0) { %>
                                             <ul class="list-group">
-                                                <% addresses.forEach((add, index) => { %>
-                                                    <li class="list-group-item position-relative d-flex align-items-start">
+                                                <% addresses.forEach((add, index)=> { %>
+                                                    <li
+                                                        class="list-group-item position-relative d-flex align-items-start">
                                                         <!-- Radio Button -->
-                                                        <input class="w-auto h-auto me-3" type="radio" name="addressSelection" id="address<%= index %>"
-                                                               value="<%= index %>" checked>
-                                    
+                                                        <input class="w-auto h-auto me-3" type="radio"
+                                                            name="addressSelection" id="address<%= index %>"
+                                                            value="<%= add.id %>">
+                                                        <input type="hidden" value="<%= add.id %>">
+
+
                                                         <div class="flex-grow-1 ms-4">
                                                             <address class="mb-0">
-                                                                <span><strong>Street:</strong> <%= add.street %></span><br>
-                                                                <span><strong>City:</strong> <%= add.city %></span><br>
-                                                                <span><strong>State:</strong> <%= add.state %></span><br>
-                                                                <span><strong>ZIP:</strong> <%= add.zip %></span><br>
-                                                                <span><strong>Country:</strong> <%= add.country %></span>
+                                                                <span><strong>Street:</strong>
+                                                                    <%= add.street %>
+                                                                </span><br>
+                                                                <span><strong>City:</strong>
+                                                                    <%= add.city %>
+                                                                </span><br>
+                                                                <span><strong>State:</strong>
+                                                                    <%= add.state %>
+                                                                </span><br>
+                                                                <span><strong>ZIP:</strong>
+                                                                    <%= add.zip %>
+                                                                </span><br>
+                                                                <span><strong>Country:</strong>
+                                                                    <%= add.country %>
+                                                                </span>
                                                             </address>
                                                         </div>
-                                                        
+
                                                         <!-- Cross Remove Button
                                                         <button class="btn-close position-absolute top-0 end-0 m-2 remove-address"
                                                                 aria-label="Close"
                                                                 onclick="removeAddress(event, '<%= index %>')"></button> -->
                                                     </li>
-                                                <% }) %>
+                                                    <% }) %>
                                             </ul>
-                                        <% } %>
+                                            <% } %>
                                     </div>
+
+
                                     <div class="checkout-account mt-25">
                                         <input class="checkout-toggle w-auto h-auto" type="checkbox" />
                                         <label>Ship to a different address?</label>
                                     </div>
                                     <div class="different-address open-toggle mt-30px">
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6">
+                                            <!-- <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-4">
                                                     <label>First Name</label>
                                                     <input type="text" />
@@ -313,53 +352,57 @@
                                                     <label>Last Name</label>
                                                     <input type="text" />
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-12">
+                                            </div> -->
+                                            <!-- <div class="col-lg-12">
                                                 <div class="billing-info mb-4">
                                                     <label>Company Name</label>
                                                     <input type="text" />
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-lg-12">
                                                 <div class="billing-select mb-4">
-                                                    <label>Country</label>
-                                                    <select>
+                                                    <div class="billing-info mb-4">
+                                                        <label>Street</label>
+                                                        <input type="text" id="street" />
+                                                    </div>
+                                                    <!-- <select>
                                                         <option>Select a country</option>
                                                         <option>Azerbaijan</option>
                                                         <option>Bahamas</option>
                                                         <option>Bahrain</option>
                                                         <option>Bangladesh</option>
                                                         <option>Barbados</option>
-                                                    </select>
+                                                    </select> -->
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="billing-info mb-4">
-                                                    <label>Street Address</label>
-                                                    <input class="billing-address"
-                                                        placeholder="House number and street name" type="text" />
-                                                    <input placeholder="Apartment, suite, unit etc." type="text" />
+                                                    <label>City</label>
+                                                    <input class="billing-address" placeholder="city" type="text"
+                                                        id="city" />
+                                                    <!-- <input placeholder="Apartment, suite, unit etc." type="text" /> -->
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="billing-info mb-4">
-                                                    <label>Town / City</label>
-                                                    <input type="text" />
+                                                    <label>State</label>
+                                                    <input type="text" id="state" />
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="billing-info mb-4">
-                                                    <label>State / County</label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
+
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-4">
                                                     <label>Postcode / ZIP</label>
-                                                    <input type="text" />
+                                                    <input type="text" id="zip" />
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
+                                                <div class="billing-info mb-4">
+                                                    <label>Country</label>
+                                                    <input type="text" id="country" />
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-4">
                                                     <label>Phone</label>
                                                     <input type="text" />
@@ -370,7 +413,7 @@
                                                     <label>Email Address</label>
                                                     <input type="text" />
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -394,29 +437,34 @@
 
                                             <div class="your-order-middle">
                                                 <ul>
-                                                    <% if(typeof userCartItems != 'undefined') { %>
-                                                        <% userCartItems.forEach(item => { %>
+                                                    <% if(typeof userCartItems !='undefined' ) { %>
+                                                        <% userCartItems.forEach(item=> { %>
                                                             <li>
-                                                                <span class="order-middle-left"><%= item.productId.productName %> X <%= item.quantity %></span> 
-                                                                <span class="order-price">₹<%= (item.productId.price * item.quantity).toFixed(2) %></span>
+                                                                <span class="order-middle-left">
+                                                                    <%= item.productId.productName %> X <%=
+                                                                            item.quantity %>
+                                                                </span>
+                                                                <span class="order-price">₹<%= (item.productId.price *
+                                                                        item.quantity).toFixed(2) %></span>
                                                             </li>
-                                                        <% }) %>
-                                                    <% } %>
+                                                            <% }) %>
+                                                                <% } %>
                                                 </ul>
                                             </div>
                                             <div class="your-order-bottom">
                                                 <ul>
                                                     <li class="your-order-shipping">Shipping</li>
-                                                    <li>₹40.00</li>
+                                                    <li class="new">₹40.00</li>
                                                 </ul>
                                             </div>
                                             <div class="your-order-total">
                                                 <ul>
                                                     <li class="order-total">Total</li>
-                                                    <li  id="ordertotal">₹0.00</li> <!-- This will be updated by JavaScript -->
+                                                    <li id="ordertotal" class="order-price">₹0.00</li>
+                                                    <!-- This will be updated by JavaScript -->
                                                 </ul>
                                             </div>
-                                            
+
 
 
                                         </div>
@@ -629,6 +677,8 @@
         <script src="assets/js/plugins/jquery-ui.min.js"></script>
         <script src="assets/js/plugins/mailchimp-ajax.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
         <!-- Minify Version -->
@@ -654,7 +704,7 @@
                         });
 
                         const totalDiv = document.getElementById('ordertotal')
-                        totalDiv.innerHTML = `₹${total + 40 }`
+                        totalDiv.innerHTML = `₹${total + 40}`
                     })
                     .catch(err => {
                         console.log(err)
@@ -663,21 +713,86 @@
         </script>
 
         <script>
-            function placeOrder(event){
+            function placeOrder(event) {
                 event.preventDefault()
 
-                const address = 
+                let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
+                let address = ''
 
-                axios.post('/placeOrder')
+                if (!checkedAddress) {
+                    const street = document.getElementById('street').value
+                    const city = document.getElementById('city').value
+                    const state = document.getElementById('state').value
+                    const zip = document.getElementById('zip').value
+                    const country = document.getElementById('country').value
+
+                    if (!street) {
+                        return Swal.fire({
+                            icon: "error",
+                            title: "address!",
+                            text: "Please enter or select shipping address",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "OK",
+                        }).then((result) => {
+                            // if (result.dismiss === Swal.DismissReason.cancel) {
+                            //     otpInputs.forEach(input => input.value = '');
+                            //     otpInputs[0].focus();
+                            // }
+                        });
+                    }
+
+                    const addressData = {
+                        street: street,
+                        city: city,
+                        state: state,
+                        zip: zip,
+                        country: country
+                    }
+
+                    address = addressData
+                } else {
+                    address = checkedAddress.value
+                }
+
+                axios.post('/placeOrder', { address: address })
                     .then(res => {
-                        console.log(res)
+                        if (res.data.error == 1) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "quantity!",
+                                text: "products don't have enough quantity",
+                                showCancelButton: true,
+                                showConfirmButton: false,
+                                cancelButtonText: "OK",
+                            }).then((result) => {
+                                // if (result.dismiss === Swal.DismissReason.cancel) {
+                                //     otpInputs.forEach(input => input.value = '');
+                                //     otpInputs[0].focus();
+                                // }
+                            });
+                        } else if (res.data.success == 7) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Order Placed!",
+                                text: "Your order was placed successfully.",
+                                showConfirmButton: true,
+                                confirmButtonText: "Continue Shopping",
+                                confirmButtonColor: '#266bf9'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/products';
+                                }
+                            });
+
+                        }
                     })
                     .catch(err => {
                         console.log(err)
                     })
             }
         </script>
-        
+
     </body>
 
 

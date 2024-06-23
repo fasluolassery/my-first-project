@@ -140,7 +140,13 @@ const addQuantity = async (req, res, next) => {
         }
 
         if(productStock.stock < quantity){
-            return res.send({error: `*only ${productStock.stock} in stock`})
+            let error = ''
+            if(!productStock.stock){
+                error = '*out of stock'
+            }else{
+                error = `*only ${productStock.stock} in stock`
+            }
+            return res.send({error: error})
         }
 
         const stockCheck = findProductCart.items.forEach((val,ind) => {

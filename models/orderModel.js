@@ -22,7 +22,8 @@ const orderSchema = new mongoose.Schema({
         userName: { type: String, required: true},
         address: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'addresses'
+            ref: 'addresses',
+            default: 'none'
         },
         street: {type: String, required: true},
         city: {type: String, required: true},
