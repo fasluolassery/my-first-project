@@ -119,6 +119,42 @@ const addAddress = async (req, res, next) => {
     }
 }
 
+const editAddress = async (req, res, next) => {
+    try{
+        const { addressId, street, city, state, zip, country } = req.body
+
+        const { userId } = req.session
+
+        const findAddressArray = await addressModel.findOne( { userId: userId } )
+
+        if(!findAddressArray){
+            return console.log("Error at findAddressArray in edit address")
+        }
+
+        const correctAdd = findAddressArray.addresses.find(val => val.id == addressId)
+
+        if(!correctAdd){
+            return console.log("can't get correct address form user in edit address")
+        }
+
+        correctAdd.street = street
+        correctAdd.city = city
+        correctAdd.state = state
+        correctAdd.zip = zip
+        correctAdd.country = country
+        
+        const saveEditAddress = await findAddressArray.save()
+
+        if(!saveEditAddress){
+            return console.log("Error at save edit address in edit address")
+        }
+
+        res.send({success: 7})
+    }catch(error){
+        console.log(error)
+    }
+}
+
 const removeAddress = async (req, res, next) => {
     try{
         const { indexOfAddress } = req.body
@@ -149,6 +185,6 @@ module.exports = {
     changePass,
     addAddress,
     removeAddress,
-    
+    editAddress
 
 };

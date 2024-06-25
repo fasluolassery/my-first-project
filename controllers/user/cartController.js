@@ -95,8 +95,6 @@ const getProductsToAdd = async (req, res, next) => {
     }
 }
 
-
-
 const removeProduct = async (req, res, next) => {
     try {
 

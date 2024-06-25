@@ -14,6 +14,8 @@ const placeOrder = async (req, res, next) => {
 
         const { userId } = req.session
 
+        const { user } = req.session
+
         const findUserDetails = await userModel.findOne({ _id: userId })
 
         if (!findUserDetails) {
@@ -109,6 +111,7 @@ const placeOrder = async (req, res, next) => {
             products: productsDetails,
             shippingAddress: {
                 userName: findUserDetails.username,
+                email: user,
                 address: id,
                 street: street,
                 city: city,

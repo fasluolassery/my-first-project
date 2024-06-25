@@ -7,6 +7,7 @@ const authController = require('../controllers/admin/authController')
 const userController = require('../controllers/admin/userController')
 const categoryController = require('../controllers/admin/categoryController')
 const productController = require('../controllers/admin/productController')
+const orderController = require('../controllers/admin/orderController')
 const upload = require('../config/multerConfig')
 
 
@@ -20,6 +21,9 @@ adminRouter.get('/products', productController.loadProducts)
 adminRouter.get('/createproducts', productController.loadCreateProducts)
 adminRouter.get('/editproducts', productController.loadEditProduct)
 adminRouter.get('/createuser', userController.loadCreateUser)
+adminRouter.get('/orders', orderController.loadOrders)
+adminRouter.get('/orderview', orderController.loadOrderView)
+
 
 
 adminRouter.post('/login', adminValidation.validateLoginAdmin, authController.verifyAdminLogin) //todo

@@ -250,44 +250,48 @@
                                     <div class="tab-pane" id="address">
                                         <!-- <p>The following addresses will be used on the checkout page by default.</p> -->
                                         <h5 class="billing-address">Address Details</h5>
-                                        <span>The last address will be default</span>
+                                        <!-- <span>The last address will be default</span> -->
                                         <br>
                                         <a href="/myAccount#address" onclick="addAddress(event)" class="view">Add</a>
                                         <div class="row mt-3">
 
-                                            <% if (typeof addresses != 'undefined' && addresses.length > 0) { %>
-                                                <% addresses.forEach((add, index) => { %>
-                                                  <div class="col-md-6 col-lg-4 mb-3">
-                                                    <div class="card p-3 position-relative">
-                                                      <!-- Cross Remove Button -->
-                                                      <button class="btn-close position-absolute top-0 end-0 m-2 remove-address" 
-                                                              aria-label="Close" onclick="removeAddress(event, '<%= index %>')"></button>
-                                                      
-                                                      <p class="mb-2"><strong>
-                                                        <%= userDetails.username %>
-                                                      </strong></p>
-                                                      <address>
-                                                        <span><strong>Street:</strong>
-                                                          <%= add.street %>
-                                                        </span><br>
-                                                        <span><strong>City:</strong>
-                                                          <%= add.city %>
-                                                        </span><br>
-                                                        <span><strong>State:</strong>
-                                                          <%= add.state %>
-                                                        </span><br>
-                                                        <span><strong>ZIP:</strong>
-                                                          <%= add.zip %>
-                                                        </span><br>
-                                                        <span><strong>Country:</strong>
-                                                          <%= add.country %>
-                                                        </span>
-                                                      </address>
+                                            <% if (typeof addresses !='undefined' && addresses.length> 0) { %>
+                                                <% addresses.forEach((add, index)=> { %>
+                                                    <div class="col-md-6 col-lg-4 mb-3">
+                                                        <div class="card p-3 position-relative">
+                                                            <!-- Cross Remove Button -->
+                                                            <button
+                                                                class="btn-close position-absolute top-0 end-0 m-2 remove-address"
+                                                                aria-label="Close"
+                                                                onclick="removeAddress(event, '<%= index %>')"></button>
+
+                                                            <p class="mb-2"><strong>
+                                                                    <%= userDetails.username %>
+                                                                </strong></p>
+                                                            <address>
+                                                                <span><strong>Street:</strong>
+                                                                    <%= add.street %>
+                                                                </span><br>
+                                                                <span><strong>City:</strong>
+                                                                    <%= add.city %>
+                                                                </span><br>
+                                                                <span><strong>State:</strong>
+                                                                    <%= add.state %>
+                                                                </span><br>
+                                                                <span><strong>ZIP:</strong>
+                                                                    <%= add.zip %>
+                                                                </span><br>
+                                                                <span><strong>Country:</strong>
+                                                                    <%= add.country %>
+                                                                </span>
+                                                            </address>
+                                                            <a onclick="editAddress(event, '<%= add.id %>','<%= add.street %>','<%= add.city %>','<%= add.state %>',' <%= add.zip %>','<%= add.country %>')"
+                                                                href>edit</a>
+                                                        </div>
                                                     </div>
-                                                  </div>
-                                                <% }) %>
-                                              <% } %>
-                                              
+                                                    <% }) %>
+                                                        <% } %>
+
 
 
                                         </div>
@@ -880,12 +884,12 @@
                 return phoneRegex.test(zip);
             }
 
-            function isAlphabetic(value){
+            function isAlphabetic(value) {
                 const regex = /^[A-Za-z]+$/;
                 return regex.test(value)
             }
 
-            function addressValidation(){
+            function addressValidation() {
                 const street = document.getElementById('street').value;
                 const city = document.getElementById('city').value;
                 const state = document.getElementById('state').value;
@@ -893,17 +897,17 @@
                 const country = document.getElementById('country').value;
 
 
-            document.getElementById('errorMessageStreet').innerHTML = '';
-            document.getElementById('errorMessageCity').innerHTML = '';
-            document.getElementById('errorMessageState').innerHTML = '';
-            document.getElementById('errorMessageCountry').innerHTML = '';
-            document.getElementById('errorMessageZip').innerHTML = '';
-                
+                document.getElementById('errorMessageStreet').innerHTML = '';
+                document.getElementById('errorMessageCity').innerHTML = '';
+                document.getElementById('errorMessageState').innerHTML = '';
+                document.getElementById('errorMessageCountry').innerHTML = '';
+                document.getElementById('errorMessageZip').innerHTML = '';
+
 
                 if (street === '') {
                     displayErrorStreet('*Please enter your street');
                     return false;
-                }else if (!isAlphabetic(street)) {
+                } else if (!isAlphabetic(street)) {
                     displayErrorStreet('*Please enter a valid street');
                     return false;
                 }
@@ -911,7 +915,7 @@
                 if (city === '') {
                     displayErrorCity('*Please enter your city');
                     return false;
-                }else if (!isAlphabetic(city)) {
+                } else if (!isAlphabetic(city)) {
                     displayErrorCity('*Please enter a valid city');
                     return false;
                 }
@@ -919,7 +923,7 @@
                 if (state === '') {
                     displayErrorState('*Please enter your state');
                     return false;
-                }else if (!isAlphabetic(state)) {
+                } else if (!isAlphabetic(state)) {
                     displayErrorState('*Please enter a valid state');
                     return false;
                 }
@@ -935,7 +939,7 @@
                 if (country === '') {
                     displayErrorCountry('*Please enter your country');
                     return false;
-                }else if (!isAlphabetic(country)) {
+                } else if (!isAlphabetic(country)) {
                     displayErrorCountry('*Please enter a valid country');
                     return false;
                 }
@@ -946,7 +950,7 @@
             function saveAddress() {
                 event.preventDefault()
 
-                if(!addressValidation()){
+                if (!addressValidation()) {
                     return console.log("error in address validation")
                 }
 
@@ -982,7 +986,7 @@
                                 confirmButtonText: "Ok",
                                 // denyButtonText: `Don't save`
                             }).then((result) => {
-                                if (result.isConfirmed){
+                                if (result.isConfirmed) {
                                     window.location.reload()
                                 }
                             })
@@ -1001,7 +1005,7 @@
         </script>
 
         <script>
-            function removeAddress(event, index){
+            function removeAddress(event, index) {
                 event.preventDefault()
 
                 Swal.fire({
@@ -1014,13 +1018,114 @@
                     confirmButtonText: "ok",
                     // denyButtonText: `Don't save`
                 }).then((result) => {
-                    if(result.isConfirmed){
-                        axios.post('/addressremove', {indexOfAddress: index})
+                    if (result.isConfirmed) {
+                        axios.post('/addressremove', { indexOfAddress: index })
+                            .then(res => {
+                                if (res.data.status == 7) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "address removed",
+                                        text: "",
+                                        // showDenyButton: true,
+                                        // showCancelButton: true,
+                                        confirmButtonColor: '#0056b3',
+                                        confirmButtonText: "Ok",
+                                        // denyButtonText: `Don't save`
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.reload()
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+                    }
+                })
+            }
+        </script>
+
+        <script>
+            function editAddress(event, addressId, street, city, state, zip, country) {
+                event.preventDefault()
+
+                // console.log(addressId, street, city, state, zip, country)
+
+                const addressContainer = document.getElementById('address');
+
+                const formHtml = `
+                <h3>Address details</h3><hr>
+                    <div class="login" id="address">
+                        <div class="login_form_container">
+                            <div class="account_login_form">
+                                <form>
+                                    <div class="default-form-box mb-20">
+                                        <label>Street</label>
+                                        <div id="errorMessageStreet" class="text-danger"></div>
+                                        <input type="text" id="street" value=${street} required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>City</label>
+                                        <div id="errorMessageCity" class="text-danger"></div>
+                                        <input type="text" id="city" value=${city} required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>State</label>
+                                        <div id="errorMessageState" class="text-danger"></div>
+                                        <input type="text" id="state" value=${state} required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>Zip</label>
+                                        <div id="errorMessageZip" class="text-danger"></div>
+                                        <input type="text" id="zip" value=${zip} required>
+                                    </div>
+                                    <div class="default-form-box mb-20" required>
+                                        <label>Country</label>
+                                        <div id="errorMessageCountry" class="text-danger"></div>
+                                        <input type="text" id="country" value=${country} required>
+                                    </div>
+                                    <input type="hidden" id="addressId" value=${addressId}>
+                                    <div class="save_button mt-3 d-flex">
+                                        <button class="btn me-2"
+                                            data-id-${addressId} id="editAddressSubmit">Submit</button>
+                                            <button class="btn"
+                                            onclick="cancelAddress(event)">Cancel</button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+        `;
+
+                addressContainer.innerHTML = formHtml;
+
+                const submitButton = document.getElementById('editAddressSubmit').addEventListener('click', function (event) {
+                    event.preventDefault()
+
+                    const addressId = document.getElementById('addressId').value
+                    const street = document.getElementById('street').value
+                    const city = document.getElementById('city').value
+                    const state = document.getElementById('state').value
+                    const zip = document.getElementById('zip').value
+                    const country = document.getElementById('country').value
+
+                    const addressData = {
+                        addressId: addressId,
+                        street: street,
+                        city: city,
+                        state: state,
+                        zip: zip,
+                        country: country
+                    }
+
+                    axios.post('/editAddress', addressData)
                     .then(res => {
-                        if(res.data.status == 7){
+                        if(res.data.success){
                             Swal.fire({
                                 icon: "success",
-                                title: "address removed",
+                                title: "address edited",
                                 text: "",
                                 // showDenyButton: true,
                                 // showCancelButton: true,
@@ -1028,7 +1133,7 @@
                                 confirmButtonText: "Ok",
                                 // denyButtonText: `Don't save`
                             }).then((result) => {
-                                if (result.isConfirmed){
+                                if (result.isConfirmed) {
                                     window.location.reload()
                                 }
                             })
@@ -1037,14 +1142,12 @@
                     .catch(err => {
                         console.log(err)
                     })
-                    }
+
                 })
-
-
-                
 
             }
         </script>
+
 
     </body>
 

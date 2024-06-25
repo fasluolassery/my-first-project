@@ -29,7 +29,10 @@ const logout = async (req, res, next) => {
     }
 }
 
+
+
 module.exports = {
     loadHome,
-    logout
+    logout,
+
 };

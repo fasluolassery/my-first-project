@@ -43,10 +43,12 @@ userRouter.post('/decProductQuantity', cartController.decQuantity)
 userRouter.post('/editUser', userController.editUser)
 userRouter.post('/changepassword', userController.changePass)
 userRouter.post('/addressadd', userController.addAddress)
+userRouter.post('/editAddress', userController.editAddress)
 userRouter.post('/addressremove', userController.removeAddress)
 userRouter.post('/sortProducts', productController.sortProducts)
 userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
 userRouter.post('/placeOrder', orderController.placeOrder)
+
 
 
 module.exports = userRouter
