@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt')
 
 const loadUsers = async (req, res, next) => {
     try {
-        const allUsers = await User.find()
+        
+        const allUsers = await User.find().limit(5)
 
         res.render('admin/users', { users: allUsers })
     } catch (error) {

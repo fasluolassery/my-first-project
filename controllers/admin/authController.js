@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const userModel = require('../../models/userModel')
+const bcrypt = require('bcrypt')
 
 const loadAdminLogin = async (req, res, next) => {
     try {
@@ -15,22 +17,26 @@ const verifyAdminLogin = async (req, res, next) => {
         if (!AdminValidationErrors.isEmpty()) {
             return console.log('error', validationErrors.array())
         }
-
-        const adminCredential = {
-            adminMail: process.env.EMAIL_ADMIN,
-            adminPassword: process.env.ADMIN_PASS
-        }
-
+        
         const { loginEmail, loginPassword } = req.body
 
-        if (loginEmail !== adminCredential.adminMail) {
+        const findAdmin = await userModel.findOne({email: loginEmail})
+
+        if(!findAdmin){
             res.send({ next: 0 })
             return console.log("Error: Admin Not Found")
         }
 
-        if (loginPassword !== adminCredential.adminPassword) {
+        if(!findAdmin.isAdmin){
+            res.send({ next: 0 })
+            return console.log("Error: Admin Not Found")
+        }
+
+        const adminPass = await bcrypt.compare(loginPassword, findAdmin.password)
+
+        if(!adminPass){
             res.send({ next: 100 })
-            return console.log("Error: Incorrect password")
+                return console.log("Error: Incorrect password")
         }
 
         req.session.admin = loginEmail
