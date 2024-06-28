@@ -30,7 +30,7 @@ const placeOrder = async (req, res, next) => {
         let id = ''
 
         if (typeof address == 'object') {
-            console.log("object here")
+            // console.log("object here")
             const { address } = req.body
 
             street = address.street
@@ -40,7 +40,7 @@ const placeOrder = async (req, res, next) => {
             country = address.country
 
         } else if (typeof address == 'string') {
-            console.log("string here")
+            // console.log("string here")
 
             const findUserAddress = await addressModel.findOne({ userId: userId })
 
@@ -121,11 +121,16 @@ const placeOrder = async (req, res, next) => {
             },
             paymentMethod: 'cod',
             totalAmount: totalAmount,
-            orderStatus: 'pending'
+            orderStatus: 'Pending'
         })
 
         const saveOrder = await newOrder.save()
         if (saveOrder) {
+            products.items = []
+
+            await products.save()
+
+
             console.log("order success")
             res.send({success: 7})
         } else {
@@ -139,5 +144,5 @@ const placeOrder = async (req, res, next) => {
 
 module.exports = {
     placeOrder,
-
+    
 }

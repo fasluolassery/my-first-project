@@ -1,6 +1,7 @@
 const User = require('../../models/userModel');
 const addressModel = require('../../models/addressModel')
 const bcrypt = require('bcrypt')
+const orderModel = require('../../models/orderModel')
 
 const loadUserAccount = async (req, res, next) => {
     try {
@@ -16,8 +17,9 @@ const loadUserAccount = async (req, res, next) => {
         // console.log(findAddress.addresses)
         const addresses = findAddress.addresses
 
+        const findOrders = await orderModel.find({ user: userId})
 
-        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses })
+        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses, orders: findOrders })
     } catch (error) {
         next(error)
     }

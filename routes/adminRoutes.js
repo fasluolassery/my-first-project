@@ -23,6 +23,7 @@ adminRouter.get('/editproducts', productController.loadEditProduct)
 adminRouter.get('/createuser', userController.loadCreateUser)
 adminRouter.get('/orders', orderController.loadOrders)
 adminRouter.get('/orderview', orderController.loadOrderView)
+adminRouter.get('/orderdetails', orderController.loadOrderDetails)
 
 
 
@@ -35,6 +36,8 @@ adminRouter.post('/createproducts', upload.array('images', 3),productController.
 adminRouter.post('/unlistproduct/:id', productController.unlistProducts)
 adminRouter.post('/editproducts',  upload.array('images', 3), productController.editProducts)
 adminRouter.post('/createuser', userController.createUser)
+adminRouter.post('/changeOrderStatus', orderController.changeOrderStatus)
+adminRouter.post('/cancelOrder', orderController.cancelOrders)
 
 
 

@@ -141,7 +141,7 @@
                                     <ul role="tablist" class="nav flex-column dashboard-list">
                                         <li><a href="#dashboard" data-bs-toggle="tab"
                                                 class="nav-link active">Dashboard</a></li>
-                                        <!-- <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li> -->
+                                        <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
                                         <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a> -->
                                         </li>
                                         <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
@@ -182,7 +182,7 @@
 
                                         </div>
                                     </div>
-                                    <!-- <div class="tab-pane fade" id="orders">
+                                    <div class="tab-pane fade" id="orders">
                                         <h4>Orders</h4>
                                         <div class="table_page table-responsive">
                                             <table>
@@ -196,24 +196,28 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <% if(typeof orders != 'undefined') {%>
+                                                        <% orders.forEach((val, ind) => { %>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>May 10, 2018</td>
-                                                        <td><span class="success">Completed</span></td>
-                                                        <td>$25.00 for 1 item </td>
+                                                        <td><%= ind + 1 %></td>
+                                                        <td><%= val.createdAt.toLocaleDateString('en-GB') %></td>
+                                                        <td><span class="success"><%= val.orderStatus %></span></td>
+                                                        <td style="font-family: sans-serif;">₹<%= val.totalAmount %></td>
                                                         <td><a href="cart.html" class="view">view</a></td>
                                                     </tr>
-                                                    <tr>
+                                                    <% }) %>
+                                                    <% } %>
+                                                    <!-- <tr>
                                                         <td>2</td>
                                                         <td>May 10, 2018</td>
                                                         <td>Processing</td>
                                                         <td>$17.00 for 1 item </td>
                                                         <td><a href="cart.html" class="view">view</a></td>
-                                                    </tr>
+                                                    </tr> -->
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <!-- <div class="tab-pane fade" id="downloads">
                                         <h4>Downloads</h4>
                                         <div class="table_page table-responsive">

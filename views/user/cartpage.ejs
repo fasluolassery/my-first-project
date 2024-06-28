@@ -295,6 +295,10 @@
                                                                     item.price %></span>
                                                         </td>
                                                         <td class="product-quantity">
+                                                            <% if(item.stock <= 0) {%>
+                                                                <p class="error-message text-danger mt-1"
+                                                                    id="errMsgQnt-<%= item.id %>">*out of stock</p>
+                                                            <% }else{ %>
                                                             <div class="cart-plus-minus">
                                                                 <div class="dec qtybutton" data-id="<%= item.id %>"
                                                                     onclick="quantityDec(event, '<%= item.id %>')">-
@@ -309,6 +313,7 @@
                                                                     id="errMsgQnt-<%= item.id %>"
                                                                     style="display: none;"></p>
                                                             </div>
+                                                            <% } %>
                                                         </td>
                                                         <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%=
                                                                 item.price %>

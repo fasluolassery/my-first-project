@@ -9,7 +9,8 @@
                     <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
                 </a>
                 <div>
-                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
                 </div>
             </div>
             <nav>
@@ -71,7 +72,8 @@
                     <form class="searchform">
                         <div class="input-group">
                             <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
-                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
                         </div>
                         <datalist id="search_terms">
                             <option value="Products"></option>
@@ -82,10 +84,12 @@
                     </form>
                 </div>
                 <div class="col-nav">
-                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
                     <ul class="nav">
                         <li class="nav-item">
-                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
                         </li>
                     </ul>
                 </div>
@@ -129,7 +133,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>#ID</th>
+                                        <th>No:</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Total</th>
@@ -178,32 +182,65 @@
                                             </div>
                                         </td>
                                     </tr> -->
-                                    
-                                    <% if(typeof orders != 'undefined') {%>
-                                        <% orders.forEach(order => { %>
-                                    <tr>
-                                        <td>2324</td>
-                                        <td><b><%= order.shippingAddress.userName %></b></td>
-                                        <td><%= order.shippingAddress.email %></td>
-                                        <td>₹<%= order.totalAmount %></td>
-                                        <td><span class="badge rounded-pill alert-success">Received</span></td>
-                                        <td><%= order.createdAt.toLocaleDateString() %></td>
-                                        <td class="text-end">
-                                            <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item" href="#">Edit info</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                            <!-- dropdown //end -->
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                    <% } %>
-                                    
+
+                                    <% if(typeof orders !='undefined' ) {%>
+                                        <% orders.forEach((order, ind)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= ind + 1 %>
+                                                </td>
+                                                <td><b>
+                                                        <%= order.shippingAddress.userName %>
+                                                    </b></td>
+                                                <td>
+                                                    <%= order.shippingAddress.email %>
+                                                </td>
+                                                <td>₹<%= order.totalAmount %>
+                                                </td>
+
+                                                <% if(order.orderStatus=='Processing' ) {%>
+                                                    <td><span class="badge rounded-pill alert-warning"
+                                                            style="height: 20px; width: 65px;">Processing</span></td>
+                                                    <% }else if(order.orderStatus=='Pending' ) {%>
+                                                        <td><span class="badge rounded-pill alert-warning"
+                                                                style="height: 20px; width: 65px;">Pending</span></td>
+                                                        <% }else if(order.orderStatus=='Shipped' ) {%>
+                                                            <td><span class="badge rounded-pill alert-success"
+                                                                    style="height: 20px; width: 65px;">Shipped</span>
+                                                            </td>
+                                                            <% }else if(order.orderStatus=='Delivered' ) {%>
+                                                                <td><span class="badge rounded-pill alert-success"
+                                                                        style="height: 20px; width: 65px;">Delivered</span>
+                                                                </td>
+                                                                <% }else if(order.orderStatus=='Canceled' ) {%>
+                                                                    <td><span class="badge rounded-pill alert-danger"
+                                                                            style="height: 20px; width: 65px;">Canceled</span>
+                                                                    </td>
+                                                                    <% }else if(order.orderStatus=='Returned' ) {%>
+                                                                        <td><span
+                                                                                class="badge rounded-pill alert-danger"
+                                                                                style="height: 20px; width: 65px;">Returned</span>
+                                                                        </td>
+                                                                        <% } %>
+
+                                                                            <td>
+                                                                                <%= order.createdAt.toLocaleDateString('en-GB')
+                                                                                    %>
+                                                                            </td>
+                                                                            <td class="text-end">
+                                                                                <a href="/admin/orderdetails/?orderId=<%= order.id %>"
+                                                                                    class="btn btn-md rounded font-sm me-2">Detail</a>
+                                                                                <button
+                                                                                    class="btn btn-outline-danger btn-sm"
+                                                                                    onclick="cancelOrder(event, '<%= order.id %>')"
+                                                                                    style="height: 37px;">
+                                                                                    <i class="fas fa-times"></i>
+                                                                                </button>
+                                                                            </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } %>
+
                                 </tbody>
                             </table>
                         </div>
@@ -249,5 +286,53 @@
         <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            function cancelOrder(event, orderId) {
+                event.preventDefault()
+
+                Swal.fire({
+                    icon: "question",
+                    title: "<span style='color: black;'>Are you sure?</span>",
+                    // text: "Verification email sent! Kindly check your inbox.",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3BB77E',
+                    confirmButtonText: 'Yes',
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        axios.post('/admin/cancelOrder', { orderId: orderId })
+                            .then(res => {
+                                if (res.data.success) {
+                                    Swal.fire({
+                                        title: "<span style='color: #3BB77E;'>Success!</span>",
+                                        html: "<span style='color: black;'>Order canceled successfully.</span>",
+                                        icon: "success",
+                                        confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                        confirmButtonText: "OK"
+                                    }).then(result => {
+                                        if(result.isConfirmed){
+                                            window.location.reload()
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+
+                    }
+                })
+
+
+            }
+        </script>
+
     </body>
-</html>
+
+    </html>
