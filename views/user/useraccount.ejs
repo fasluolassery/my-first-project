@@ -203,7 +203,7 @@
                                                         <td><%= val.createdAt.toLocaleDateString('en-GB') %></td>
                                                         <td><span class="success"><%= val.orderStatus %></span></td>
                                                         <td style="font-family: sans-serif;">₹<%= val.totalAmount %></td>
-                                                        <td><a href="cart.html" class="view">view</a></td>
+                                                        <td><a href="/orderDetails/?orderId=<%= val.id %>" class="view">view</a></td>
                                                     </tr>
                                                     <% }) %>
                                                     <% } %>

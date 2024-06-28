@@ -142,7 +142,44 @@ const placeOrder = async (req, res, next) => {
     }
 }
 
+const loadOrderDetails = async (req, res, next) => {
+    try{
+        
+        const { orderId } = req.query
+
+        const findOrder = await orderModel.findById(orderId).populate('products.product')
+
+        if(!findOrder){
+            return console.log("can't get order details in load order details")
+        }
+
+        res.render('user/orderdetails', { order: findOrder})
+    }catch(error){
+        next(error)
+    }
+}
+
+const cancelOrder = async (req, res, next) => {
+    try{
+        const { orderId } = req.body
+
+        if(!orderId){
+            return console.log("can't get order id at cancel order")
+        }
+
+        const findAndDeleteOrder = await orderModel.findByIdAndDelete(orderId)
+
+        if(findAndDeleteOrder){
+            console.log("order deleted success")
+            res.send({success: 7})
+        }
+
+    }catch(error){
+        next(error)
+    }
+}
 module.exports = {
     placeOrder,
-    
+    loadOrderDetails,
+    cancelOrder
 }

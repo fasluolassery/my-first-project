@@ -31,6 +31,7 @@ userRouter.get('/cart', sessionCheckUser.isLogin, cartController.loadCart)
 userRouter.get('/myAccount', sessionCheckUser.isLogin, userController.loadUserAccount)
 userRouter.get('/logout', sessionCheckUser.isLogin, homeController.logout)
 userRouter.get('/checkout', sessionCheckUser.isLogin, checkoutController.loadCheckout)
+userRouter.get('/orderDetails', orderController.loadOrderDetails)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)
@@ -48,6 +49,7 @@ userRouter.post('/addressremove', userController.removeAddress)
 userRouter.post('/sortProducts', productController.sortProducts)
 userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
 userRouter.post('/placeOrder', orderController.placeOrder)
+userRouter.post('/cancelOrder', orderController.cancelOrder)
 
 
 
