@@ -51,6 +51,8 @@ userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
 userRouter.post('/placeOrder', orderController.placeOrder)
 userRouter.post('/cancelOrder', orderController.cancelOrder)
 userRouter.post('/cancelSingleOrder', orderController.cancelSingleProduct)
+userRouter.post('/search', userController.search)
+userRouter.post('/filterByCategory' , userController.filterByCategory)
 
 
 

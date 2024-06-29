@@ -2,6 +2,8 @@ const User = require('../../models/userModel');
 const addressModel = require('../../models/addressModel')
 const bcrypt = require('bcrypt')
 const orderModel = require('../../models/orderModel')
+const productModel = require('../../models/productModel')
+const categoryModel = require('../../models/categoryModel')
 
 const loadUserAccount = async (req, res, next) => {
     try {
@@ -179,6 +181,45 @@ const removeAddress = async (req, res, next) => {
     }
 }
 
+const search = async (req, res, next) => {
+    try{
+        const { value } = req.body
+
+        if(value.length <= 0){
+            return console.log("there is no value at search")
+        }
+
+        const findProducts = await productModel.find({productName: new RegExp(value, 'i')})
+
+        // const findCategories = await categoryModel.find({categoryName: new RegExp(value, 'i')})
+
+        res.send({
+            products: findProducts,
+            // categories: findCategories
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+const filterByCategory = async (req, res, next) => {
+    try{
+        const { category } = req.body
+
+        if(!category){
+            return 
+        }
+
+        const findProducts = await productModel.find({ category: category})
+
+        res.send({
+            products: findProducts
+        })
+
+    }catch(error){
+        next(error)
+    }
+}
 
 
 module.exports = {
@@ -188,6 +229,8 @@ module.exports = {
     changePass,
     addAddress,
     removeAddress,
-    editAddress
+    editAddress,
+    search,
+    filterByCategory,
 
 };

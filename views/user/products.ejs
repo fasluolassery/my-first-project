@@ -297,7 +297,7 @@
                                                         <span>(<%= categories.length %>)</span> </a></li>
                                                 <% if(categories) { %>
                                                     <% categories.forEach(category=> { %>
-                                                        <li><a href="/products" class="">
+                                                        <li><a href onclick="filterByCategory(event, '<%= category.categoryName %>')">
                                                                 <%= category.categoryName %>
                                                                     <span></span>
                                                             </a></li>
@@ -359,7 +359,7 @@
                                         </div> -->
                                     </div>
                                     <!-- Sidebar single item -->
-                                    <div class="sidebar-widget">
+                                    <!-- <div class="sidebar-widget">
                                         <h4 class="sidebar-title">Brands</h4>
                                         <div class="sidebar-widget-brand">
                                             <ul>
@@ -371,7 +371,7 @@
                                                 <li><a href="#" class=""> Xlovgtir<span>(12)</span></a></li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!-- Sidebar single item -->
                                 </div>
                             </div>
@@ -901,6 +901,44 @@
                                 });
                             }
 
+                        </script>
+
+                        <script>
+
+                            document.getElementById('searchInput').addEventListener('input', (event) => {
+                                event.preventDefault()
+
+                                const searchInput = document.getElementById('searchInput').value
+
+                                console.log(searchInput)
+
+                                axios.post('/search', { value: searchInput })
+                                    .then(res => {
+                                        console.log(res.data)
+                                        const products = res.data.products
+                                        updateProductList(products);
+                                        updateProductGrid(products)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            })
+                        </script>
+
+                        <script>
+                            function filterByCategory(event, category){
+                                event.preventDefault()
+                                
+                                axios.post('/filterByCategory', {category: category})
+                                    .then(res => {
+                                        const products = res.data.products
+                                        updateProductList(products);
+                                        updateProductGrid(products)
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                            }
                         </script>
     </body>
 

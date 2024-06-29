@@ -10,7 +10,9 @@ const loadProductsUser = async (req, res, next) => {
         const findAllCategories = await Category.find({ isBlock: false })
         const { user, userId } = req.session
 
-        res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId })
+        const isProduct = true
+
+        res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId, isProduct: isProduct})
 
         // console.log(findAllProducts)
     } catch (error) {
