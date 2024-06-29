@@ -15,7 +15,7 @@
             </div>
             <nav>
                 <ul class="menu-aside">
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a class="menu-link" href="/admin/dashboard">
                             <i class="icon material-icons md-home"></i>
                             <span class="text">Dashboard</span>
@@ -27,7 +27,7 @@
                             <span class="text">Users</span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a class="menu-link" href="/admin/orders">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Orders</span>
@@ -212,9 +212,9 @@
                                                                 <td><span class="badge rounded-pill alert-success"
                                                                         style="height: 20px; width: 65px;">Delivered</span>
                                                                 </td>
-                                                                <% }else if(order.orderStatus=='Canceled' ) {%>
+                                                                <% }else if(order.orderStatus=='Cancelled' ) {%>
                                                                     <td><span class="badge rounded-pill alert-danger"
-                                                                            style="height: 20px; width: 65px;">Canceled</span>
+                                                                            style="height: 20px; width: 65px;">Cancelled</span>
                                                                     </td>
                                                                     <% }else if(order.orderStatus=='Returned' ) {%>
                                                                         <td><span
@@ -236,6 +236,7 @@
                                                                                     style="height: 37px;">
                                                                                     <i class="fas fa-times"></i>
                                                                                 </button>
+                                                                                
                                                                             </td>
                                             </tr>
                                             <% }) %>
@@ -296,7 +297,8 @@
                 Swal.fire({
                     icon: "question",
                     title: "<span style='color: black;'>Are you sure?</span>",
-                    // text: "Verification email sent! Kindly check your inbox.",
+                    // text:  "<span style='color: #3BB77E;'>Success!</span>",
+                    html: "<span style='color: black;'>Are you sure to cancel the order?</span>",
                     // showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonColor: '#3BB77E',
@@ -311,7 +313,7 @@
                                 if (res.data.success) {
                                     Swal.fire({
                                         title: "<span style='color: #3BB77E;'>Success!</span>",
-                                        html: "<span style='color: black;'>Order canceled successfully.</span>",
+                                        html: "<span style='color: black;'>Order cancelled successfully.</span>",
                                         icon: "success",
                                         confirmButtonColor: "#3BB77E", // Bootstrap's success color
                                         confirmButtonText: "OK"

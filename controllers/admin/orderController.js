@@ -67,14 +67,22 @@ const changeOrderStatus = async (req, res, next) => {
     }
 }
 
-const cancelOrders = async (req, res, nest) => {
+const cancelOrders = async (req, res, next) => {
     try{
         const { orderId } = req.body
 
-        const findOrderAndDelete = await orderModel.findByIdAndDelete(orderId)
+        const findOrder = await orderModel.findById(orderId)
 
-        if(findOrderAndDelete){
-            console.log("order Deleted success at cancel order")
+        findOrder.orderStatus = 'Cancelled'
+
+        findOrder.products.forEach(val => {
+            val.productStatus = 'Cancelled'
+        })
+
+        const update = await findOrder.save()
+
+        if(update){
+            console.log("order canceled success at cancel order")
             res.send({ success: true})
         }
 

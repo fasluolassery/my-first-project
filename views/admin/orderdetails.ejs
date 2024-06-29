@@ -137,14 +137,15 @@
                             <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                                 <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200" id="status">
                                     <option value="">Change status</option>
-                                    <option>Processing</option>
+                                    <!-- <option>Processing</option> -->
                                     <option>Pending</option>
                                     <option>Shipped</option>
                                     <option>Delivered</option>
-                                    <option>Canceled</option>
-                                    <option>Returned</option>
+                                    <option>Cancelled</option>
+                                    <!-- <option>Returned</option> -->
                                 </select>
                                 <a class="btn btn-primary" onclick="changeStatus(event, '<%= orderDetails.id %>')">Save</a>
+                                <a class="btn btn-danger ms-2" href="/admin/orders">back</a>
                                 <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
                             </div>
                         </div>
@@ -213,6 +214,7 @@
                                                 <th width="40%">Product</th>
                                                 <th width="20%">Unit Price</th>
                                                 <th width="20%">Quantity</th>
+                                                <th width="20%">Status</th>
                                                 <th width="20%" class="text-end">Total</th>
                                             </tr>
                                         </thead>
@@ -229,6 +231,7 @@
                                                 </td>
                                                 <td>$<%= val.price %></td>
                                                 <td><%= val.quantity %></td>
+                                                <td><%= val.productStatus %></td>
                                                 <td class="text-end">$<%= val.price * val.quantity %></td>
                                             </tr>
                                             <% }) %>
@@ -248,12 +251,12 @@
                                                             <dt>Grand total:</dt>
                                                             <dd><b class="h5">$983.00</b></dd>
                                                         </dl>
-                                                        <dl class="dlist">
+                                                        <!-- <dl class="dlist">
                                                             <dt class="text-muted">Status:</dt>
                                                             <dd>
                                                                 <span class="badge rounded-pill alert-success text-success">Payment done</span>
                                                             </dd>
-                                                        </dl>
+                                                        </dl> -->
                                                     </article>
                                                 </td>
                                             </tr>

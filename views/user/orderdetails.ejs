@@ -260,13 +260,21 @@
                 <!-- Wishlist Area Start -->
                 <div class="cart-main-area pt-100px pb-100px">
                     <div class="container">
-                        
+
                         <div class="d-flex justify-content-between align-items-center pb-3">
-                            <h3 class="cart-page-title mb-0">Your Order Details</h3>
-                            <button class="btn btn-primary" onclick="cancelBulkOrder(event, '<%= order.id %>')" style="background-color: #007bff; color: #fff; width: auto; height: auto;"><p class="p-3">Cancel Order</p></button>
+
+                            <% if(order.orderStatus !='Cancelled' ) {%>
+                                <h3 class="cart-page-title mb-0">Your Order Details</h3>
+                                <button class="btn btn-primary" onclick="cancelBulkOrder(event, '<%= order.id %>')"
+                                    style="background-color: #007bff; color: #fff; width: auto; height: auto;">
+                                    <p class="p-3">Cancel Order</p>
+                                </button>
+                                <% }else{ %>
+                                    <h3 class="cart-page-title mb-0 text-danger">Your Cancelled Order Details</h3>
+                                    <% } %>
                         </div>
-                        
-                        
+
+
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <form action="#">
@@ -283,24 +291,38 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% order.products.forEach(pro => { %>
-                                                <tr>
-                                                    <td class="product-thumbnail">
-                                                        <a href="#"><img class="img-responsive ml-15px"
-                                                                src="<%= pro.product.imagePaths[0] %>" alt="" width="100px"/></a>
-                                                    </td>
-                                                    <td class="product-name"><a href="#"><%= pro.name %></a></td>
-                                                    <td class="product-price-cart"><span class="amount">$<%= pro.price %></span>
-                                                    </td>
-                                                    <td class="product-price-cart"><span class="amount"><%= pro.quantity %></span>
+                                                <% order.products.forEach(pro=> { %>
+                                                    <tr>
+                                                        <td class="product-thumbnail">
+                                                            <a href="#"><img class="img-responsive ml-15px"
+                                                                    src="<%= pro.product.imagePaths[0] %>" alt=""
+                                                                    width="100px" /></a>
+                                                        </td>
+                                                        <td class="product-name"><a href="#">
+                                                                <%= pro.name %>
+                                                            </a></td>
+                                                        <td class="product-price-cart"><span class="amount">$<%=
+                                                                    pro.price %></span>
+                                                        </td>
+                                                        <td class="product-price-cart"><span class="amount">
+                                                                <%= pro.quantity %>
+                                                            </span>
 
-                                                    <td class="product-subtotal">$<%= pro.quantity * pro.price %></td>
-                                                    <td class="product-wishlist-cart">
-                                                        <a href="" onclick="cancelBulkOrder(event, '<%= order.id %>')">Cancel</a>
-                                                    </td>
-                                                </tr>
-                                                <% }) %>
-                                                <!-- <tr>
+                                                        <td class="product-subtotal">$<%= pro.quantity * pro.price %>
+                                                        </td>
+                                                        <% if(pro.productStatus != 'Cancelled') {%>
+                                                        <td class="product-wishlist-cart">
+                                                            <a href=""
+                                                                onclick="cancelSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Cancel</a>
+                                                        </td>
+                                                        <% }else{ %>
+                                                            <td>
+                                                            <p class="error-message text-danger mt-1">*cancelled</p>
+                                                        </td>
+                                                        <% } %>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <!-- <tr>
                                             <td class="product-thumbnail">
                                                 <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/2.webp" alt="" /></a>
                                             </td>
@@ -497,7 +519,7 @@
         <script src="assets/js/main.js"></script>
 
         <script>
-            function cancelBulkOrder(event, orderId){
+            function cancelBulkOrder(event, orderId) {
                 event.preventDefault()
 
                 Swal.fire({
@@ -511,10 +533,10 @@
                     // denyButtonText: `Don't save`
                 }).then((result) => {
                     if (result.isConfirmed) {
-                       axios.post('/cancelOrder', {orderId: orderId})
-                        .then(res => {
-                            if(res.data.success){
-                                Swal.fire({
+                        axios.post('/cancelOrder', { orderId: orderId })
+                            .then(res => {
+                                if (res.data.success) {
+                                    Swal.fire({
                                         icon: "success",
                                         title: "Order Cancelled",
                                         text: "",
@@ -528,13 +550,59 @@
                                             window.location.href = '/myAccount'
                                         }
                                     })
-                            }
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
                     }
                 })
+            }
+        </script>
+
+        <script>
+            function cancelSingleProduct(event, orderId, productId) {
+                event.preventDefault()
+
+                Swal.fire({
+                    icon: "question",
+                    title: "Are you sure?",
+                    text: "",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#0056b3',
+                    confirmButtonText: "ok",
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.post('/cancelSingleOrder', { orderId: orderId, productId, productId })
+                            .then(res => {
+                                if (res.data.success) {
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Order Cancelled",
+                                        text: "",
+                                        // showDenyButton: true,
+                                        // showCancelButton: true,
+                                        confirmButtonColor: '#0056b3',
+                                        confirmButtonText: "Ok",
+                                        // denyButtonText: `Don't save`
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = '/myAccount'
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+
+
+                    }
+                })
+
+
             }
         </script>
     </body>

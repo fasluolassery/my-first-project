@@ -50,6 +50,7 @@ userRouter.post('/sortProducts', productController.sortProducts)
 userRouter.post('/checkoutTotal', checkoutController.checkoutTotal)
 userRouter.post('/placeOrder', orderController.placeOrder)
 userRouter.post('/cancelOrder', orderController.cancelOrder)
+userRouter.post('/cancelSingleOrder', orderController.cancelSingleProduct)
 
 
 
