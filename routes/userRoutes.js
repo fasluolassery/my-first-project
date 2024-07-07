@@ -25,8 +25,14 @@ userRouter.get('/login', sessionCheckUser.isLogout, authController.loadRegister)
 userRouter.get('/verifyotp', emailController.loadVerifyOtp)
 userRouter.get('/products', sessionCheckUser.isLogin,productController.loadProductsUser)
 userRouter.get('/productview', sessionCheckUser.isLogin,productController.loadSingleProductUser)
+
+
+//? Google
 userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
+
+
+
 userRouter.get('/cart', sessionCheckUser.isLogin, cartController.loadCart)
 userRouter.get('/myAccount', sessionCheckUser.isLogin, userController.loadUserAccount)
 userRouter.get('/logout', sessionCheckUser.isLogin, homeController.logout)

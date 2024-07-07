@@ -87,7 +87,7 @@ const placeOrder = async (req, res, next) => {
             totalAmount += val.quantity * val.price
         })
 
-         //!fix
+        //  !fix
          for (let item of productsDetails) {
             const product = await productModel.findOne({ _id: item.product });
 
