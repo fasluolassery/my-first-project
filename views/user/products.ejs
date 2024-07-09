@@ -152,6 +152,7 @@
                                                                                         class="pe-7s-shopbag"></i></button>
                                                                                 <button class="action wishlist"
                                                                                     title="Wishlist"
+                                                                                    onclick="addToWishlist('<%= product.id %>', event)"
                                                                                     data-bs-toggle="modal"
                                                                                     data-bs-target="#exampleModal-Wishlist"><i
                                                                                         class="pe-7s-like"></i></button>
@@ -236,6 +237,7 @@
                                                                                             class="pe-7s-shopbag"></i></button>
                                                                                     <button class="action wishlist"
                                                                                         title="Wishlist"
+                                                                                        onclick="addToWishlist('<%= product.id %>', event)"
                                                                                         data-bs-toggle="modal"
                                                                                         data-bs-target="#exampleModal-Wishlist"><i
                                                                                             class="pe-7s-like"></i></button>
@@ -297,7 +299,8 @@
                                                         <span>(<%= categories.length %>)</span> </a></li>
                                                 <% if(categories) { %>
                                                     <% categories.forEach(category=> { %>
-                                                        <li><a href onclick="filterByCategory(event, '<%= category.categoryName %>')">
+                                                        <li><a href
+                                                                onclick="filterByCategory(event, '<%= category.categoryName %>')">
                                                                 <%= category.categoryName %>
                                                                     <span></span>
                                                             </a></li>
@@ -682,148 +685,159 @@
 
 
                         <!-- Modal wishlist -->
-                        <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body text-center">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"><i class="pe-7s-close"></i></button>
-                                        <div class="tt-modal-messages">
-                                            <i class="pe-7s-check"></i> Added to Wishlist successfully!
-                                        </div>
-                                        <div class="tt-modal-product">
-                                            <div class="tt-img">
-                                                <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        <% if(typeof products !='undefined' ) { %>
+                            <% products.forEach(product=> { %>
+                                <div class="modal customize-class fade" id="exampleModal-Wishlist-<%= product.id %>"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body text-center">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"><i class="pe-7s-close"></i></button>
+                                                <div class="tt-modal-messages">
+                                                    <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                                                </div>
+                                                <div class="tt-modal-product">
+                                                    <div class="tt-img">
+                                                        <img src="<%= product.imagePaths[0] %>"
+                                                            alt="<%= product.productName %>">
+                                                    </div>
+                                                    <h2 class="tt-title mt-3"><a href="#">
+                                                            <%= product.productName %>
+                                                        </a></h2>
+                                                </div>
                                             </div>
-                                            <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Modal compare -->
-                        <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body text-center">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"><i class="pe-7s-close"></i></button>
-                                        <div class="tt-modal-messages">
-                                            <i class="pe-7s-check"></i> Added to compare successfully!
-                                        </div>
-                                        <div class="tt-modal-product">
-                                            <div class="tt-img">
-                                                <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                                <% }) %>
+                                    <% } %>
+
+
+
+                                        <!-- Modal compare -->
+                                        <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body text-center">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"><i class="pe-7s-close"></i></button>
+                                                        <div class="tt-modal-messages">
+                                                            <i class="pe-7s-check"></i> Added to compare successfully!
+                                                        </div>
+                                                        <div class="tt-modal-product">
+                                                            <div class="tt-img">
+                                                                <img src="assets/images/product-image/1.webp"
+                                                                    alt="Modern Smart Phone">
+                                                            </div>
+                                                            <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Global Vendor, plugins JS -->
-                        <!-- JS Files
+                                        <!-- Global Vendor, plugins JS -->
+                                        <!-- JS Files
     ============================================ -->
-                        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-                        <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-                        <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
-                        <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
-                        <script src="assets/js/plugins/jquery.countdown.min.js"></script>
-                        <script src="assets/js/plugins/swiper-bundle.min.js"></script>
-                        <script src="assets/js/plugins/scrollUp.js"></script>
-                        <script src="assets/js/plugins/venobox.min.js"></script>
-                        <script src="assets/js/plugins/jquery-ui.min.js"></script>
-                        <script src="assets/js/plugins/mailchimp-ajax.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                                        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+                                        <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+                                        <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
+                                        <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+                                        <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+                                        <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+                                        <script src="assets/js/plugins/scrollUp.js"></script>
+                                        <script src="assets/js/plugins/venobox.min.js"></script>
+                                        <script src="assets/js/plugins/jquery-ui.min.js"></script>
+                                        <script src="assets/js/plugins/mailchimp-ajax.js"></script>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
-                        <!-- Minify Version -->
-                        <!-- <script src="assets/js/vendor.min.js"></script>
+                                        <!-- Minify Version -->
+                                        <!-- <script src="assets/js/vendor.min.js"></script>
     <script src="assets/js/plugins.min.js"></script>
     <script src="assets/js/main.min.js"></script> -->
 
-                        <!--Main JS (Common Activation Codes)-->
-                        <script src="assets/js/main.js"></script>
+                                        <!--Main JS (Common Activation Codes)-->
+                                        <script src="assets/js/main.js"></script>
 
-                        <script>
+                                        <script>
 
-                            function addToCartFromProducts(productId, event) {
-                                event.preventDefault(); // Prevent the default action of the button (i.e., opening the modal)
+                                            function addToCartFromProducts(productId, event) {
+                                                event.preventDefault(); // Prevent the default action of the button (i.e., opening the modal)
 
-                                axios.post('/addtocart', { productId: productId })
-                                    .then(res => {
-                                        if (res.data.status === 1) {
-                                            Swal.fire({
-                                                title: "<span style='color: black;'>You're not logged in</span>",
-                                                text: "Please login to continue.",
-                                                confirmButtonColor: '#266bf9',
-                                                confirmButtonText: "Login",
-                                                showCancelButton: true,
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    window.location.href = '/login';
+                                                axios.post('/addtocart', { productId: productId })
+                                                    .then(res => {
+                                                        if (res.data.status === 1) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>You're not logged in</span>",
+                                                                text: "Please login to continue.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "Login",
+                                                                showCancelButton: true,
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    window.location.href = '/login';
+                                                                }
+                                                            });
+                                                        } else if (res.data.status === 3) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
+                                                                text: "Feel free to adjust the quantity in your cart if you'd like more.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "ok",
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    // window.location.href = '/login';
+                                                                }
+                                                            });
+                                                        } else {
+                                                            // Trigger the modal manually if the user is logged in and item is added to the cart
+                                                            const modalId = `#exampleModal-Cart-${productId}`;
+                                                            const modalElement = document.querySelector(modalId);
+                                                            const modalInstance = new bootstrap.Modal(modalElement);
+                                                            modalInstance.show();
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err);
+                                                    });
+                                            }
+                                        </script>
+
+                                        <script>
+                                            function sorting(event, index, text) {
+                                                event.preventDefault();
+
+                                                // Update the button text
+                                                const sortButton = document.getElementById('sortButton');
+                                                sortButton.innerHTML = `${text} <i class="fa fa-angle-down"></i>`;
+
+                                                axios.post('/sortProducts', { index: index })
+                                                    .then(res => {
+                                                        const products = res.data.products;
+                                                        updateProductList(products);
+                                                        updateProductGrid(products);
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err);
+                                                    });
+                                            }
+
+
+                                            function updateProductList(products) {
+                                                const listElement = document.getElementById('shop-list');
+
+                                                if (!listElement) {
+                                                    console.error('Element with id "shop-list" not found.');
+                                                    return;
                                                 }
-                                            });
-                                        } else if (res.data.status === 3) {
-                                            Swal.fire({
-                                                title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
-                                                text: "Feel free to adjust the quantity in your cart if you'd like more.",
-                                                confirmButtonColor: '#266bf9',
-                                                confirmButtonText: "ok",
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    // window.location.href = '/login';
-                                                }
-                                            });
-                                        } else {
-                                            // Trigger the modal manually if the user is logged in and item is added to the cart
-                                            const modalId = `#exampleModal-Cart-${productId}`;
-                                            const modalElement = document.querySelector(modalId);
-                                            const modalInstance = new bootstrap.Modal(modalElement);
-                                            modalInstance.show();
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.log(err);
-                                    });
-                            }
-                        </script>
 
-                        <script>
-                            function sorting(event, index, text) {
-                                event.preventDefault();
+                                                listElement.innerHTML = ''; // Clear the existing product list
 
-                                // Update the button text
-                                const sortButton = document.getElementById('sortButton');
-                                sortButton.innerHTML = `${text} <i class="fa fa-angle-down"></i>`;
-
-                                axios.post('/sortProducts', { index: index })
-                                    .then(res => {
-                                        const products = res.data.products;
-                                        updateProductList(products);
-                                        updateProductGrid(products);
-                                    })
-                                    .catch(err => {
-                                        console.log(err);
-                                    });
-                            }
-
-
-                            function updateProductList(products) {
-                                const listElement = document.getElementById('shop-list');
-
-                                if (!listElement) {
-                                    console.error('Element with id "shop-list" not found.');
-                                    return;
-                                }
-
-                                listElement.innerHTML = ''; // Clear the existing product list
-
-                                products.forEach(product => {
-                                    listElement.innerHTML += `
+                                                products.forEach(product => {
+                                                    listElement.innerHTML += `
                                                 <div class="shop-list-wrapper mb-30px">
                                                     <div class="row">
                                                         <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
@@ -859,21 +873,21 @@
                                                         </div>
                                                     </div>
                                                 </div>`;
-                                });
-                            }
+                                                });
+                                            }
 
-                            function updateProductGrid(products) {
-                                const gridElement = document.getElementById('shop-grid');
+                                            function updateProductGrid(products) {
+                                                const gridElement = document.getElementById('shop-grid');
 
-                                if (!gridElement) {
-                                    console.error('Element with id "shop-grid" not found.');
-                                    return;
-                                }
+                                                if (!gridElement) {
+                                                    console.error('Element with id "shop-grid" not found.');
+                                                    return;
+                                                }
 
-                                gridElement.querySelector('.row').innerHTML = ''; // Clear the existing product grid
+                                                gridElement.querySelector('.row').innerHTML = ''; // Clear the existing product grid
 
-                                products.forEach(product => {
-                                    gridElement.querySelector('.row').innerHTML += `
+                                                products.forEach(product => {
+                                                    gridElement.querySelector('.row').innerHTML += `
                                                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                                         <div class="product">
                                                             ${product.isNew ? `<span class="badges"><span class="new">New</span></span>` : ''}
@@ -898,48 +912,93 @@
                                                             </div>
                                                         </div>
                                                     </div>`;
-                                });
-                            }
+                                                });
+                                            }
 
-                        </script>
+                                        </script>
 
-                        <script>
+                                        <script>
 
-                            document.getElementById('searchInput').addEventListener('input', (event) => {
-                                event.preventDefault()
+                                            document.getElementById('searchInput').addEventListener('input', (event) => {
+                                                event.preventDefault()
 
-                                const searchInput = document.getElementById('searchInput').value
+                                                const searchInput = document.getElementById('searchInput').value
 
-                                console.log(searchInput)
+                                                console.log(searchInput)
 
-                                axios.post('/search', { value: searchInput })
-                                    .then(res => {
-                                        console.log(res.data)
-                                        const products = res.data.products
-                                        updateProductList(products);
-                                        updateProductGrid(products)
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                    })
-                            })
-                        </script>
+                                                axios.post('/search', { value: searchInput })
+                                                    .then(res => {
+                                                        console.log(res.data)
+                                                        const products = res.data.products
+                                                        updateProductList(products);
+                                                        updateProductGrid(products)
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err)
+                                                    })
+                                            })
+                                        </script>
 
-                        <script>
-                            function filterByCategory(event, category){
-                                event.preventDefault()
-                                
-                                axios.post('/filterByCategory', {category: category})
-                                    .then(res => {
-                                        const products = res.data.products
-                                        updateProductList(products);
-                                        updateProductGrid(products)
-                                    })
-                                    .catch(err => {
-                                        console.log(err)
-                                    })
-                            }
-                        </script>
+                                        <script>
+                                            function filterByCategory(event, category) {
+                                                event.preventDefault()
+
+                                                axios.post('/filterByCategory', { category: category })
+                                                    .then(res => {
+                                                        const products = res.data.products
+                                                        updateProductList(products);
+                                                        updateProductGrid(products)
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err)
+                                                    })
+                                            }
+                                        </script>
+
+<script>
+    function addToWishlist(productId, event) {
+        event.preventDefault();
+        console.log(productId);
+
+        axios.post('/addToWishlist', { productId: productId })
+            .then(res => {
+                if (res.data.status === 1) {
+                    Swal.fire({
+                        title: "<span style='color: black;'>You're not logged in</span>",
+                        text: "Please login to continue.",
+                        confirmButtonColor: '#266bf9',
+                        confirmButtonText: "Login",
+                        showCancelButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else if (res.data.status === 3) {
+                    Swal.fire({
+                        title: "<span style='color: black;'>💖 <hr> Product Already in Your Wishlist</span>",
+                        text: "You can view it in your wishlist.",
+                        confirmButtonColor: '#266bf9',
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // window.location.href = '/wishlist';
+                        }
+                    });
+                } else {
+                    // Trigger the modal manually if the user is logged in and item is added to the wishlist
+                    const modalId = `#exampleModal-Wishlist-${productId}`;
+                    const modalElement = document.querySelector(modalId);
+                    const modalInstance = new bootstrap.Modal(modalElement);
+                    modalInstance.show();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+</script>
     </body>
 
 

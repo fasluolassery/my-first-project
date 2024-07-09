@@ -132,6 +132,8 @@ const editProducts = async (req, res, next) => {
     try {
         const productInfo = req.body;
         const newImageFiles = req.files;
+
+        // console.log(newImageFiles)
         const existingImagePaths = req.body.existingImagePaths;
 
         // console.log("New Image Files: ", newImageFiles); // Debug log //! to remove

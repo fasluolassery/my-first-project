@@ -152,53 +152,55 @@
                             <div class="col">
                                 <div class="row mb-n-30px">
 
-                                <% if(typeof products != 'undefined') {%>
-                                    <% products.forEach(product=> { %>
-                                        <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
-                                            <div class="product">
-                                                <span class="badges">
-                                                    <% if (product.isNew) { %>
-                                                        <span class="new">New</span>
-                                                        <% } %>
-                                                </span>
-                                                <div class="thumb">
-                                                    <a href="productview?id=<%= product.id %>" class="image">
-                                                        <img src="<%= product.imagePaths[0] %>"
-                                                            alt="<%= product.productName %>">
-                                                        <img class="hover-image" src="<%= product.imagePaths[0] %>"
-                                                            alt="<%= product.productName %>" />
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <span class="category mt-3"><a href="#">
-                                                            <%= product.category %>
-                                                        </a></span>
-                                                    <h5 class="title"><a href="productview?id=<%= product.id %>">
-                                                            <%= product.productName %>
-                                                        </a></h5>
-                                                    <span class="price"><span class="new">₹<%= product.price.toFixed(2)
-                                                                %></span></span>
-                                                </div>
-                                                <div class="actions">
-                                                    <button title="Add To Cart" class="action add-to-cart"
-                                                        onclick="addToCart('<%= product.id %>', event)"><i
-                                                            class="pe-7s-shopbag"></i></button>
-                                                    <button class="action wishlist" title="Wishlist"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal-Wishlist"><i
-                                                            class="pe-7s-like"></i></button>
-                                                    <button class="action quickview" data-link-action="quickview"
-                                                        title="Quick view" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal"><i
-                                                            class="pe-7s-look"></i></button>
-                                                    <button class="action compare" title="Compare"
-                                                        data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i
-                                                            class="pe-7s-refresh-2"></i></button>
+                                    <% if(typeof products !='undefined' ) {%>
+                                        <% products.forEach(product=> { %>
+                                            <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
+                                                <div class="product">
+                                                    <span class="badges">
+                                                        <% if (product.isNew) { %>
+                                                            <span class="new">New</span>
+                                                            <% } %>
+                                                    </span>
+                                                    <div class="thumb">
+                                                        <a href="productview?id=<%= product.id %>" class="image">
+                                                            <img src="<%= product.imagePaths[0] %>"
+                                                                alt="<%= product.productName %>">
+                                                            <img class="hover-image" src="<%= product.imagePaths[0] %>"
+                                                                alt="<%= product.productName %>" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <span class="category mt-3"><a href="#">
+                                                                <%= product.category %>
+                                                            </a></span>
+                                                        <h5 class="title"><a href="productview?id=<%= product.id %>">
+                                                                <%= product.productName %>
+                                                            </a></h5>
+                                                        <span class="price"><span class="new">₹<%=
+                                                                    product.price.toFixed(2) %></span></span>
+                                                    </div>
+                                                    <div class="actions">
+                                                        <button title="Add To Cart" class="action add-to-cart"
+                                                            onclick="addToCart('<%= product.id %>', event)"><i
+                                                                class="pe-7s-shopbag"></i></button>
+                                                        <button class="action wishlist" title="Wishlist"
+                                                            onclick="addToWishlist('<%= product.id %>', event)"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal-Wishlist"><i
+                                                                class="pe-7s-like"></i></button>
+                                                        <button class="action quickview" data-link-action="quickview"
+                                                            title="Quick view" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal"><i
+                                                                class="pe-7s-look"></i></button>
+                                                        <button class="action compare" title="Compare"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal-Compare"><i
+                                                                class="pe-7s-refresh-2"></i></button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <% }) %>
-                                        <% } %>
+                                            <% }) %>
+                                                <% } %>
 
 
 
@@ -541,149 +543,208 @@
         <!-- Modal end -->
         <!-- Modal Cart -->
 
-        <% if(typeof products != 'undefined') {%>
-        <% products.forEach(product=> { %>
-            <div class="modal customize-class fade" id="exampleModal-Cart-<%= product.id %>" tabindex="-1"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body text-center">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                    class="pe-7s-close"></i></button>
-                            <div class="tt-modal-messages">
-                                <i class="pe-7s-check mb-3"></i> Added to cart successfully!
-                            </div>
-                            <div class="tt-modal-product">
-                                <div class="tt-img">
-                                    <img src="<%= product.imagePaths[0] %>" alt="<%= product.productName %>">
-                                </div>
-                                <h2 class="tt-title mt-3"><a href="#">
-                                        <%= product.productName %>
-                                    </a></h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% }) %>
-            <% } %>
-
-
-
-                <!-- Modal wishlist -->
-                <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1" aria-hidden="true">
+        <% if(typeof products !='undefined' ) {%>
+            <% products.forEach(product=> { %>
+                <div class="modal customize-class fade" id="exampleModal-Cart-<%= product.id %>" tabindex="-1"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-body text-center">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
                                         class="pe-7s-close"></i></button>
                                 <div class="tt-modal-messages">
-                                    <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                                    <i class="pe-7s-check mb-3"></i> Added to cart successfully!
                                 </div>
                                 <div class="tt-modal-product">
                                     <div class="tt-img">
-                                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                                        <img src="<%= product.imagePaths[0] %>" alt="<%= product.productName %>">
                                     </div>
-                                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                                    <h2 class="tt-title mt-3"><a href="#">
+                                            <%= product.productName %>
+                                        </a></h2>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Modal compare -->
-                <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                        class="pe-7s-close"></i></button>
-                                <div class="tt-modal-messages">
-                                    <i class="pe-7s-check"></i> Added to compare successfully!
-                                </div>
-                                <div class="tt-modal-product">
-                                    <div class="tt-img">
-                                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                <% }) %>
+                    <% } %>
+
+
+
+                        <!-- Modal wishlist -->
+                        <% if(typeof products !='undefined' ) { %>
+                            <% products.forEach(product=> { %>
+                                <div class="modal customize-class fade" id="exampleModal-Wishlist-<%= product.id %>"
+                                    tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body text-center">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"><i class="pe-7s-close"></i></button>
+                                                <div class="tt-modal-messages">
+                                                    <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                                                </div>
+                                                <div class="tt-modal-product">
+                                                    <div class="tt-img">
+                                                        <img src="<%= product.imagePaths[0] %>"
+                                                            alt="<%= product.productName %>">
+                                                    </div>
+                                                    <h2 class="tt-title mt-3"><a href="#">
+                                                            <%= product.productName %>
+                                                        </a></h2>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Global Vendor, plugins JS -->
-                <!-- JS Files
+                                <% }) %>
+                                    <% } %>
+
+
+
+
+                                        <!-- Modal compare -->
+                                        <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body text-center">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"><i class="pe-7s-close"></i></button>
+                                                        <div class="tt-modal-messages">
+                                                            <i class="pe-7s-check"></i> Added to compare successfully!
+                                                        </div>
+                                                        <div class="tt-modal-product">
+                                                            <div class="tt-img">
+                                                                <img src="assets/images/product-image/1.webp"
+                                                                    alt="Modern Smart Phone">
+                                                            </div>
+                                                            <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Global Vendor, plugins JS -->
+                                        <!-- JS Files
     ============================================ -->
-                <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-                <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-                <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
-                <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
-                <script src="assets/js/plugins/jquery.countdown.min.js"></script>
-                <script src="assets/js/plugins/swiper-bundle.min.js"></script>
-                <script src="assets/js/plugins/scrollUp.js"></script>
-                <script src="assets/js/plugins/venobox.min.js"></script>
-                <script src="assets/js/plugins/jquery-ui.min.js"></script>
-                <script src="assets/js/plugins/mailchimp-ajax.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                                        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+                                        <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+                                        <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
+                                        <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+                                        <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+                                        <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+                                        <script src="assets/js/plugins/scrollUp.js"></script>
+                                        <script src="assets/js/plugins/venobox.min.js"></script>
+                                        <script src="assets/js/plugins/jquery-ui.min.js"></script>
+                                        <script src="assets/js/plugins/mailchimp-ajax.js"></script>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 
-                <!-- Minify Version -->
-                <!-- <script src="assets/js/vendor.min.js"></script>
+                                        <!-- Minify Version -->
+                                        <!-- <script src="assets/js/vendor.min.js"></script>
     <script src="assets/js/plugins.min.js"></script>
     <script src="assets/js/main.min.js"></script> -->
 
-                <!--Main JS (Common Activation Codes)-->
-                <script src="assets/js/main.js"></script>
+                                        <!--Main JS (Common Activation Codes)-->
+                                        <script src="assets/js/main.js"></script>
 
 
-                <script>
-
-                                       
-
-                    function addToCart(productId, event) {
-                        event.preventDefault(); // Prevent the default action of the button (i.e., opening the modal)
-
-                        axios.post('/addtocart', { productId: productId })
-                            .then(res => {
-                                if (res.data.status === 1) {
-                                    Swal.fire({
-                                        title: "<span style='color: black;'>You're not logged in</span>",
-                                        text: "Please login to continue.",
-                                        confirmButtonColor: '#266bf9',
-                                        confirmButtonText: "Login",
-                                        showCancelButton: true,
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href = '/login';
-                                        }
-                                    });
-                                } else if(res.data.status === 3){
-                                    Swal.fire({
-                                        title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
-                                        text: "Feel free to adjust the quantity in your cart if you'd like more.",
-                                        confirmButtonColor: '#266bf9',
-                                        confirmButtonText: "ok",
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // window.location.href = '/login';
-                                        }
-                                    });
-                                }else {
-                                    // Trigger the modal manually if the user is logged in and item is added to the cart
-                                    const modalId = `#exampleModal-Cart-${productId}`;
-                                    const modalElement = document.querySelector(modalId);
-                                    const modalInstance = new bootstrap.Modal(modalElement);
-                                    modalInstance.show();
-                                }
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
+                                        <script>
 
 
-                </script>
+
+                                            function addToCart(productId, event) {
+                                                event.preventDefault(); // Prevent the default action of the button (i.e., opening the modal)
+
+                                                axios.post('/addtocart', { productId: productId })
+                                                    .then(res => {
+                                                        if (res.data.status === 1) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>You're not logged in</span>",
+                                                                text: "Please login to continue.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "Login",
+                                                                showCancelButton: true,
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    window.location.href = '/login';
+                                                                }
+                                                            });
+                                                        } else if (res.data.status === 3) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
+                                                                text: "Feel free to adjust the quantity in your cart if you'd like more.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "ok",
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    // window.location.href = '/login';
+                                                                }
+                                                            });
+                                                        } else {
+                                                            // Trigger the modal manually if the user is logged in and item is added to the cart
+                                                            const modalId = `#exampleModal-Cart-${productId}`;
+                                                            const modalElement = document.querySelector(modalId);
+                                                            const modalInstance = new bootstrap.Modal(modalElement);
+                                                            modalInstance.show();
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err);
+                                                    });
+                                            }
+
+
+                                        </script>
+
+                                        <script>
+                                            function addToWishlist(productId, event) {
+                                                event.preventDefault();
+                                                console.log(productId);
+
+                                                axios.post('/addToWishlist', { productId: productId })
+                                                    .then(res => {
+                                                        if (res.data.status === 1) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>You're not logged in</span>",
+                                                                text: "Please login to continue.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "Login",
+                                                                showCancelButton: true,
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    window.location.href = '/login';
+                                                                }
+                                                            });
+                                                        } else if (res.data.status === 3) {
+                                                            Swal.fire({
+                                                                title: "<span style='color: black;'>💖 <hr> Product Already in Your Wishlist</span>",
+                                                                text: "You can view it in your wishlist.",
+                                                                confirmButtonColor: '#266bf9',
+                                                                confirmButtonText: "OK",
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    // window.location.href = '/wishlist';
+                                                                }
+                                                            });
+                                                        } else {
+                                                            // Trigger the modal manually if the user is logged in and item is added to the wishlist
+                                                            const modalId = `#exampleModal-Wishlist-${productId}`;
+                                                            const modalElement = document.querySelector(modalId);
+                                                            const modalInstance = new bootstrap.Modal(modalElement);
+                                                            modalInstance.show();
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        console.log(err);
+                                                    });
+                                            }
+
+                                        </script>
 
     </body>
 

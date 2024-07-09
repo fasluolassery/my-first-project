@@ -175,7 +175,7 @@
                                                     id="singleProductQuantity" value="1" />
                                             </div> -->
                                             <div class="pro-details-compare-wishlist pro-details-wishlist">
-                                                <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                                <a href onclick="addToWishlist('<%= product.id %>', event)"><i class="pe-7s-like"></i></a>
                                             </div>
                                             <div class="pro-details-cart">
                                                 <button class="add-cart"
@@ -764,25 +764,34 @@
 
 
                 <!-- Modal wishlist -->
-                <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                        class="pe-7s-close"></i></button>
-                                <div class="tt-modal-messages">
-                                    <i class="pe-7s-check"></i> Added to Wishlist successfully!
-                                </div>
-                                <div class="tt-modal-product">
-                                    <div class="tt-img">
-                                        <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                <% if(typeof products !='undefined' ) { %>
+                    <% products.forEach(product=> { %>
+                        <div class="modal customize-class fade" id="exampleModal-Wishlist-<%= product.id %>"
+                            tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"><i class="pe-7s-close"></i></button>
+                                        <div class="tt-modal-messages">
+                                            <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                                        </div>
+                                        <div class="tt-modal-product">
+                                            <div class="tt-img">
+                                                <img src="<%= product.imagePaths[0] %>"
+                                                    alt="<%= product.productName %>">
+                                            </div>
+                                            <h2 class="tt-title mt-3"><a href="#">
+                                                    <%= product.productName %>
+                                                </a></h2>
+                                        </div>
                                     </div>
-                                    <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        <% }) %>
+                            <% } %>
+
                 <!-- Modal compare -->
                 <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -923,7 +932,56 @@
 
 
                 </script>
+<script>
+    function addToWishlist(productId, event) {
+        event.preventDefault();
+        console.log(productId);
 
+        axios.post('/addToWishlist', { productId: productId })
+            .then(res => {
+                if (res.data.status === 1) {
+                    Swal.fire({
+                        title: "<span style='color: black;'>You're not logged in</span>",
+                        text: "Please login to continue.",
+                        confirmButtonColor: '#266bf9',
+                        confirmButtonText: "Login",
+                        showCancelButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else if (res.data.status === 3) {
+                    Swal.fire({
+                        title: "<span style='color: black;'>💖 <hr> Product Already in Your Wishlist</span>",
+                        text: "You can view it in your wishlist.",
+                        confirmButtonColor: '#266bf9',
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // window.location.href = '/wishlist';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon:'success',
+                        title: "<span style='color: black;'>Product Added To Your Wishlist</span>",
+                        text: "You can view it in your wishlist.",
+                        confirmButtonColor: '#266bf9',
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // window.location.href = '/wishlist';
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+</script>
 
     </body>
 
