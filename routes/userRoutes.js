@@ -15,6 +15,7 @@ const userController = require('../controllers/user/userController')
 const checkoutController = require('../controllers/user/checkoutController')
 const orderController = require('../controllers/user/orderController')
 const wishlistController = require('../controllers/user/wishlistController')
+const couponController = require('../controllers/user/couponController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -57,6 +58,7 @@ userRouter.post('/search', userController.search)
 userRouter.post('/filterByCategory' , userController.filterByCategory)
 userRouter.post('/addToWishlist', wishlistController.addToWishlist)
 userRouter.post('/removeFromWishlist', wishlistController.removeProduct)
+userRouter.post('/applyCoupon', couponController.applyCoupon)
 
 
 

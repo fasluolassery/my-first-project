@@ -440,8 +440,20 @@
 
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-5 mt-md-30px mt-lm-30px ">
+                            <div class="col-lg-5 m-0 p-0 ">
                                 <div class="your-order-area">
+                                    <div class="discount-code-wrapper mb-4 p-4">
+                                        <div class="title-wrap">
+                                            <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
+                                        </div>
+                                        <div class="discount-code">
+                                            <p class="mb-0">Enter your coupon code if you have one.</p>
+                                            <form>
+                                                <input type="text" required="" id="coupon-code"/>
+                                                <button class="cart-btn-2" onclick="applycoupon(event)" type="button">Apply Coupon</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                     <h3>Your order</h3>
                                     <div class="your-order-wrap gray-bg-4">
                                         <div class="your-order-product-info">
@@ -451,9 +463,6 @@
                                                     <li>Total</li>
                                                 </ul>
                                             </div>
-
-
-
                                             <div class="your-order-middle">
                                                 <ul>
                                                     <% if(typeof userCartItems !='undefined' ) { %>
@@ -485,9 +494,6 @@
                                                     <!-- This will be updated by JavaScript -->
                                                 </ul>
                                             </div>
-
-
-
                                         </div>
                                         <form>
                                             <div class="payment-method">
@@ -526,9 +532,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
@@ -797,13 +800,29 @@
                             console.log(err)
                         })
 
-                }else if(paymentMethod == 'razorPay'){
+                } else if (paymentMethod == 'razorPay') {
 
-                    
+
 
                 }
 
 
+            }
+        </script>
+
+        <script>
+            function applycoupon(event){
+                event.preventDefault()
+
+                const couponInput = document.getElementById('coupon-code').value
+                
+                axios.post('/applyCoupon', {couponCode: couponInput})
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         </script>
 

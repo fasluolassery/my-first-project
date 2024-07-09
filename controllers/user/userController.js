@@ -3,6 +3,7 @@ const addressModel = require('../../models/addressModel')
 const bcrypt = require('bcrypt')
 const orderModel = require('../../models/orderModel')
 const productModel = require('../../models/productModel')
+const couponModel = require('../../models/couponModel')
 const categoryModel = require('../../models/categoryModel')
 
 const loadUserAccount = async (req, res, next) => {
@@ -21,7 +22,9 @@ const loadUserAccount = async (req, res, next) => {
 
         const findOrders = await orderModel.find({ user: userId})
 
-        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses, orders: findOrders })
+        const findCoupons = await couponModel.find()
+
+        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses, orders: findOrders, coupons: findCoupons })
     } catch (error) {
         next(error)
     }

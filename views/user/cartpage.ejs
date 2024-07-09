@@ -295,25 +295,29 @@
                                                                     item.price %></span>
                                                         </td>
                                                         <td class="product-quantity">
-                                                            <% if(item.stock <= 0) {%>
+                                                            <% if(item.stock <=0) {%>
                                                                 <p class="error-message text-danger mt-1"
                                                                     id="errMsgQnt-<%= item.id %>">*out of stock</p>
-                                                            <% }else{ %>
-                                                            <div class="cart-plus-minus">
-                                                                <div class="dec qtybutton" data-id="<%= item.id %>"
-                                                                    onclick="quantityDec(event, '<%= item.id %>')">-
-                                                                </div>
-                                                                <input class="cart-plus-minus-box"
-                                                                    id="quantityValue-<%= item.id %>" type="text"
-                                                                    name="qtybutton" value="1" />
-                                                                <div class="inc qtybutton" data-id="<%= item.id %>"
-                                                                    onclick="quantityInc(event, '<%= item.id %>')">+
-                                                                </div>
-                                                                <p class="error-message text-danger mt-1"
-                                                                    id="errMsgQnt-<%= item.id %>"
-                                                                    style="display: none;"></p>
-                                                            </div>
-                                                            <% } %>
+                                                                <% }else{ %>
+                                                                    <div class="cart-plus-minus">
+                                                                        <div class="dec qtybutton"
+                                                                            data-id="<%= item.id %>"
+                                                                            onclick="quantityDec(event, '<%= item.id %>')">
+                                                                            -
+                                                                        </div>
+                                                                        <input class="cart-plus-minus-box"
+                                                                            id="quantityValue-<%= item.id %>"
+                                                                            type="text" name="qtybutton" value="1" />
+                                                                        <div class="inc qtybutton"
+                                                                            data-id="<%= item.id %>"
+                                                                            onclick="quantityInc(event, '<%= item.id %>')">
+                                                                            +
+                                                                        </div>
+                                                                        <p class="error-message text-danger mt-1"
+                                                                            id="errMsgQnt-<%= item.id %>"
+                                                                            style="display: none;"></p>
+                                                                    </div>
+                                                                    <% } %>
                                                         </td>
                                                         <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%=
                                                                 item.price %>
@@ -361,12 +365,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-12 mt-md-30px">
+
+
+
+                                    <div class="col-lg-4 col-md-12 mt-md-30px ml-auto">
                                         <div class="grand-totall">
                                             <div class="title-wrap">
                                                 <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                             </div>
-                                            <h5>Total products <span id="total-products-amount">₹0.00</span></h5>
+                                            <h5>Total products <span id="total-products-amount"></span></h5>
                                             <div class="total-shipping">
                                                 <h5>Total shipping</h5>
                                                 <ul>
@@ -374,11 +381,12 @@
                                                 </ul>
                                             </div>
                                             <h4 class="grand-totall-title">Grand Total <span
-                                                    id="grand-total-amount">₹0.00</span></h4>
+                                                    id="grand-total-amount"></span></h4>
                                             <a href="/checkout">Proceed to Checkout</a>
                                         </div>
-
                                     </div>
+
+                                    
                                 </div>
                             </div>
                         </div>
