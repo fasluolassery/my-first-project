@@ -141,13 +141,14 @@
                                     <ul role="tablist" class="nav flex-column dashboard-list">
                                         <li><a href="#dashboard" data-bs-toggle="tab"
                                                 class="nav-link active">Dashboard</a></li>
-                                        <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
-                                        <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a> -->
-                                        </li>
-                                        <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
-                                        <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account
-                                                details</a>
-                                        </li>
+                                                <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
+                                                <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a> -->
+                                                </li>
+                                                <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
+                                                <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account
+                                                    details</a>
+                                                </li>
+                                                <li> <a href="#coupon" data-bs-toggle="tab" class="nav-link">coupon</a></li>
                                         <li><a onclick="logout()" class="nav-link">logout</a></li>
                                     </ul>
                                 </div>
@@ -357,6 +358,55 @@
                                                     </form>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="coupon">
+                                        <!-- <p>The following addresses will be used on the checkout page by default.</p> -->
+                                        <h5 class="billing-address">Coupons</h5>
+                                        <!-- <span>The last address will be default</span> -->
+                                        <!-- <a href="/myAccount#address" onclick="addAddress(event)" class="view">Add</a> -->
+                                        <div class="row mt-3">
+
+                                            <% if (typeof addresses !='undefined' && addresses.length> 0) { %>
+                                                <% addresses.forEach((add, index)=> { %>
+                                                    <div class="col-md-6 col-lg-4 mb-3">
+                                                        <div class="card p-3 position-relative">
+                                                            <!-- Cross Remove Button -->
+                                                            <button
+                                                                class="btn-close position-absolute top-0 end-0 m-2 remove-address"
+                                                                aria-label="Close"
+                                                                onclick="removeAddress(event, '<%= index %>')"></button>
+
+                                                            <p class="mb-2"><strong>
+                                                                    <%= userDetails.username %>
+                                                                </strong></p>
+                                                            <address>
+                                                                <span><strong>Street:</strong>
+                                                                    <%= add.street %>
+                                                                </span><br>
+                                                                <span><strong>City:</strong>
+                                                                    <%= add.city %>
+                                                                </span><br>
+                                                                <span><strong>State:</strong>
+                                                                    <%= add.state %>
+                                                                </span><br>
+                                                                <span><strong>ZIP:</strong>
+                                                                    <%= add.zip %>
+                                                                </span><br>
+                                                                <span><strong>Country:</strong>
+                                                                    <%= add.country %>
+                                                                </span>
+                                                            </address>
+                                                            <!-- <a onclick="editAddress(event, '<%= add.id %>','<%= add.street %>','<%= add.city %>','<%= add.state %>',' <%= add.zip %>','<%= add.country %>')"
+                                                                href>edit</a> -->
+                                                        </div>
+                                                    </div>
+                                                    <% }) %>
+                                                        <% } %>
+
+
+
                                         </div>
                                     </div>
                                 </div>

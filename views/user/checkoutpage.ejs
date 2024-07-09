@@ -23,6 +23,25 @@
         }
     </style>
 
+    <style>
+        .panel-title label {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .panel-title input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .panel-body {
+            margin-left: 30px;
+            padding: 10px 0;
+        }
+    </style>
+
     </head>
 
     <body>
@@ -460,7 +479,9 @@
                                             <div class="your-order-total">
                                                 <ul>
                                                     <li class="order-total">Total</li>
-                                                    <li id="ordertotal" style="font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;">₹0.00</li>
+                                                    <li id="ordertotal"
+                                                        style="font-family: 'Roboto', 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif;">
+                                                        ₹0.00</li>
                                                     <!-- This will be updated by JavaScript -->
                                                 </ul>
                                             </div>
@@ -468,57 +489,37 @@
 
 
                                         </div>
-                                        <div class="payment-method">
-                                            <div class="payment-accordion element-mrg">
-                                                <div id="faq" class="panel-group">
-                                                    <!-- <div class="panel panel-default single-my-account m-0">
-                                                        <div class="panel-heading my-account-title">
-                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
-                                                                    href="#my-account-1" class="collapsed"
-                                                                    aria-expanded="true">Direct bank transfer</a>
-                                                            </h4>
-                                                        </div>
-                                                        <div id="my-account-1" class="panel-collapse collapse show"
-                                                            data-bs-parent="#faq">
-                                                            <div class="panel-body">
-                                                                <p>Please send a check to Store Name, Store Street,
-                                                                    Store Town,
-                                                                    Store State / County, Store Postcode.</p>
+                                        <form>
+                                            <div class="payment-method">
+                                                <div class="payment-accordion element-mrg">
+                                                    <div id="faq" class="panel-group">
+                                                        <div class="panel panel-default single-my-account m-0">
+                                                            <div class="panel-heading my-account-title">
+                                                                <h4 class="panel-title">
+                                                                    <label style="font-weight: normal;">
+                                                                        <input type="radio" name="payment-method"
+                                                                            value="razorPay" style="width: 15px;"
+                                                                            checked>
+                                                                        Razor pay
+                                                                    </label>
+                                                                </h4>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="panel panel-default single-my-account m-0">
-                                                        <div class="panel-heading my-account-title">
-                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
-                                                                    href="#my-account-2" aria-expanded="false"
-                                                                    class="collapsed">Check payments</a></h4>
-                                                        </div>
-                                                        <div id="my-account-2" class="panel-collapse collapse"
-                                                            data-bs-parent="#faq">
-                                                            <div class="panel-body">
-                                                                <p>Please send a check to Store Name, Store Street,
-                                                                    Store Town,
-                                                                    Store State / County, Store Postcode.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
-                                                    <div class="panel panel-default single-my-account m-0">
-                                                        <div class="panel-heading my-account-title">
-                                                            <h4 class="panel-title"><a data-bs-toggle="collapse"
-                                                                    href="#my-account-3">Cash on delivery</a></h4>
-                                                        </div>
-                                                        <div id="my-account-3" class="panel-collapse collapse"
-                                                            data-bs-parent="#faq">
-                                                            <div class="panel-body">
-                                                                <p>Please send a check to Store Name, Store Street,
-                                                                    Store Town,
-                                                                    Store State / County, Store Postcode.</p>
+                                                        <div class="panel panel-default single-my-account m-0">
+                                                            <div class="panel-heading my-account-title">
+                                                                <h4 class="panel-title">
+                                                                    <label style="font-weight: normal;">
+                                                                        <input type="radio" name="payment-method"
+                                                                            value="cashOnDelivery" style="width: 15px;">
+                                                                        Cash on delivery
+                                                                    </label>
+                                                                </h4>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                     <div class="Place-order mt-25">
                                         <a class="btn-hover" onclick="placeOrder(event)">Place Order</a>
@@ -716,52 +717,26 @@
             function placeOrder(event) {
                 event.preventDefault()
 
-                let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
-                let address = ''
+                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value
+                // const paymentMethod = document.getElementByid('')
 
-                if (!checkedAddress) {
-                    const street = document.getElementById('street').value
-                    const city = document.getElementById('city').value
-                    const state = document.getElementById('state').value
-                    const zip = document.getElementById('zip').value
-                    const country = document.getElementById('country').value
+                if (paymentMethod == 'cashOnDelivery') {
 
-                    if (!street) {
-                        return Swal.fire({
-                            icon: "error",
-                            title: "address!",
-                            text: "Please enter or select shipping address",
-                            showCancelButton: true,
-                            showConfirmButton: false,
-                            cancelButtonText: "OK",
-                        }).then((result) => {
-                            // if (result.dismiss === Swal.DismissReason.cancel) {
-                            //     otpInputs.forEach(input => input.value = '');
-                            //     otpInputs[0].focus();
-                            // }
-                        });
-                    }
+                    let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
+                    let address = ''
 
-                    const addressData = {
-                        street: street,
-                        city: city,
-                        state: state,
-                        zip: zip,
-                        country: country
-                    }
+                    if (!checkedAddress) {
+                        const street = document.getElementById('street').value
+                        const city = document.getElementById('city').value
+                        const state = document.getElementById('state').value
+                        const zip = document.getElementById('zip').value
+                        const country = document.getElementById('country').value
 
-                    address = addressData
-                } else {
-                    address = checkedAddress.value
-                }
-
-                axios.post('/placeOrder', { address: address })
-                    .then(res => {
-                        if (res.data.error == 1) {
-                            Swal.fire({
+                        if (!street) {
+                            return Swal.fire({
                                 icon: "error",
-                                title: "quantity!",
-                                text: "products don't have enough quantity",
+                                title: "address!",
+                                text: "Please enter or select shipping address",
                                 showCancelButton: true,
                                 showConfirmButton: false,
                                 cancelButtonText: "OK",
@@ -771,25 +746,64 @@
                                 //     otpInputs[0].focus();
                                 // }
                             });
-                        } else if (res.data.success == 7) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Order Placed!",
-                                text: "Your order was placed successfully.",
-                                showConfirmButton: true,
-                                confirmButtonText: "Continue Shopping",
-                                confirmButtonColor: '#266bf9'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = '/products';
-                                }
-                            });
-
                         }
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+
+                        const addressData = {
+                            street: street,
+                            city: city,
+                            state: state,
+                            zip: zip,
+                            country: country
+                        }
+
+                        address = addressData
+                    } else {
+                        address = checkedAddress.value
+                    }
+
+                    axios.post('/placeOrder', { address: address })
+                        .then(res => {
+                            if (res.data.error == 1) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "quantity!",
+                                    text: "products don't have enough quantity",
+                                    showCancelButton: true,
+                                    showConfirmButton: false,
+                                    cancelButtonText: "OK",
+                                }).then((result) => {
+                                    // if (result.dismiss === Swal.DismissReason.cancel) {
+                                    //     otpInputs.forEach(input => input.value = '');
+                                    //     otpInputs[0].focus();
+                                    // }
+                                });
+                            } else if (res.data.success == 7) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Order Placed!",
+                                    text: "Your order was placed successfully.",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonColor: '#266bf9'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/products';
+                                    }
+                                });
+
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+
+                }else if(paymentMethod == 'razorPay'){
+
+                    
+
+                }
+
+
             }
         </script>
 

@@ -1,0 +1,369 @@
+<%- include('../layout/adminhead.ejs') %>
+    </head>
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">Coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                        <datalist id="search_terms">
+                            <option value="Products"></option>
+                            <option value="New orders"></option>
+                            <option value="Apple iphone"></option>
+                            <option value="Ahmed Hassan"></option>
+                        </datalist>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Coupon</h2>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up"
+                                    onclick="createCoupon(event)">Create</button>
+                                <a href="/admin/coupons"><button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Cancel</button></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <label for="product_title" class="form-label">Coupon name</label>
+                                        <input type="text" placeholder="Type here" class="form-control"
+                                        id="couponName" value="cpname"/>
+                                        <div id="errmsgName" class="text-danger"></div>
+                                    </div>
+                                    <div class="row gx-3">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_sku" class="form-label">Amount</label>
+                                            <input type="number" placeholder="Type here" class="form-control"
+                                            id="couponAmount" value="1500"/>
+                                            <div id="errmsgAmount" class="text-danger"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_color" class="form-label">start date</label>
+                                            <input type="date" placeholder="Type here" class="form-control"
+                                            id="startDate" value="2024-07-09"/>
+                                            <div id="errmsgStartDate" class="text-danger"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_size" class="form-label">end date</label>
+                                            <input type="date" placeholder="Type here" class="form-control"
+                                            id="endDate" value="2024-07-10"/>
+                                            <div id="errmsgEndDate" class="text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="product_brand" class="form-label">Minimum Purchase Amount</label>
+                                        <input type="number" placeholder="Type here" class="form-control"
+                                        id="minPurchaseAmt" value="1000"/>
+                                        <div id="errmsgMinPA" class="text-danger"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- card end// -->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div>
+                                        <label class="form-label">Description</label>
+                                        <div id="errmsgDescription" class="text-danger"></div>
+                                        <textarea placeholder="Type here" class="form-control" rows="4"
+                                        id="description">hello world</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <script>
+            function validateCoupon() {
+                const name = document.getElementById('couponName').value
+                const amount = document.getElementById('couponAmount').value
+                const startDate = document.getElementById('startDate').value
+                const endDate = document.getElementById('endDate').value
+                const minPurchaseAmount = document.getElementById('minPurchaseAmt').value
+                const description = document.getElementById('description').value
+
+                document.getElementById('errmsgName').innerHTML = '';
+                document.getElementById('errmsgAmount').innerHTML = '';
+                document.getElementById('errmsgStartDate').innerHTML = '';
+                document.getElementById('errmsgEndDate').innerHTML = '';
+                document.getElementById('errmsgMinPA').innerHTML = '';
+                document.getElementById('errmsgDescription').innerHTML = '';
+
+
+                const allowedCharacters = /^[a-zA-Z\s]+$/;
+
+                //name validation
+                if (name === '') {
+                    displayErrorName('*name is required.')
+                    return false;
+                } else if (name.length < 3) {
+                    displayErrorName(`*name must be at least 3 characters long.`);
+                    return false;
+                } else if (name.length > 30) {
+                    displayErrorName(`*name must be less than 30 characters long.`);
+                    return false;
+                } else if (!allowedCharacters.test(name)) {
+                    displayErrorName("*name can only contain letters, numbers, and spaces.");
+                    return false
+                }
+
+
+                //price validation
+                var minPrice = 100;
+                var maxPrice = 8000;
+
+                if (amount === '') {
+                    displayErrorAmount('*price is required.')
+                    return false;
+                } else if (isNaN(amount) || amount <= 0) {
+                    displayErrorAmount('*price must be a positive number.')
+                    return false;
+                } 
+                // else if (amount < minPrice) {
+                //     displayErrorAmount(`*price must be at least $${minPrice.toFixed(2)}.`)
+                //     return false;
+                // } else if (amount > maxPrice) {
+                //     displayErrorAmount(`*price must be less than or equal to $${maxPrice.toFixed(2)}.`)
+                //     return false;
+                // }
+
+                //date validation
+                let dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+
+                if (!dateFormat.test(startDate)) {
+                    displayErrorStDate('*Invalid date')
+                    return false
+                }
+                if (!dateFormat.test(endDate)) {
+                    displayErrorEndDate('*Invalid date')
+                    return false
+                }
+
+
+                //minPurchaseAmount validation
+                if (minPurchaseAmount === '') {
+                    displayErrorminPurchaseAmount('*Product price is required.')
+                    return false;
+                } else if (isNaN(minPurchaseAmount) || minPurchaseAmount <= 0) {
+                    displayErrorminPurchaseAmount('*Product price must be a positive number.')
+                    return false;
+                } else if (minPurchaseAmount < minPrice) {
+                    displayErrorminPurchaseAmount(`*Product price must be at least $${minPrice.toFixed(2)}.`)
+                    return false;
+                } else if (minPurchaseAmount > maxPrice) {
+                    displayErrorminPurchaseAmount(`*Product price must be less than or equal to $${maxPrice.toFixed(2)}.`)
+                    return false;
+                }
+
+
+                //description validation
+                if (description === '') {
+                    displayErrorDescription('*Product description is required.')
+                    return false;
+                }
+
+                return true
+            }
+
+            function displayErrorName(errorMessage) {
+                const errorDiv = document.getElementById('errmsgName');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorAmount(errorMessage) {
+                const errorDiv = document.getElementById('errmsgAmount');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorStDate(errorMessage) {
+                const errorDiv = document.getElementById('errmsgStartDate');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorEndDate(errorMessage) {
+                const errorDiv = document.getElementById('errmsgEndDate');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorminPurchaseAmount(errorMessage) {
+                const errorDiv = document.getElementById('errmsgMinPA');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorDescription(errorMessage) {
+                const errorDiv = document.getElementById('errmsgDescription');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            const name = document.getElementById('couponName').value
+            const amount = document.getElementById('couponAmount').value
+            const startDate = document.getElementById('startDate').value
+            const endDate = document.getElementById('endDate').value
+            const minPurchaseAmount = document.getElementById('minPurchaseAmt').value
+            const description = document.getElementById('description').value
+
+            document.getElementById('couponName').addEventListener('input', validateCoupon)
+            document.getElementById('couponAmount').addEventListener('input', validateCoupon)
+            document.getElementById('startDate').addEventListener('input', validateCoupon)
+            document.getElementById('endDate').addEventListener('input', validateCoupon)
+            document.getElementById('minPurchaseAmt').addEventListener('input', validateCoupon)
+            document.getElementById('description').addEventListener('input', validateCoupon)
+        </script>
+
+        <script>
+            function createCoupon(event) {
+                event.preventDefault()
+
+                if(!validateCoupon()){
+                    return console.log("*validation Error")
+                }
+
+                const name = document.getElementById('couponName').value
+                const amount = document.getElementById('couponAmount').value
+                const startDate = document.getElementById('startDate').value
+                const endDate = document.getElementById('endDate').value
+                const minPurchaseAmount = document.getElementById('minPurchaseAmt').value
+                const description = document.getElementById('description').value
+
+                const couponData = {
+                    name: name,
+                    amount: amount,
+                    startDate: startDate,
+                    endDate: endDate,
+                    minPurchaseAmount: minPurchaseAmount,
+                    description: description
+                }
+
+                axios.post('/admin/createCoupon', couponData)
+                    .then(res => {
+                        if(res.data.error){
+                            displayErrorName("*this coupon already exists")
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        </script>
+    </body>
+
+    </html>
