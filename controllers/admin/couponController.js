@@ -6,7 +6,6 @@ const loadCoupons = async (req, res, next) => {
 
         const findAllCoupons = await couponModel.find()
 
-        console.log(findAllCoupons)
         res.render('admin/coupons', {coupons: findAllCoupons})
     }catch(error){
         next(error)
@@ -48,7 +47,29 @@ const createCoupon = async (req, res, next) => {
 
         if(saveNewCoupon){
             console.log("success created new coupon")
+            res.send({success: 7})
         }
+    }catch(error){
+        next(error)
+    }
+}
+
+const deleteCoupon = async (req, res, next) => {
+    try{
+        const { couponId } = req.body
+
+        if(!couponId){
+            return console.log("can't get any coupon id at delete coupon")
+        }
+
+        const deleting = await couponModel.findByIdAndDelete(couponId)
+
+        if(deleting){
+            console.log('deleting coupon success')
+            res.send({success: 7})
+        }
+
+
     }catch(error){
         next(error)
     }
@@ -58,4 +79,5 @@ module.exports = {
     loadCoupons,
     loadCreateCoupon,
     createCoupon,
+    deleteCoupon,
 }

@@ -102,7 +102,8 @@
                             <div>
                                 <button class="btn btn-md rounded font-sm hover-up"
                                     onclick="createCoupon(event)">Create</button>
-                                <a href="/admin/coupons"><button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Cancel</button></a>
+                                <a href="/admin/coupons"><button
+                                        class="btn btn-light rounded font-sm mr-5 text-body hover-up">Cancel</button></a>
                             </div>
                         </div>
                         <div class="col">
@@ -110,34 +111,34 @@
                                 <div class="card-body">
                                     <div class="mb-4">
                                         <label for="product_title" class="form-label">Coupon name</label>
-                                        <input type="text" placeholder="Type here" class="form-control"
-                                        id="couponName" value="cpname"/>
+                                        <input type="text" placeholder="Type here" class="form-control" id="couponName"
+                                            value="cpname" />
                                         <div id="errmsgName" class="text-danger"></div>
                                     </div>
                                     <div class="row gx-3">
                                         <div class="col-md-4 mb-3">
                                             <label for="product_sku" class="form-label">Amount</label>
                                             <input type="number" placeholder="Type here" class="form-control"
-                                            id="couponAmount" value="1500"/>
+                                                id="couponAmount" value="1500" />
                                             <div id="errmsgAmount" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_color" class="form-label">start date</label>
                                             <input type="date" placeholder="Type here" class="form-control"
-                                            id="startDate" value="2024-07-09"/>
+                                                id="startDate" value="2024-07-09" />
                                             <div id="errmsgStartDate" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_size" class="form-label">end date</label>
-                                            <input type="date" placeholder="Type here" class="form-control"
-                                            id="endDate" value="2024-07-10"/>
+                                            <input type="date" placeholder="Type here" class="form-control" id="endDate"
+                                                value="2024-07-10" />
                                             <div id="errmsgEndDate" class="text-danger"></div>
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="product_brand" class="form-label">Minimum Purchase Amount</label>
                                         <input type="number" placeholder="Type here" class="form-control"
-                                        id="minPurchaseAmt" value="1000"/>
+                                            id="minPurchaseAmt" value="1000" />
                                         <div id="errmsgMinPA" class="text-danger"></div>
                                     </div>
                                 </div>
@@ -149,7 +150,7 @@
                                         <label class="form-label">Description</label>
                                         <div id="errmsgDescription" class="text-danger"></div>
                                         <textarea placeholder="Type here" class="form-control" rows="4"
-                                        id="description">hello world</textarea>
+                                            id="description">hello world</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -179,6 +180,7 @@
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             function validateCoupon() {
@@ -225,7 +227,7 @@
                 } else if (isNaN(amount) || amount <= 0) {
                     displayErrorAmount('*price must be a positive number.')
                     return false;
-                } 
+                }
                 // else if (amount < minPrice) {
                 //     displayErrorAmount(`*price must be at least $${minPrice.toFixed(2)}.`)
                 //     return false;
@@ -333,7 +335,7 @@
             function createCoupon(event) {
                 event.preventDefault()
 
-                if(!validateCoupon()){
+                if (!validateCoupon()) {
                     return console.log("*validation Error")
                 }
 
@@ -355,8 +357,21 @@
 
                 axios.post('/admin/createCoupon', couponData)
                     .then(res => {
-                        if(res.data.error){
+                        if (res.data.error) {
                             displayErrorName("*this coupon already exists")
+                        } else if (res.data.success) {
+                            Swal.fire({
+                                title: "<span style='color: #3BB77E;'>Success!</span>",
+                                html: "<span style='color: black;'>Added new Coupon.</span>",
+                                icon: "success",
+                                confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                confirmButtonText: "OK"
+                            }).then(result => {
+                                if(result.isConfirmed){
+                                    window.location.href = '/admin/coupons'
+                                }
+                            })
+                            
                         }
                     })
                     .catch(err => {

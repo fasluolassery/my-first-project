@@ -42,6 +42,8 @@ adminRouter.post('/createuser', userController.createUser)
 adminRouter.post('/changeOrderStatus', orderController.changeOrderStatus)
 adminRouter.post('/cancelOrder', orderController.cancelOrders)
 adminRouter.post('/createCoupon', couponController.createCoupon)
+adminRouter.post('/deleteCoupon', couponController.deleteCoupon)
+
 
 
 
