@@ -23,6 +23,8 @@
         }
     </style>
 
+
+
     <style>
         .panel-title label {
             display: flex;
@@ -39,6 +41,54 @@
         .panel-body {
             margin-left: 30px;
             padding: 10px 0;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 
@@ -319,7 +369,7 @@
                                                         <!-- Radio Button -->
                                                         <input class="w-auto h-auto me-3" type="radio"
                                                             name="addressSelection" id="address<%= index %>"
-                                                            value="<%= add.id %>">
+                                                            value="<%= add.id %>" <%=index===0 ? 'checked' : '' %>>
                                                         <input type="hidden" value="<%= add.id %>">
 
 
@@ -433,6 +483,9 @@
                                                     <input type="text" />
                                                 </div>
                                             </div> -->
+                                            <div class="save_button mt-3">
+                                                <button class="btn" onclick="addAddressFromCheckout(event)">Add</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -447,10 +500,47 @@
                                             <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
                                         </div>
                                         <div class="discount-code">
-                                            <p class="mb-0">Enter your coupon code if you have one.</p>
+                                            <p class="mb-0"><a id="openModal" class="text-primary">Available Coupons</a>
+                                            </p>
+                                            <div class="text-success" id="coupon-success"></div>
+
+
+                                            <div id="couponModal" class="modal">
+                                                <div class="modal-content">
+                                                    <span class="close">&times;</span>
+                                                    <h2>Coupon Details</h2>
+                                                    <% if(typeof coupons !='undefined' ){ %>
+
+                                                        <p>Here are some great coupons for you:</p>
+                                                        <hr>
+                                                        <% coupons.forEach(val=> { %>
+                                                            <ul>
+                                                                <li>Coupon name: <%= val.name %>
+                                                                </li>
+                                                                <li>Code: <a id="couponCode<%= val.id %>">
+                                                                        <%= val.code %>
+                                                                    </a>
+                                                                </li>
+                                                                <li>discount: <%= val.discountAmount %>
+                                                                </li>
+                                                                <li>end Date: <%=
+                                                                        val.endDate.toLocaleDateString('en-GB') %>
+                                                                </li>
+                                                                <li>Min Purchase Amount: <%= val.minPurchaseAmount %>
+                                                                </li>
+                                                                <a onclick="copyCode(event, '<%= val.id %>')" href>Copy
+                                                                    Code</a>
+                                                            </ul>
+                                                            <hr>
+                                                            <% }) %>
+                                                                <% } %>
+                                                </div>
+                                            </div>
+
                                             <form>
-                                                <input type="text" required="" id="coupon-code"/>
-                                                <button class="cart-btn-2" onclick="applycoupon(event)" type="button">Apply Coupon</button>
+                                                <input type="text" required="" id="coupon-code" />
+                                                <button class="cart-btn-2" onclick="applycoupon(event)"
+                                                    type="button">Apply Coupon</button>
                                             </form>
                                         </div>
                                     </div>
@@ -694,6 +784,35 @@
         <script src="assets/js/main.js"></script>
 
         <script>
+            // Get the modal
+            var modal = document.getElementById("couponModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("openModal");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+        </script>
+
+        <script>
             document.addEventListener('DOMContentLoaded', () => {
                 axios.post('/checkoutTotal')
                     .then(res => {
@@ -717,52 +836,68 @@
         </script>
 
         <script>
+            function addAddressFromCheckout(event) {
+                event.preventDefault()
+
+                const street = document.getElementById('street').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const zip = document.getElementById('zip').value;
+                const country = document.getElementById('country').value;
+
+                // Display a message or handle the new address
+                // alert(`Address Saved: ${street}, ${city}, ${state}, ${zip}, ${country}`);
+
+                const addressData = {
+                    street: street,
+                    city: city,
+                    state: state,
+                    zip: zip,
+                    country: country
+                }
+
+                axios.post('/addressadd', addressData)
+                    .then(res => {
+                        if (res.data.status === 7) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "address added",
+                                text: "",
+                                // showDenyButton: true,
+                                // showCancelButton: true,
+                                confirmButtonColor: '#0056b3',
+                                confirmButtonText: "Ok",
+                                // denyButtonText: `Don't save`
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        </script>
+
+        <script>
             function placeOrder(event) {
                 event.preventDefault()
 
                 const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value
-                // const paymentMethod = document.getElementByid('')
+                const succesMsg = document.getElementById('coupon-success')
+
+                if(succesMsg.innerText == '*coupon applied'){
+                    
+                }
+                
 
                 if (paymentMethod == 'cashOnDelivery') {
 
                     let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
-                    let address = ''
 
-                    if (!checkedAddress) {
-                        const street = document.getElementById('street').value
-                        const city = document.getElementById('city').value
-                        const state = document.getElementById('state').value
-                        const zip = document.getElementById('zip').value
-                        const country = document.getElementById('country').value
-
-                        if (!street) {
-                            return Swal.fire({
-                                icon: "error",
-                                title: "address!",
-                                text: "Please enter or select shipping address",
-                                showCancelButton: true,
-                                showConfirmButton: false,
-                                cancelButtonText: "OK",
-                            }).then((result) => {
-                                // if (result.dismiss === Swal.DismissReason.cancel) {
-                                //     otpInputs.forEach(input => input.value = '');
-                                //     otpInputs[0].focus();
-                                // }
-                            });
-                        }
-
-                        const addressData = {
-                            street: street,
-                            city: city,
-                            state: state,
-                            zip: zip,
-                            country: country
-                        }
-
-                        address = addressData
-                    } else {
-                        address = checkedAddress.value
-                    }
+                    let address = checkedAddress.value
 
                     axios.post('/placeOrder', { address: address })
                         .then(res => {
@@ -811,18 +946,46 @@
         </script>
 
         <script>
-            function applycoupon(event){
+            function applycoupon(event) {
                 event.preventDefault()
 
                 const couponInput = document.getElementById('coupon-code').value
-                
-                axios.post('/applyCoupon', {couponCode: couponInput})
+
+                axios.post('/applyCoupon', { couponCode: couponInput })
                     .then(res => {
-                        console.log(res)
+                        const succesMsg = document.getElementById('coupon-success')
+
+                        if (res.data.disAmount) {
+                            const totalDiv = document.getElementById('ordertotal')
+                            totalDiv.innerHTML = res.data.disAmount
+                            succesMsg.innerText = '*coupon applied'
+                        }else{
+                            succesMsg.innerText = ''
+                        }
                     })
                     .catch(err => {
                         console.log(err)
                     })
+            }
+        </script>
+
+        <script>
+            function copyCode(event, couponId) {
+                event.preventDefault()
+
+                const couponCode = document.getElementById(`couponCode${couponId}`).innerText
+                let input = document.getElementById('coupon-code')
+
+                let tempInput = document.createElement('input')
+                tempInput.value = couponCode
+                document.body.appendChild(tempInput)
+
+                tempInput.select()
+                document.execCommand('copy')
+
+                input.value = couponCode
+
+                document.body.removeChild(tempInput)
             }
         </script>
 

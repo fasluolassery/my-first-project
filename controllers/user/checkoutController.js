@@ -1,5 +1,6 @@
 const addressModel = require('../../models/addressModel')
 const cartModel = require('../../models/cartModel')
+const couponModel = require('../../models/couponModel')
 
 const loadCheckout = async (req, res, next) => {
     try{
@@ -23,7 +24,13 @@ const loadCheckout = async (req, res, next) => {
 
         const addresses = findAddresses.addresses
 
-        res.render('user/checkoutpage', { addresses: addresses, userCartItems: findUserCart.items})
+        const findCoupons = await couponModel.find()
+
+        if(!findCoupons){
+            return console.log("Can't find coupons in loadcheckout")
+        }
+
+        res.render('user/checkoutpage', { addresses: addresses, userCartItems: findUserCart.items, coupons: findCoupons})
 
     }catch(error){
         next(error)
