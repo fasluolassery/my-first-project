@@ -16,6 +16,7 @@ const checkoutController = require('../controllers/user/checkoutController')
 const orderController = require('../controllers/user/orderController')
 const wishlistController = require('../controllers/user/wishlistController')
 const couponController = require('../controllers/user/couponController')
+const razorpayController = require('../controllers/user/razorpayController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -59,6 +60,8 @@ userRouter.post('/filterByCategory' , userController.filterByCategory)
 userRouter.post('/addToWishlist', wishlistController.addToWishlist)
 userRouter.post('/removeFromWishlist', wishlistController.removeProduct)
 userRouter.post('/applyCoupon', couponController.applyCoupon)
+userRouter.post('/razorPay', razorpayController.createOrder)
+// userRouter.post('/succesPayment', razorpayController.success)
 
 
 

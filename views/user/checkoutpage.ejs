@@ -772,6 +772,8 @@
         <script src="assets/js/plugins/mailchimp-ajax.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
 
 
@@ -888,10 +890,10 @@
                 const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value
                 const succesMsg = document.getElementById('coupon-success')
 
-                if(succesMsg.innerText == '*coupon applied'){
-                    
+                if (succesMsg.innerText == '*coupon applied') {
+
                 }
-                
+
 
                 if (paymentMethod == 'cashOnDelivery') {
 
@@ -937,7 +939,76 @@
 
                 } else if (paymentMethod == 'razorPay') {
 
+                    let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
 
+                    let address = checkedAddress.value
+
+                    axios.post('/razorPay', { address: address })
+                        .then(res => {
+                            console.log(res.data.order)
+                            if (res.data.error == 1) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "quantity!",
+                                    text: "products don't have enough quantity",
+                                    showCancelButton: true,
+                                    showConfirmButton: false,
+                                    cancelButtonText: "OK",
+                                }).then((result) => {
+                                    // if (result.dismiss === Swal.DismissReason.cancel) {
+                                    //     otpInputs.forEach(input => input.value = '');
+                                    //     otpInputs[0].focus();
+                                    // }
+                                });
+                            }else{
+                                razorpayPayment(res.data.order)
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    function razorpayPayment(order) {
+                        const option = {
+                            key: "rzp_test_i8191KFpq7S1w1",
+                            amount: order.amount * 100,
+                            currency: order.currency,
+                            name: 'Gadget Galaxy',
+                            description: 'Purchase Description',
+                            order_id: order.id,
+                            handler: function (response) {
+                                // Handle the success response here
+                                console.log('Payment successful:', response);
+
+                                // verifyPayment(response,order)
+                                // Redirect or show success message
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Order Placed!",
+                                    text: "Your order was placed successfully.",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonColor: '#266bf9'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/products';
+                                    }
+                                });
+                            },
+                            prefill: {
+                                name: 'Customer Name',
+                                email: 'customer@example.com',
+                                contact: '9999999999'
+                            },
+                            notes: {
+                                address: 'Customer Address'
+                            },
+                            theme: {
+                                color: '#3399cc'
+                            }
+                        };
+                        const rzp1 = new Razorpay(option);
+                        rzp1.open()
+                    }
 
                 }
 
@@ -959,7 +1030,7 @@
                             const totalDiv = document.getElementById('ordertotal')
                             totalDiv.innerHTML = res.data.disAmount
                             succesMsg.innerText = '*coupon applied'
-                        }else{
+                        } else {
                             succesMsg.innerText = ''
                         }
                     })
