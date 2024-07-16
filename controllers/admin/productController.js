@@ -11,7 +11,7 @@ const loadProducts = async (req, res, next) => {
 
         const skip = (page - 1) * limit;
 
-        const products = await Product.find().limit(limit).skip(skip);
+        const products = await Product.find().sort({createdAt: 1}).limit(limit).skip(skip);
 
         const totalProducts = await Product.countDocuments();
 

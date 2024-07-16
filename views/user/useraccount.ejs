@@ -563,6 +563,7 @@
 
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
+        <!-- edit user details -->
         <script>
             function validation() {
                 const name = document.getElementById('user-name').value.trim()
@@ -728,6 +729,7 @@
 
         </script>
 
+        <!-- error handling -->
         <script>
             function displayErrorOldPassword(errorMessage) {
                 const errorDiv = document.getElementById('errorMessagesOldPassword');
@@ -827,7 +829,7 @@
             }
         </script>
 
-
+        <!-- add address -->
         <script>
             function addAddress(event) {
                 event.preventDefault()
@@ -1052,6 +1054,7 @@
 
         </script>
 
+        <!-- remove address -->
         <script>
             function removeAddress(event, index) {
                 event.preventDefault()
@@ -1094,6 +1097,7 @@
             }
         </script>
 
+        <!-- edit address -->
         <script>
             function editAddress(event, addressId, street, city, state, zip, country) {
                 event.preventDefault()
@@ -1196,6 +1200,7 @@
             }
         </script>
 
+        <!-- copy code -->
         <script>
             function copyCode(event, couponId){
                 event.preventDefault()

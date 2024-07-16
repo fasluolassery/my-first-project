@@ -594,8 +594,7 @@
                                                                 <h4 class="panel-title">
                                                                     <label style="font-weight: normal;">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="razorPay" style="width: 15px;"
-                                                                            checked>
+                                                                            value="razorPay" style="width: 15px;">
                                                                         Razor pay
                                                                     </label>
                                                                 </h4>
@@ -606,7 +605,7 @@
                                                                 <h4 class="panel-title">
                                                                     <label style="font-weight: normal;">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="cashOnDelivery" style="width: 15px;">
+                                                                            value="cashOnDelivery" style="width: 15px;" checked>
                                                                         Cash on delivery
                                                                     </label>
                                                                 </h4>
@@ -898,6 +897,22 @@
                 if (paymentMethod == 'cashOnDelivery') {
 
                     let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
+
+                    if(!checkedAddress){
+                        return Swal.fire({
+                                    icon: "error",
+                                    title: "Address!",
+                                    text: "please select or create a new address",
+                                    showCancelButton: true,
+                                    showConfirmButton: false,
+                                    cancelButtonText: "OK",
+                                }).then((result) => {
+                                    // if (result.dismiss === Swal.DismissReason.cancel) {
+                                    //     otpInputs.forEach(input => input.value = '');
+                                    //     otpInputs[0].focus();
+                                    // }
+                                });
+                    }
 
                     let address = checkedAddress.value
 

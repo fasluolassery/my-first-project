@@ -2,7 +2,7 @@ const Category = require('../../models/categoryModel');
 
 const loadCategory = async (req, res, next) => {
     try {
-        const findAllCategories = await Category.find()
+        const findAllCategories = await Category.find().sort({createdAt: 1})
         res.render('admin/category', { categories: findAllCategories })
     } catch (error) {
         next(error)

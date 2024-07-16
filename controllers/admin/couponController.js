@@ -4,7 +4,7 @@ const couponModel = require('../../models/couponModel')
 const loadCoupons = async (req, res, next) => {
     try{
 
-        const findAllCoupons = await couponModel.find()
+        const findAllCoupons = await couponModel.find().sort({createdAt: 1})
 
         res.render('admin/coupons', {coupons: findAllCoupons})
     }catch(error){

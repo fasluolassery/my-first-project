@@ -16,13 +16,18 @@ const loadCheckout = async (req, res, next) => {
             return console.log("can't find user cart in loadcheckout")
         }
 
-        const findAddresses = await addressModel.findOne({ userId: userId })
+        let findAddresses = await addressModel.findOne({ userId: userId })
+        
+        let addresses 
 
         if(!findAddresses){
-            return console.log("Can't find findAddresses in loadcheckout")
+            // console.log("Can't find findAddresses in loadcheckout")
+            addresses = []
+        }else{
+            addresses = findAddresses.addresses
         }
 
-        const addresses = findAddresses.addresses
+
 
         const findCoupons = await couponModel.find()
 

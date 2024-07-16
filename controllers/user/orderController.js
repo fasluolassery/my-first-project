@@ -65,7 +65,6 @@ const placeOrder = async (req, res, next) => {
             totalAmount += val.quantity * val.price
         })
 
-        //  !fix
         for (let item of productsDetails) {
             const product = await productModel.findOne({ _id: item.product });
 
@@ -197,7 +196,17 @@ const cancelSingleProduct = async (req, res, next) => {
         if (!product) {
             return console.log("can't find product at cancel single products")
         }
+        
+        const findProduct = await productModel.findById(product.product.toString())
 
+        if(!findProduct){
+            return console.log("can't find findProduct in cancel single product")
+        }
+
+        findProduct.stock += product.quantity
+
+        await findProduct.save()
+        
         product.productStatus = 'Cancelled'
 
         const saveCancel = await findOrder.save()
@@ -212,10 +221,54 @@ const cancelSingleProduct = async (req, res, next) => {
     }
 }
 
+const returnSingleOrder = async (req, res, next) => {
+    try{
+        const { orderId, productId } = req.body
+
+        if (!orderId || !productId) {
+            return console.log("can't get order id and product id at cancel single product")
+        }
+
+        const findOrder = await orderModel.findById({ _id: orderId })
+
+        if (!findOrder) {
+            return console.log("can't find order at cancel single products")
+        }
+
+        const product = findOrder.products.find(val => val.id == productId)
+
+        if (!product) {
+            return console.log("can't find product at cancel single products")
+        }
+
+        const findProduct = await productModel.findById(product.product.toString())
+
+        if(!findProduct){
+            return console.log("can't find findProduct in cancel single product")
+        }
+
+        findProduct.stock += product.quantity
+
+        await findProduct.save()
+
+        product.productStatus = 'Returned'
+
+        const saveCancel = await findOrder.save()
+
+        if (saveCancel) {
+            console.log("cancel product success")
+            res.send({ success: 7 })
+        }
+    }catch(error){
+        next(error)
+    }
+}
+
 
 module.exports = {
     placeOrder,
     loadOrderDetails,
     cancelOrder,
     cancelSingleProduct,
+    returnSingleOrder,
 }

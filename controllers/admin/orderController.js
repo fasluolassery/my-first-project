@@ -2,7 +2,7 @@ const orderModel = require('../../models/orderModel')
 
 const loadOrders = async (req, res, next) => {
     try{
-        const findAllOrders = await orderModel.find()
+        const findAllOrders = await orderModel.find().sort({createdAt: 1})
         
         res.render('admin/order', { orders: findAllOrders})
     }catch(error){
@@ -41,8 +41,6 @@ const changeOrderStatus = async (req, res, next) => {
         if(newStatus.length <= 0){
             return console.log("there is no new status to change at change order status")
         }
-
-        console.log(orderId)
 
         if(!orderId){
             return console.log("can't get orderid here at change order status")
@@ -91,10 +89,30 @@ const cancelOrders = async (req, res, next) => {
     }
 }
 
+const changeProductStatus = async (req, res, next) => {
+    try{
+        const { productId, newStatus, orderId} = req.body
+
+        const findOrder = await orderModel.findById(orderId)
+
+        // findOrder.products.forEach(val => console.log(val.product.toString()))
+
+        const find = findOrder.products.find(val => val.product.toString() == productId)
+
+        find.productStatus = newStatus
+
+        await findOrder.save()
+        
+    }catch(error){
+        next(error)
+    }
+}
+
 module.exports = {
     loadOrders,
     loadOrderView,
     loadOrderDetails,
     changeOrderStatus,
     cancelOrders,
+    changeProductStatus,
 }

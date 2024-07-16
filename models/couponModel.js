@@ -8,7 +8,8 @@ const couponSchema = new mongoose.Schema({
     startDate: {type: Date},
     endDate: {type: Date},
     minPurchaseAmount: {type: Number, required: true},
-    userList: [{userId: {type: String, ref: 'Users'}}]
+    userList: [{userId: {type: String, ref: 'Users'}}],
+    createdAt: {type: Date, default: Date.now}
 })
 
 const coupon = mongoose.model('coupon', couponSchema)

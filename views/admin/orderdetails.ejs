@@ -9,7 +9,8 @@
                     <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
                 </a>
                 <div>
-                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
                 </div>
             </div>
             <nav>
@@ -71,7 +72,8 @@
                     <form class="searchform">
                         <div class="input-group">
                             <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
-                            <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
                         </div>
                         <datalist id="search_terms">
                             <option value="Products"></option>
@@ -82,7 +84,8 @@
                     </form>
                 </div>
                 <div class="col-nav">
-                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
                     <ul class="nav">
                         <!-- <li class="nav-item">
                             <a class="nav-link btn-icon" href="#">
@@ -91,7 +94,8 @@
                             </a>
                         </li> -->
                         <li class="nav-item">
-                            <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
                         </li>
                         <!-- <li class="nav-item">
                             <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
@@ -131,7 +135,12 @@
                     <header class="card-header">
                         <div class="row align-items-center">
                             <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                                <span> <i class="material-icons md-calendar_today"></i> <b><%= orderDetails.createdAt.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>,  <%= orderDetails.createdAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) %></b> </span> <br />
+                                <span> <i class="material-icons md-calendar_today"></i> <b>
+                                        <%= orderDetails.createdAt.toLocaleDateString('en-US', { weekday: 'long' ,
+                                            year: 'numeric' , month: 'long' , day: 'numeric' }) %>, <%=
+                                                orderDetails.createdAt.toLocaleTimeString('en-US', { hour: 'numeric' ,
+                                                minute: 'numeric' , hour12: true }) %>
+                                    </b> </span> <br />
                                 <!-- <small class="text-muted">Order ID: 3453012</small> -->
                             </div>
                             <div class="col-lg-6 col-md-6 ms-auto text-md-end">
@@ -142,9 +151,12 @@
                                     <option>Shipped</option>
                                     <option>Delivered</option>
                                     <option>Cancelled</option>
+                                    <option>Returned</option>
+                                    
                                     <!-- <option>Returned</option> -->
                                 </select>
-                                <a class="btn btn-primary" onclick="changeStatus(event, '<%= orderDetails.id %>')">Save</a>
+                                <a class="btn btn-primary"
+                                    onclick="changeStatus(event, '<%= orderDetails.id %>')">Save</a>
                                 <a class="btn btn-danger ms-2" href="/admin/orders">back</a>
                                 <!-- <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a> -->
                             </div>
@@ -162,8 +174,8 @@
                                         <h6 class="mb-1">Customer</h6>
                                         <p class="mb-1">
                                             <%= orderDetails.shippingAddress.userName %> <br />
-                                            <%= orderDetails.shippingAddress.email %> <br />
-                                            <%= orderDetails.user.phone %>
+                                                <%= orderDetails.shippingAddress.email %> <br />
+                                                    <%= orderDetails.user.phone %>
                                         </p>
                                         <!-- <a href="#">View profile</a> -->
                                     </div>
@@ -180,7 +192,9 @@
                                         <p class="mb-1">
                                             Shipping: Galaxy express <br />
                                             Pay method: <%= orderDetails.paymentMethod %> <br />
-                                            Status: <a href="#"><%= orderDetails.orderStatus %></a>
+                                                Status: <a href="#">
+                                                    <%= orderDetails.orderStatus %>
+                                                </a>
                                         </p>
                                         <!-- <a href="#">Download info</a> -->
                                     </div>
@@ -195,8 +209,11 @@
                                     <div class="text">
                                         <h6 class="mb-1">Deliver to</h6>
                                         <p class="mb-1">
-                                            City: <%= orderDetails.shippingAddress.street %>, <%= orderDetails.shippingAddress.city %> <br /> <%= orderDetails.shippingAddress.state %>, <%= orderDetails.shippingAddress.country %> <br />
-                                            <%= orderDetails.shippingAddress.zip %>
+                                            City: <%= orderDetails.shippingAddress.street %>, <%=
+                                                    orderDetails.shippingAddress.city %> <br />
+                                                    <%= orderDetails.shippingAddress.state %>, <%=
+                                                            orderDetails.shippingAddress.country %> <br />
+                                                            <%= orderDetails.shippingAddress.zip %>
                                         </p>
                                         <!-- <a href="#">View profile</a> -->
                                     </div>
@@ -219,27 +236,49 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% orderDetails.products.forEach(val => { %>
-                                            <tr>
-                                                <td>
-                                                    <a class="itemside" href="#">
-                                                        <div class="left">
-                                                            <img src="<%= val.product.imagePaths[0] %>" width="40" height="40" class="img-xs" alt="Item" />
-                                                        </div>
-                                                        <div class="info"><%= val.name %></div>
-                                                    </a>
-                                                </td>
-                                                <td>$<%= val.price %></td>
-                                                <td><%= val.quantity %></td>
-                                                <td><%= val.productStatus %></td>
-                                                <td class="text-end">$<%= val.price * val.quantity %></td>
-                                            </tr>
-                                            <% }) %>
-                                           
-                                            <tr>
-                                                <td colspan="4">
-                                                    <article class="float-end">
-                                                        <dl class="dlist">
+                                            <% orderDetails.products.forEach(val=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <a class="itemside" href="#">
+                                                            <div class="left">
+                                                                <img src="<%= val.product.imagePaths[0] %>" width="40"
+                                                                    height="40" class="img-xs" alt="Item" />
+                                                            </div>
+                                                            <div class="info">
+                                                                <%= val.name %>
+                                                            </div>
+                                                        </a>
+                                                    </td>
+                                                    <td>$<%= val.price %>
+                                                    </td>
+                                                    <td>
+                                                        <%= val.quantity %>
+                                                    </td>
+
+
+                                                    <td>
+                                                        <input type="hidden" value="<%= val.productStatus %>" id="productStatus<%= val.product.id %>">
+                                                        <select class="form-select d-inline-block" style="width: 110px;" 
+                                                            id="productStatusOption<%= val.product.id %>" 
+                                                            onchange="changeProductStatus('<%= val.product.id %>', '<%= orderDetails.id %>')">
+                                                            <option value="Pending">Pending</option>
+                                                            <option value="Shipped">Shipped</option>
+                                                            <option value="Delivered">Delivered</option>
+                                                            <option value="Cancelled">Cancelled</option>
+                                                            <option value="Returned">Returned</option>
+                                                        </select>
+                                                    </td>
+
+
+                                                    <td class="text-end">$<%= val.price * val.quantity %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+
+                                                    <tr>
+                                                        <td colspan="4">
+                                                            <article class="float-end">
+                                                                <!-- <dl class="dlist">
                                                             <dt>Subtotal:</dt>
                                                             <dd>$973.35</dd>
                                                         </dl>
@@ -250,16 +289,16 @@
                                                         <dl class="dlist">
                                                             <dt>Grand total:</dt>
                                                             <dd><b class="h5">$983.00</b></dd>
-                                                        </dl>
-                                                        <!-- <dl class="dlist">
+                                                        </dl> -->
+                                                                <!-- <dl class="dlist">
                                                             <dt class="text-muted">Status:</dt>
                                                             <dd>
                                                                 <span class="badge rounded-pill alert-success text-success">Payment done</span>
                                                             </dd>
                                                         </dl> -->
-                                                    </article>
-                                                </td>
-                                            </tr>
+                                                            </article>
+                                                        </td>
+                                                    </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -316,14 +355,15 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- bulk order change status -->
         <script>
-            function changeStatus(event, orderId){
+            function changeStatus(event, orderId) {
                 event.preventDefault();
                 const status = document.getElementById('status').value
-                
-                axios.post('/admin/changeOrderStatus', {orderId: orderId, newStatus: status})
+
+                axios.post('/admin/changeOrderStatus', { orderId: orderId, newStatus: status })
                     .then(res => {
-                        if(res.data.success){
+                        if (res.data.success) {
                             window.location.href = `/admin/orders`
                         }
                     })
@@ -332,5 +372,40 @@
                     })
             }
         </script>
+
+        <!--show single product status -->
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const productElements = document.querySelectorAll('[id^="productStatusOption"]');
+
+                productElements.forEach(element => {
+                    const productId = element.id.replace('productStatusOption', '');
+                    const productStatus = document.getElementById(`productStatus${productId}`).value;
+
+                    for (let i = 0; i < element.options.length; i++) {
+                        if (element.options[i].value === productStatus) {
+                            element.selectedIndex = i;
+                            break;
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <!-- change status of single product -->
+        <script>
+            function changeProductStatus(productId, orderId) {
+                const newStatus = document.getElementById(`productStatusOption${productId}`).value
+
+                axios.post('/admin/changeProductStatus', { productId: productId, newStatus: newStatus, orderId: orderId })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        </script>
     </body>
-</html>
+
+    </html>
