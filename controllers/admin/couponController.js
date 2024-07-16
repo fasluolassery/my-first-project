@@ -4,9 +4,15 @@ const couponModel = require('../../models/couponModel')
 const loadCoupons = async (req, res, next) => {
     try{
 
-        const findAllCoupons = await couponModel.find().sort({createdAt: 1})
+        const page = parseInt(req.query.page) || 1
+        const limit = 5
+        const skip = (page - 1) * limit
 
-        res.render('admin/coupons', {coupons: findAllCoupons})
+        const findAllCoupons = await couponModel.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const totalCoupons = await couponModel.countDocuments();
+        const totalPages = Math.ceil(totalCoupons / limit);
+
+        res.render('admin/coupons', {coupons: findAllCoupons, currentPage: page, totalPages})
     }catch(error){
         next(error)
     }

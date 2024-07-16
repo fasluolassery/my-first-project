@@ -7,7 +7,7 @@ const loadHome = async (req, res, next) => {
     try {
         
         const { user, userId } = req.session
-        const findAllProducts = await Products.find({isBlock: false})
+        const findAllProducts = await Products.find({isBlock: false}).sort({createdAt: -1}).limit(4)
         if(user){
             
             res.render('user/homepage', {products: findAllProducts, user: userId})

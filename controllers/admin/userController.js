@@ -3,13 +3,13 @@ const bcrypt = require('bcrypt')
 
 const loadUsers = async (req, res, next) => {
     try {
-        const page = parseInt(req.query.page) || 1; // Current page, default to 1
-        const limit = 5; // Number of users per page
-        const skip = (page - 1) * limit; // Calculate number of users to skip
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5; 
+        const skip = (page - 1) * limit;
 
-        const users = await User.find().sort({createdAt: 1}).limit(limit).skip(skip); // Fetch users for current page
-        const totalUsers = await User.countDocuments(); // Total number of users
-        const totalPages = Math.ceil(totalUsers / limit); // Total number of pages
+        const users = await User.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const totalUsers = await User.countDocuments();
+        const totalPages = Math.ceil(totalUsers / limit);
 
         res.render('admin/users', { 
             users, 

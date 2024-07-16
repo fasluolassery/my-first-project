@@ -1,9 +1,18 @@
 const Category = require('../../models/categoryModel');
 
 const loadCategory = async (req, res, next) => {
-    try {
-        const findAllCategories = await Category.find().sort({createdAt: 1})
-        res.render('admin/category', { categories: findAllCategories })
+    try {   
+
+        const page = parseInt(req.query.page) || 1
+        const limit = 5
+        const skip = (page - 1) * limit
+
+        const findAllCategories = await Category.find().sort({createdAt: 1}).limit(limit).skip(skip);
+
+        const totalCategory = await Category.countDocuments();
+        const totalPages = Math.ceil(totalCategory / limit);
+
+        res.render('admin/category', { categories: findAllCategories, currentPage: page, totalPages})
     } catch (error) {
         next(error)
     }

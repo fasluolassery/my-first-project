@@ -2,9 +2,15 @@ const orderModel = require('../../models/orderModel')
 
 const loadOrders = async (req, res, next) => {
     try{
-        const findAllOrders = await orderModel.find().sort({createdAt: 1})
+        const page = parseInt(req.query.page) || 1
+        const limit = 5
+        const skip = (page - 1) * limit
+
+        const findAllOrders = await orderModel.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const totalOrders = await orderModel.countDocuments();
+        const totalPages = Math.ceil(totalOrders / limit);
         
-        res.render('admin/order', { orders: findAllOrders})
+        res.render('admin/order', { orders: findAllOrders, currentPage: page, totalPages})
     }catch(error){
         next(error)
     }
