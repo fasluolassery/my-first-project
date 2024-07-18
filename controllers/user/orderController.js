@@ -3,10 +3,14 @@ const cartModel = require('../../models/cartModel')
 const userModel = require('../../models/userModel')
 const addressModel = require('../../models/addressModel')
 const productModel = require('../../models/productModel')
+const couponModel = require('../../models/couponModel')
 
 const placeOrder = async (req, res, next) => {
     try {
         const { address } = req.body
+
+        const { coupon } = req.body
+
 
         if (!address) {
             return console.log("can't find address or address id at place order")
@@ -65,6 +69,20 @@ const placeOrder = async (req, res, next) => {
             totalAmount += val.quantity * val.price
         })
 
+        if (coupon.length > 0) {
+            const fetchCoupon = await couponModel.findOne({ code: coupon })
+
+            if (!fetchCoupon) {
+                return console.log("can't find coupon, maybe code is invalid")
+            }
+
+            totalAmount -= fetchCoupon.discountAmount
+
+            fetchCoupon.userList.push({ userId });
+
+            await fetchCoupon.save()
+        }
+
         for (let item of productsDetails) {
             const product = await productModel.findOne({ _id: item.product });
 
@@ -107,11 +125,11 @@ const placeOrder = async (req, res, next) => {
 
             for (let item of productsDetails) {
                 const product = await productModel.findOne({ _id: item.product });
-    
+
                 if (!product) {
                     return console.log("product not found")
                 }
-    
+
                 // Decrease product quantity
                 product.stock -= item.quantity;
                 await product.save();
@@ -196,17 +214,17 @@ const cancelSingleProduct = async (req, res, next) => {
         if (!product) {
             return console.log("can't find product at cancel single products")
         }
-        
+
         const findProduct = await productModel.findById(product.product.toString())
 
-        if(!findProduct){
+        if (!findProduct) {
             return console.log("can't find findProduct in cancel single product")
         }
 
         findProduct.stock += product.quantity
 
         await findProduct.save()
-        
+
         product.productStatus = 'Cancelled'
 
         const saveCancel = await findOrder.save()
@@ -222,7 +240,7 @@ const cancelSingleProduct = async (req, res, next) => {
 }
 
 const returnSingleOrder = async (req, res, next) => {
-    try{
+    try {
         const { orderId, productId } = req.body
 
         if (!orderId || !productId) {
@@ -243,7 +261,7 @@ const returnSingleOrder = async (req, res, next) => {
 
         const findProduct = await productModel.findById(product.product.toString())
 
-        if(!findProduct){
+        if (!findProduct) {
             return console.log("can't find findProduct in cancel single product")
         }
 
@@ -259,7 +277,7 @@ const returnSingleOrder = async (req, res, next) => {
             console.log("cancel product success")
             res.send({ success: 7 })
         }
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }

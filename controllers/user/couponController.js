@@ -6,7 +6,6 @@ const applyCoupon = async (req, res, next) => {
         const { couponCode } = req.body
 
         if(!couponCode){
-            
             console.log("can't get coupon code")
             return res.send({error: 1})
         }
@@ -20,27 +19,44 @@ const applyCoupon = async (req, res, next) => {
         const fetchCoupon = await couponModel.findOne({code: couponCode})
 
         if(!fetchCoupon){
-            return console.log("coupon not found")
+            console.log("coupon not found")
+            return res.send({error: '*coupon not found'})
         }
 
         const currentDate = new Date();
-        if (fetchCoupon.endDate < currentDate) {
-            return console.log("Coupon has expired" )
+        if (fetchCoupon.endDate && fetchCoupon.endDate < currentDate) {
+            console.log("Coupon has expired");
+            return res.send({error: '*coupon has expired'})
         }
 
-        //! to do
-        // if (coupon.user <= coupon.timesUsed) {
-        //     return res.status(400).json({ message: "Coupon usage limit reached" });
-        // }
-        // let hai = fetchCoupon.userList.find(val => {})
+        if (fetchCoupon.startDate && fetchCoupon.startDate > currentDate) {
+            console.log("Coupon not valid yet");
+            return res.send({error: '*Coupon not valid yet'})
+        }
 
-        const findCart = await cartModel.findOne({userId: userId}).populate('items.productId')
+        if (fetchCoupon.userList.some(user => user.userId === userId)) {
+            console.log("Coupon already used by this user");
+            return res.send({error: '*Coupon already used'})
+        }
 
-        const totalAmount = findCart.items.reduce((acc, val) => acc + (val.productId.price * val.quantity) ,0)
+        const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId');
 
-        const lastAmount = totalAmount - fetchCoupon.discountAmount
+        if (!findCart) {
+            return console.log("Cart not found for user");
+        }
 
-        res.send({disAmount: lastAmount})
+        const totalAmount = findCart.items.reduce((acc, val) => acc + (val.productId.price * val.quantity), 0);
+
+        if (totalAmount < fetchCoupon.minPurchaseAmount) {
+            console.log("Minimum purchase amount not met");
+            return res.send({error: '*Minimum purchase amount not met'})
+        }
+
+        const lastAmount = totalAmount - fetchCoupon.discountAmount;
+
+        await fetchCoupon.save();
+
+        res.send({ discountedAmount: lastAmount + 40 });
         
     }catch(error){
         next(error)

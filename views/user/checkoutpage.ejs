@@ -783,7 +783,7 @@
 
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
-
+        <!-- coupon modal -->
         <script>
             // Get the modal
             var modal = document.getElementById("couponModal");
@@ -813,6 +813,7 @@
 
         </script>
 
+        <!-- checkout total -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 axios.post('/checkoutTotal')
@@ -835,7 +836,7 @@
                     })
             })
         </script>
-
+        <!-- add address -->
         <script>
             function addAddressFromCheckout(event) {
                 event.preventDefault()
@@ -882,6 +883,7 @@
             }
         </script>
 
+        <!-- place order -->
         <script>
             function placeOrder(event) {
                 event.preventDefault()
@@ -889,8 +891,12 @@
                 const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value
                 const succesMsg = document.getElementById('coupon-success')
 
-                if (succesMsg.innerText == '*coupon applied') {
+                let couponApplied = ''
 
+                if (succesMsg.innerText == '*coupon applied') {
+                    const coupon = document.getElementById('coupon-code').value
+
+                    couponApplied = coupon
                 }
 
 
@@ -916,7 +922,7 @@
 
                     let address = checkedAddress.value
 
-                    axios.post('/placeOrder', { address: address })
+                    axios.post('/placeOrder', { address: address, coupon: couponApplied })
                         .then(res => {
                             if (res.data.error == 1) {
                                 Swal.fire({
@@ -958,7 +964,7 @@
 
                     let address = checkedAddress.value
 
-                    axios.post('/razorPay', { address: address })
+                    axios.post('/razorPay', { address: address, coupon: couponApplied  })
                         .then(res => {
                             console.log(res.data.order)
                             if (res.data.error == 1) {
@@ -1031,6 +1037,7 @@
             }
         </script>
 
+        <!-- apply coupon -->
         <script>
             function applycoupon(event) {
                 event.preventDefault()
@@ -1041,10 +1048,18 @@
                     .then(res => {
                         const succesMsg = document.getElementById('coupon-success')
 
-                        if (res.data.disAmount) {
+                        console.log(res.data)
+
+                        if (res.data.discountedAmount) {
                             const totalDiv = document.getElementById('ordertotal')
-                            totalDiv.innerHTML = res.data.disAmount
+                            totalDiv.innerHTML = res.data.discountedAmount
+                            succesMsg.classList.remove('text-danger')
+                            succesMsg.classList.add('text-success')
                             succesMsg.innerText = '*coupon applied'
+                        }else if(res.data.error){
+                            succesMsg.classList.remove('text-success')
+                            succesMsg.classList.add('text-danger')
+                            succesMsg.innerText = res.data.error
                         } else {
                             succesMsg.innerText = ''
                         }
@@ -1055,6 +1070,7 @@
             }
         </script>
 
+        <!-- copy coupon code -->
         <script>
             function copyCode(event, couponId) {
                 event.preventDefault()

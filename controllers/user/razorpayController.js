@@ -4,22 +4,17 @@ const addressModel = require('../../models/addressModel')
 const cartModel = require('../../models/cartModel')
 const productModel = require('../../models/productModel')
 const orderModel = require('../../models/orderModel')
+const couponModel = require('../../models/couponModel')
 
 const createOrder = async (req, res, next) => {
     try{
 
-        const { address } = req.body
+        const { address, coupon } = req.body
 
         const { userId } = req.session
 
         const { user } = req.session
 
-        // if(!amount){
-        //     return console.log("can't get amount at create order razor pay")
-        // }
-
-        // const rid = process.env.RAZOR_KEY_ID
-        // const key = process.env.RAZOR_KEY_SECRET
         
         const findUserDetails = await userModel.findOne({ _id: userId })
         
@@ -70,6 +65,20 @@ const createOrder = async (req, res, next) => {
             totalAmount += val.quantity * val.price
         })
 
+        if (coupon.length > 0) {
+            const fetchCoupon = await couponModel.findOne({ code: coupon })
+
+            if (!fetchCoupon) {
+                return console.log("can't find coupon, maybe code is invalid")
+            }
+
+            totalAmount -= fetchCoupon.discountAmount
+
+            fetchCoupon.userList.push({ userId });
+
+            await fetchCoupon.save()
+        }
+
         for (let item of productsDetails) {
             const product = await productModel.findOne({ _id: item.product });
 
@@ -112,7 +121,7 @@ const createOrder = async (req, res, next) => {
                 zip: zip,
                 country: country
             },
-            paymentMethod: 'cod',
+            paymentMethod: 'Razor Pay',
             totalAmount: totalAmount,
             orderStatus: 'Pending'
         })
