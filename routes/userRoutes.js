@@ -17,6 +17,7 @@ const orderController = require('../controllers/user/orderController')
 const wishlistController = require('../controllers/user/wishlistController')
 const couponController = require('../controllers/user/couponController')
 const razorpayController = require('../controllers/user/razorpayController')
+const walletController = require('../controllers/user/walletController')
 // ------------------------------------------------------------------
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
@@ -34,8 +35,9 @@ userRouter.get('/cart', sessionCheckUser.isLogin, cartController.loadCart)
 userRouter.get('/myAccount', sessionCheckUser.isLogin, userController.loadUserAccount)
 userRouter.get('/logout', sessionCheckUser.isLogin, homeController.logout)
 userRouter.get('/checkout', sessionCheckUser.isLogin, checkoutController.loadCheckout)
-userRouter.get('/orderDetails', orderController.loadOrderDetails)
-userRouter.get('/wishlist', wishlistController.loadWishlist)
+userRouter.get('/orderDetails', sessionCheckUser.isLogin, orderController.loadOrderDetails)
+userRouter.get('/wishlist', sessionCheckUser.isLogin, wishlistController.loadWishlist)
+userRouter.get('/wallet', sessionCheckUser.isLogin, walletController.loadWallet)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)
@@ -62,6 +64,7 @@ userRouter.post('/addToWishlist', wishlistController.addToWishlist)
 userRouter.post('/removeFromWishlist', wishlistController.removeProduct)
 userRouter.post('/applyCoupon', couponController.applyCoupon)
 userRouter.post('/razorPay', razorpayController.createOrder)
+userRouter.post('/placeOrderWithWallet', walletController.orderWithWallet)
 // userRouter.post('/succesPayment', razorpayController.success)
 
 

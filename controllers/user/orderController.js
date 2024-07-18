@@ -4,6 +4,7 @@ const userModel = require('../../models/userModel')
 const addressModel = require('../../models/addressModel')
 const productModel = require('../../models/productModel')
 const couponModel = require('../../models/couponModel')
+const transactionModel = require('../../models/transactionSchema')
 
 const placeOrder = async (req, res, next) => {
     try {
@@ -199,6 +200,8 @@ const cancelSingleProduct = async (req, res, next) => {
     try {
         const { orderId, productId } = req.body
 
+        const { userId } = req.session
+
         if (!orderId || !productId) {
             return console.log("can't get order id and product id at cancel single product")
         }
@@ -229,7 +232,21 @@ const cancelSingleProduct = async (req, res, next) => {
 
         const saveCancel = await findOrder.save()
 
-        if (saveCancel) {
+        if(findOrder.paymentMethod == 'Razor Pay' || findOrder.paymentMethod == 'wallet'){
+            const user = await userModel.findById(userId)
+            user.balance += findOrder.totalAmount
+            await user.save()   
+
+            const transaction = new transactionModel({
+                userId: userId,
+                amount: findOrder.totalAmount,
+                type: 'credit'
+            })
+
+            await transaction.save()
+            
+            res.send({success: 8})
+        }else if(saveCancel){
             console.log("cancel product success")
             res.send({ success: 7 })
         }

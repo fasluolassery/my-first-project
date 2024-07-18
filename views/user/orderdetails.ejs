@@ -621,11 +621,26 @@
                     if (result.isConfirmed) {
                         axios.post('/cancelSingleOrder', { orderId: orderId, productId, productId })
                             .then(res => {
-                                if (res.data.success) {
+                                if (res.data.success == 7) {
                                     Swal.fire({
                                         icon: "success",
                                         title: "Order Cancelled",
                                         text: "",
+                                        // showDenyButton: true,
+                                        // showCancelButton: true,
+                                        confirmButtonColor: '#0056b3',
+                                        confirmButtonText: "Ok",
+                                        // denyButtonText: `Don't save`
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = '/myAccount'
+                                        }
+                                    })
+                                }else if(res.data.success == 8){
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Order Cancelled",
+                                        text: "you'r money added to your wallet",
                                         // showDenyButton: true,
                                         // showCancelButton: true,
                                         confirmButtonColor: '#0056b3',

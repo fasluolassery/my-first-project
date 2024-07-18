@@ -605,8 +605,20 @@
                                                                 <h4 class="panel-title">
                                                                     <label style="font-weight: normal;">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="cashOnDelivery" style="width: 15px;" checked>
+                                                                            value="cashOnDelivery" style="width: 15px;"
+                                                                            checked>
                                                                         Cash on delivery
+                                                                    </label>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel panel-default single-my-account m-0">
+                                                            <div class="panel-heading my-account-title">
+                                                                <h4 class="panel-title">
+                                                                    <label style="font-weight: normal;">
+                                                                        <input type="radio" name="payment-method"
+                                                                            value="Wallet" style="width: 15px;" checked>
+                                                                        Wallet
                                                                     </label>
                                                                 </h4>
                                                             </div>
@@ -904,20 +916,20 @@
 
                     let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
 
-                    if(!checkedAddress){
+                    if (!checkedAddress) {
                         return Swal.fire({
-                                    icon: "error",
-                                    title: "Address!",
-                                    text: "please select or create a new address",
-                                    showCancelButton: true,
-                                    showConfirmButton: false,
-                                    cancelButtonText: "OK",
-                                }).then((result) => {
-                                    // if (result.dismiss === Swal.DismissReason.cancel) {
-                                    //     otpInputs.forEach(input => input.value = '');
-                                    //     otpInputs[0].focus();
-                                    // }
-                                });
+                            icon: "error",
+                            title: "Address!",
+                            text: "please select or create a new address",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "OK",
+                        }).then((result) => {
+                            // if (result.dismiss === Swal.DismissReason.cancel) {
+                            //     otpInputs.forEach(input => input.value = '');
+                            //     otpInputs[0].focus();
+                            // }
+                        });
                     }
 
                     let address = checkedAddress.value
@@ -964,7 +976,7 @@
 
                     let address = checkedAddress.value
 
-                    axios.post('/razorPay', { address: address, coupon: couponApplied  })
+                    axios.post('/razorPay', { address: address, coupon: couponApplied })
                         .then(res => {
                             console.log(res.data.order)
                             if (res.data.error == 1) {
@@ -981,7 +993,7 @@
                                     //     otpInputs[0].focus();
                                     // }
                                 });
-                            }else{
+                            } else {
                                 razorpayPayment(res.data.order)
                             }
                         })
@@ -1031,6 +1043,76 @@
                         rzp1.open()
                     }
 
+                } else if (paymentMethod == 'Wallet') {
+                    let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');
+
+                    if (!checkedAddress) {
+                        return Swal.fire({
+                            icon: "error",
+                            title: "Address!",
+                            text: "please select or create a new address",
+                            showCancelButton: true,
+                            showConfirmButton: false,
+                            cancelButtonText: "OK",
+                        }).then((result) => {
+                            // if (result.dismiss === Swal.DismissReason.cancel) {
+                            //     otpInputs.forEach(input => input.value = '');
+                            //     otpInputs[0].focus();
+                            // }
+                        });
+                    }
+
+                    let address = checkedAddress.value
+
+                    axios.post('/placeOrderWithWallet', { address: address, coupon: couponApplied })
+                        .then(res => {
+                            if (res.data.error == 1) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "quantity!",
+                                    text: "products don't have enough quantity",
+                                    showCancelButton: true,
+                                    showConfirmButton: false,
+                                    cancelButtonText: "OK",
+                                }).then((result) => {
+                                    // if (result.dismiss === Swal.DismissReason.cancel) {
+                                    //     otpInputs.forEach(input => input.value = '');
+                                    //     otpInputs[0].focus();
+                                    // }
+                                });
+                            } else if (res.data.success == 7) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Order Placed!",
+                                    text: "Your order was placed successfully.",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonColor: '#266bf9'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/products';
+                                    }
+                                });
+
+                            } else if (res.data.error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Insufficient Balance!",
+                                    text: "Oops! Your balance is too low for this transaction.",
+                                    showCancelButton: true,
+                                    showConfirmButton: false,
+                                    cancelButtonText: "OK",
+                                }).then((result) => {
+                                    // if (result.dismiss === Swal.DismissReason.cancel) {
+                                    //     otpInputs.forEach(input => input.value = '');
+                                    //     otpInputs[0].focus();
+                                    // }
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
                 }
 
 
@@ -1056,7 +1138,7 @@
                             succesMsg.classList.remove('text-danger')
                             succesMsg.classList.add('text-success')
                             succesMsg.innerText = '*coupon applied'
-                        }else if(res.data.error){
+                        } else if (res.data.error) {
                             succesMsg.classList.remove('text-success')
                             succesMsg.classList.add('text-danger')
                             succesMsg.innerText = res.data.error

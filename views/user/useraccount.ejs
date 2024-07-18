@@ -121,10 +121,10 @@
                             <div class="col-12 text-center">
                                 <h2 class="breadcrumb-title">Account</h2>
                                 <!-- breadcrumb-list start -->
-                                <ul class="breadcrumb-list">
+                                <!-- <ul class="breadcrumb-list">
                                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                                     <li class="breadcrumb-item active">Account</li>
-                                </ul>
+                                </ul> -->
                                 <!-- breadcrumb-list end -->
                             </div>
                         </div>
@@ -139,17 +139,19 @@
                                 <!-- Nav tabs -->
                                 <div class="dashboard_tab_button" data-aos="fade-up" data-aos-delay="0">
                                     <ul role="tablist" class="nav flex-column dashboard-list">
+
+
                                         <li><a href="#dashboard" data-bs-toggle="tab"
                                                 class="nav-link active">Dashboard</a></li>
                                                 <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
-                                                <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a> -->
-                                                </li>
+                                                <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a></li> -->
                                                 <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
-                                                <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account
-                                                    details</a>
-                                                </li>
-                                                <li> <a href="#coupon" data-bs-toggle="tab" class="nav-link">coupon</a></li>
-                                        <li><a onclick="logout()" class="nav-link">logout</a></li>
+                                                <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a></li>
+                                                <li> <a href="#coupon" data-bs-toggle="tab" class="nav-link">Coupons</a></li>
+                                                <li> <a href="#wallet" data-bs-toggle="tab" class="nav-link">wallet</a></li>
+                                        <li><a onclick="logout()" class="nav-link">Logout</a></li>
+
+
                                     </ul>
                                 </div>
                             </div>
@@ -404,6 +406,26 @@
 
                                         </div>
                                     </div>
+
+
+                                    <div class="tab-pane" id="wallet">
+                                        <h4>Wallet Balance</h4>
+                                        <div class="row mt-3">
+
+
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card p-3">
+                                                    <h1 style="font-family: sans-serif;">₹<%= userDetails.balance %></h1>
+                                                    <hr>
+                                                    <a href="/wallet">view history</a>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

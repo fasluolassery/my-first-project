@@ -1,0 +1,328 @@
+<%- include('../layout/userMeta.ejs') %>
+    </head>
+
+    <body>
+        <div class="main-wrapper">
+            <%- include('../layout/userHead.ejs') %>
+                <!-- offcanvas overlay start -->
+                <div class="offcanvas-overlay"></div>
+                <!-- offcanvas overlay end -->
+
+                <!-- OffCanvas Menu Start -->
+               
+                <!-- OffCanvas Menu End -->
+                <!-- breadcrumb-area start -->
+                <div class="breadcrumb-area">
+                    <div class="container">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-12 text-center">
+                                <h2 class="breadcrumb-title">Wallet History</h2>
+                                <!-- breadcrumb-list start -->
+                                <ul class="breadcrumb-list">
+                                    <!-- <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Wishlist</li> -->
+                                </ul>
+                                <!-- breadcrumb-list end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- breadcrumb-area end -->
+                <!-- Wishlist Area Start -->
+                <div class="cart-main-area pt-100px pb-100px">
+                    <div class="container">
+                        <h3 class="cart-page-title">Your Balance: <%= user.balance %></h3>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <form action="#">
+                                    <div class="table-content table-responsive cart-table-content">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th>Amount</th>
+                                                    <!-- <th>Qty</th> -->
+                                                    <th>Type</th>
+                                                    <!-- <th>Action</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (typeof transactions !='undefined' ) { %>
+                                                    <% transactions.forEach(val=> { %>
+                                                        <tr>
+                                                            <!-- <td class="product-thumbnail">
+                                                                <a href="#"><img class="img-responsive ml-15px"
+                                                                        src="<%= val %>" alt="" /></a>
+                                                            </td> -->
+                                                            <td class="product-name"><a href="#"><%= val.createdAt.toLocaleDateString('en-GB') %> </a></td>
+                                                            <td class="product-price-cart">
+                                                                <span class="amount">
+                                                                    <% 
+                                                                        let timeString = val.createdAt.toLocaleTimeString('en-GB', {
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit',
+                                                                            second: undefined,
+                                                                            hour12: true
+                                                                        });
+                                                                        // Adjust for midnight and noon
+                                                                        if (timeString.startsWith('00')) {
+                                                                            timeString = timeString.replace('00', '12');
+                                                                        }
+                                                                    %>
+                                                                    <%= timeString %>
+                                                                </span>
+                                                            </td>
+                                                            <td class="product-name"><a href style="font-family: sans-serif;">₹<%= val.amount %></a></td>
+                                                            <td class="product-name"><a href="#"><%= val.type%> </a></td>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } %>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Wishlist Area End -->
+                <!-- Footer Area Start -->
+                <div class="footer-area">
+                    <div class="footer-container">
+                        <div class="footer-top">
+                            <div class="container">
+                                <div class="row">
+                                    <!-- Start single blog -->
+                                    <div class="col-md-6 col-lg-3 mb-md-30px mb-lm-30px">
+                                        <div class="single-wedge">
+                                            <div class="footer-logo">
+                                                <a href="index.html"><img src="assets/images/logo/footer-logo.png"
+                                                        alt=""></a>
+                                            </div>
+                                            <p class="about-text">Lorem ipsum dolor sit amet consl adipisi elit, sed do
+                                                eiusmod templ incididunt ut labore
+                                            </p>
+                                            <ul class="link-follow">
+                                                <li>
+                                                    <a class="m-0" title="Twitter" target="_blank"
+                                                        rel="noopener noreferrer" href="#"><i class="fa fa-facebook"
+                                                            aria-hidden="true"></i></a>
+                                                </li>
+                                                <li>
+                                                    <a title="Tumblr" target="_blank" rel="noopener noreferrer"
+                                                        href="#"><i class="fa fa-tumblr" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a title="Facebook" target="_blank" rel="noopener noreferrer"
+                                                        href="#"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a title="Instagram" target="_blank" rel="noopener noreferrer"
+                                                        href="#"><i class="fa fa-instagram" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- End single blog -->
+                                    <!-- Start single blog -->
+                                    <div class="col-md-6 col-lg-3 col-sm-6 mb-lm-30px pl-lg-60px">
+                                        <div class="single-wedge">
+                                            <h4 class="footer-herading">Services</h4>
+                                            <div class="footer-links">
+                                                <div class="footer-row">
+                                                    <ul class="align-items-center">
+                                                        <li class="li"><a class="single-link" href="my-account.html">My
+                                                                Account</a></li>
+                                                        <li class="li"><a class="single-link"
+                                                                href="contact.html">Contact</a></li>
+                                                        <li class="li"><a class="single-link" href="cart.html">Shopping
+                                                                cart</a></li>
+                                                        <li class="li"><a class="single-link"
+                                                                href="shop-left-sidebar.html">Shop</a></li>
+                                                        <li class="li"><a class="single-link" href="login.html">Services
+                                                                Login</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End single blog -->
+                                    <!-- Start single blog -->
+                                    <div class="col-md-6 col-lg-3 col-sm-6 mb-lm-30px pl-lg-40px">
+                                        <div class="single-wedge">
+                                            <h4 class="footer-herading">My Account</h4>
+                                            <div class="footer-links">
+                                                <div class="footer-row">
+                                                    <ul class="align-items-center">
+                                                        <li class="li"><a class="single-link" href="my-account.html">My
+                                                                Account</a></li>
+                                                        <li class="li"><a class="single-link"
+                                                                href="contact.html">Contact</a></li>
+                                                        <li class="li"><a class="single-link" href="cart.html">Shopping
+                                                                cart</a></li>
+                                                        <li class="li"><a class="single-link"
+                                                                href="shop-left-sidebar.html">Shop</a></li>
+                                                        <li class="li"><a class="single-link" href="login.html">Services
+                                                                Login</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End single blog -->
+                                    <!-- Start single blog -->
+                                    <div class="col-md-6 col-lg-3 col-sm-12">
+                                        <div class="single-wedge">
+                                            <h4 class="footer-herading">Contact Info</h4>
+                                            <div class="footer-links">
+                                                <!-- News letter area -->
+                                                <p class="address">Address: Your Address Goes Here.</p>
+                                                <p class="phone">Phone/Fax:<a href="tel:0123456789"> 0123456789</a></p>
+                                                <p class="mail">Email:<a href="mailto:demo@example.com">
+                                                        demo@example.com</a></p>
+                                                <p class="mail"><a href="https://demo@example.com/">
+                                                        demo@example.com</a></p>
+                                                <!-- News letter area  End -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End single blog -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-bottom">
+                            <div class="container">
+                                <div class="line-shape-top line-height-1">
+                                    <div class="row flex-md-row-reverse align-items-center">
+                                        <div class="col-md-6 text-center text-md-end">
+                                            <div class="payment-mth"><a href="#"><img class="img img-fluid"
+                                                        src="assets/images/icons/payment.png" alt="payment-image"></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-center text-md-start">
+                                            <p class="copy-text"> © 2022 <strong>Hmart</strong> Made With <i
+                                                    class="fa fa-heart" aria-hidden="true"></i> By <a
+                                                    class="company-name"
+                                                    href="https://themeforest.net/user/codecarnival/portfolio">
+                                                    <strong> Codecarnival </strong></a>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer Area End -->
+        </div>
+        <!-- Global Vendor, plugins JS -->
+        <!-- JS Files
+    ============================================ -->
+        <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendor/jquery-migrate-3.3.2.min.js"></script>
+        <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
+        <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+        <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+        <script src="assets/js/plugins/scrollUp.js"></script>
+        <script src="assets/js/plugins/venobox.min.js"></script>
+        <script src="assets/js/plugins/jquery-ui.min.js"></script>
+        <script src="assets/js/plugins/mailchimp-ajax.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <!-- Minify Version -->
+        <!-- <script src="assets/js/vendor.min.js"></script>
+    <script src="assets/js/plugins.min.js"></script>
+    <script src="assets/js/main.min.js"></script> -->
+
+        <!--Main JS (Common Activation Codes)-->
+        <script src="assets/js/main.js"></script>
+        <script>
+
+            function addToCart(productId, event) {
+                event.preventDefault();
+
+                axios.post('/addtocart', { productId: productId })
+                    .then(res => {
+                        if (res.data.status === 1) {
+                            Swal.fire({
+                                title: "<span style='color: black;'>You're not logged in</span>",
+                                text: "Please login to continue.",
+                                confirmButtonColor: '#266bf9',
+                                confirmButtonText: "Login",
+                                showCancelButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/login';
+                                }
+                            });
+                        } else if (res.data.status === 3) {
+                            Swal.fire({
+                                title: "<span style='color: black;'>🛒 <hr> Product Already in Your Cart</span>",
+                                text: "Feel free to adjust the quantity in your cart if you'd like more.",
+                                confirmButtonColor: '#266bf9',
+                                confirmButtonText: "ok",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // window.location.href = '/login';
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                // title: "<span style='color: black;'>Product Added To Your Cart</span>",
+                                text: "Product Added To Your Cart",
+                                confirmButtonColor: '#266bf9',
+                                confirmButtonText: "ok",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // window.location.href = '/login';
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+
+            function wishlistRemove(productId, event) {
+                event.preventDefault();
+
+                Swal.fire({
+                    icon: "question",
+                    title: "<span style='color: black;'>Are you sure?</span>",
+                    // text: "Verification email sent! Kindly check your inbox.",
+                    // showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonColor: '#0056b3',
+                    confirmButtonText: 'Yes',
+                    // denyButtonText: `Don't save`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.post('/removeFromWishlist', { productId: productId })
+                            .then(res => {
+                                if (res.data.status === 7) {
+                                    window.location.reload()
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err)
+                            })
+                    }
+                })
+
+
+            }
+        </script>
+    </body>
+
+
+    <!-- Mirrored from htmldemo.net/hmart/hmart/wishlist.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 May 2024 11:06:54 GMT -->
+
+    </html>
