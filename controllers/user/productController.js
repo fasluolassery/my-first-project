@@ -77,6 +77,55 @@ const sortProducts = async (req, res, next) => {
     }
 }
 
+const combinedController = async (req, res, next) => {
+    try {
+        const { value, category, index } = req.body;
+
+        console.log(req.body)
+
+        let query = {};
+
+        // Search by value
+        if (value && value.length > 0) {
+            query.productName = new RegExp(value, 'i');
+        }
+
+        // Filter by category
+        if (category) {
+            query.category = category;
+        }
+
+        let findProducts = Product.find(query);
+
+        // Sort products
+        if (index) {
+            switch (index) {
+                case 1:
+                    findProducts = findProducts.sort({ productName: 1 });
+                    break;
+                case 2:
+                    findProducts = findProducts.sort({ productName: -1 });
+                    break;
+                case 3:
+                    findProducts = findProducts.sort({ price: 1 });
+                    break;
+                case 4:
+                    findProducts = findProducts.sort({ price: -1 });
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        const products = await findProducts;
+
+        res.send({ products });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 
 
 module.exports = {
@@ -84,5 +133,5 @@ module.exports = {
     loadProductsUser,
     loadSingleProductUser,
     sortProducts,
-
+    combinedController,
 };

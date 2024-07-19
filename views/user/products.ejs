@@ -70,7 +70,7 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 0, 'Default')">Default</a></li>
+                                                        onclick="sorting(event, 0, 'Default')" >Default</a></li>
                                                 <li><a class="dropdown-item" href="#"
                                                         onclick="sorting(event, 1, 'Name, A to Z')">Name, A to Z</a>
                                                 </li>
@@ -299,6 +299,7 @@
                                                         <span>(<%= categories.length %>)</span> </a></li>
                                                 <% if(categories) { %>
                                                     <% categories.forEach(category=> { %>
+                                                        <input type="hidden" value="<%= category.categoryName %>" id="categoryForFilter">
                                                         <li><a href
                                                                 onclick="filterByCategory(event, '<%= category.categoryName %>')">
                                                                 <%= category.categoryName %>
@@ -762,6 +763,7 @@
                                         <!--Main JS (Common Activation Codes)-->
                                         <script src="assets/js/main.js"></script>
 
+                                        <!-- add to cart -->
                                         <script>
 
                                             function addToCartFromProducts(productId, event) {
@@ -806,6 +808,7 @@
                                             }
                                         </script>
 
+                                        <!-- sorting -->
                                         <script>
                                             function sorting(event, index, text) {
                                                 event.preventDefault();
@@ -814,7 +817,10 @@
                                                 const sortButton = document.getElementById('sortButton');
                                                 sortButton.innerHTML = `${text} <i class="fa fa-angle-down"></i>`;
 
-                                                axios.post('/sortProducts', { index: index })
+                                                const searchInput = document.getElementById('searchInput').value
+                                                const category = document.getElementById('categoryForFilter').value
+
+                                                axios.post('/combined', { index: index, category: category, value: searchInput })
                                                     .then(res => {
                                                         const products = res.data.products;
                                                         updateProductList(products);
@@ -917,16 +923,16 @@
 
                                         </script>
 
+                                        <!-- search -->
                                         <script>
 
                                             document.getElementById('searchInput').addEventListener('input', (event) => {
                                                 event.preventDefault()
 
                                                 const searchInput = document.getElementById('searchInput').value
+                                                const category = document.getElementById('categoryForFilter').value
 
-                                                console.log(searchInput)
-
-                                                axios.post('/search', { value: searchInput })
+                                                axios.post('/combined', { value: searchInput, category: category })
                                                     .then(res => {
                                                         console.log(res.data)
                                                         const products = res.data.products
@@ -939,11 +945,14 @@
                                             })
                                         </script>
 
+                                        <!-- filter -->
                                         <script>
                                             function filterByCategory(event, category) {
                                                 event.preventDefault()
 
-                                                axios.post('/filterByCategory', { category: category })
+                                                const searchInput = document.getElementById('searchInput').value
+
+                                                axios.post('/combined', { category: category, value: searchInput })
                                                     .then(res => {
                                                         const products = res.data.products
                                                         updateProductList(products);
@@ -954,7 +963,7 @@
                                                     })
                                             }
                                         </script>
-
+<!-- wishlist -->
 <script>
     function addToWishlist(productId, event) {
         event.preventDefault();
@@ -999,6 +1008,7 @@
     }
 
 </script>
+
     </body>
 
 
