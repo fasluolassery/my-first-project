@@ -24,7 +24,7 @@ const loadUserAccount = async (req, res, next) => {
             // res.render('user/useraccount', {userDetails: findUserDetails, user: userId, referalLink: referalLink })
             addresses = []
         }else{
-            const addresses = findAddress.addresses
+            addresses = findAddress.addresses
         }
         // console.log(findAddress.addresses)
 

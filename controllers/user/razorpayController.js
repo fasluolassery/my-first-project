@@ -60,10 +60,13 @@ const createOrder = async (req, res, next) => {
         })
         
         let totalAmount = 40
+        let  originalAmount 
         
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
         })
+
+        originalAmount = totalAmount
 
         if (coupon.length > 0) {
             const fetchCoupon = await couponModel.findOne({ code: coupon })
@@ -123,6 +126,7 @@ const createOrder = async (req, res, next) => {
             },
             paymentMethod: 'Razor Pay',
             totalAmount: totalAmount,
+            originalAmount: originalAmount,
             orderStatus: 'Pending'
         })
 

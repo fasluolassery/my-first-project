@@ -10,6 +10,7 @@ const productController = require('../controllers/admin/productController')
 const orderController = require('../controllers/admin/orderController')
 const couponController = require('../controllers/admin/couponController')
 const offerController = require('../controllers/admin/offerController')
+const salesController = require('../controllers/admin/salesController')
 const upload = require('../config/multerConfig')
 
 
@@ -30,6 +31,7 @@ adminRouter.get('/coupons', couponController.loadCoupons)
 adminRouter.get('/createCoupon', couponController.loadCreateCoupon)
 adminRouter.get('/offers', offerController.loadOffers)
 adminRouter.get('/createOffer', offerController.loadCreateOffer)
+adminRouter.get('/salesReport', salesController.loadSalesReport)
 
 
 

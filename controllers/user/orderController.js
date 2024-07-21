@@ -65,10 +65,13 @@ const placeOrder = async (req, res, next) => {
         })
 
         let totalAmount = 40
+        let originalAmount 
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
         })
+
+        originalAmount = totalAmount
 
         if (coupon.length > 0) {
             const fetchCoupon = await couponModel.findOne({ code: coupon })
@@ -118,6 +121,7 @@ const placeOrder = async (req, res, next) => {
             },
             paymentMethod: 'cod',
             totalAmount: totalAmount,
+            originalAmount: originalAmount,
             orderStatus: 'Pending'
         })
 

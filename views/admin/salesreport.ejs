@@ -27,7 +27,7 @@
                             <span class="text">Users</span>
                         </a>
                     </li>
-                    <li class="menu-item active">
+                    <li class="menu-item ">
                         <a class="menu-link" href="/admin/orders">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Orders</span>
@@ -45,7 +45,7 @@
                             <span class="text">Categories</span>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a class="menu-link" href="/admin/salesReport">
                             <i class="icon material-icons md-business"></i>
                             <span class="text">Sales Reports</span>
@@ -97,32 +97,38 @@
             <section class="content-main">
                 <div class="content-header">
                     <div>
-                        <h2 class="content-title card-title">Order List</h2>
+                        <h2 class="content-title card-title">Sales Reports</h2>
                         <p>Lorem ipsum dolor sit amet.</p>
                     </div>
                     <div>
-                        <input type="text" placeholder="Search order ID" class="form-control bg-white" />
+                        <!-- <input type="text" placeholder="Search order ID" class="form-control bg-white" /> -->
                     </div>
                 </div>
                 <div class="card mb-4">
                     <header class="card-header">
                         <div class="row gx-3">
                             <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
+                                <!-- <input type="text" placeholder="Search..." class="form-control" /> -->
+                                <!-- <input type="date" placeholder="Type here" class="form-control" id="endDate"
+                                    value="2024-07-10" /> -->
+                            </div>
+                            <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="startDate">
+
+                                <input type="date" placeholder="Type here" class="form-control" value="2024-07-10" />
+
+                            </div>
+                            <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="endDate">
+
+                                <input type="date" placeholder="Type here" class="form-control" value="2024-07-31" />
+
                             </div>
                             <div class="col-lg-2 col-6 col-md-3">
-                                <select class="form-select">
-                                    <option>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-6 col-md-3">
-                                <select class="form-select">
-                                    <option>Show 20</option>
-                                    <option>Show 30</option>
-                                    <option>Show 40</option>
+                                <select class="form-select" onchange="triggerDateInputs(event)" id="dateInput">
+                                    <option>Select Date</option>
+                                    <option>Daily</option>
+                                    <option>weekly</option>
+                                    <option>Yearly</option>
+                                    <option>Custom</option>
                                 </select>
                             </div>
                         </div>
@@ -137,9 +143,10 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Total</th>
+                                        <th scope="col">Discount</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Date</th>
-                                        <th scope="col" class="text-end">Action</th>
+                                        <th scope="col">Payment</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -183,64 +190,41 @@
                                         </td>
                                     </tr> -->
 
-                                    <% if(typeof orders !='undefined' ) {%>
-                                        <% orders.forEach((order, ind)=> { %>
-                                            <tr>
-                                                <td>
-                                                    <%= ind + 1 %>
-                                                </td>
-                                                <td><b>
-                                                        <%= order.shippingAddress.userName %>
-                                                    </b></td>
-                                                <td>
-                                                    <%= order.shippingAddress.email %>
-                                                </td>
-                                                <td>₹<%= order.totalAmount %>
-                                                </td>
+                                    <% fetchAllOrders.forEach((val, ind)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= ind + 1 %>
+                                            </td>
+                                            <td><b>
+                                                    <%= val.shippingAddress.userName %>
 
-                                                <% if(order.orderStatus=='Processing' ) {%>
-                                                    <td><span class="badge rounded-pill alert-warning"
-                                                            style="height: 20px; width: 65px;">Processing</span></td>
-                                                    <% }else if(order.orderStatus=='Pending' ) {%>
-                                                        <td><span class="badge rounded-pill alert-warning"
-                                                                style="height: 20px; width: 65px;">Pending</span></td>
-                                                        <% }else if(order.orderStatus=='Shipped' ) {%>
-                                                            <td><span class="badge rounded-pill alert-success"
-                                                                    style="height: 20px; width: 65px;">Shipped</span>
-                                                            </td>
-                                                            <% }else if(order.orderStatus=='Delivered' ) {%>
-                                                                <td><span class="badge rounded-pill alert-success"
-                                                                        style="height: 20px; width: 65px;">Delivered</span>
-                                                                </td>
-                                                                <% }else if(order.orderStatus=='Cancelled' ) {%>
-                                                                    <td><span class="badge rounded-pill alert-danger"
-                                                                            style="height: 20px; width: 65px;">Cancelled</span>
-                                                                    </td>
-                                                                    <% }else if(order.orderStatus=='Returned' ) {%>
-                                                                        <td><span
-                                                                                class="badge rounded-pill alert-danger"
-                                                                                style="height: 20px; width: 65px;">Returned</span>
-                                                                        </td>
-                                                                        <% } %>
+                                                </b></td>
+                                            <td>
+                                                <%= val.shippingAddress.email %>
+                                            </td>
 
-                                                                            <td>
-                                                                                <%= order.createdAt.toLocaleDateString('en-GB')
-                                                                                    %>
-                                                                            </td>
-                                                                            <td class="text-end">
-                                                                                <a href="/admin/orderdetails/?orderId=<%= order.id %>"
-                                                                                    class="btn btn-md rounded font-sm me-2">Detail</a>
-                                                                                <button
-                                                                                    class="btn btn-outline-danger btn-sm"
-                                                                                    onclick="cancelOrder(event, '<%= order.id %>')"
-                                                                                    style="height: 37px;">
-                                                                                    <i class="fas fa-times"></i>
-                                                                                </button>
-                                                                                
-                                                                            </td>
-                                            </tr>
-                                            <% }) %>
-                                                <% } %>
+                                            <td>₹<%= val.totalAmount %>
+                                            </td>
+
+                                            <td>₹<%= val.originalAmount - val.totalAmount %>
+                                            </td>
+
+
+                                            <td><span class="badge rounded-pill alert-success"
+                                                    style="height: 20px; width: 65px;">Delivered</span>
+                                            </td>
+
+
+                                            <td>
+                                                <%= val.createdAt.toLocaleDateString('en-Gb') %>
+                                            </td>
+                                            <td>
+                                                <%= val.paymentMethod %>
+
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+
 
                                 </tbody>
                             </table>
@@ -310,50 +294,29 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- trigger dates -->
         <script>
-            function cancelOrder(event, orderId) {
+            function triggerDateInputs(event) {
                 event.preventDefault()
 
-                Swal.fire({
-                    icon: "question",
-                    title: "<span style='color: black;'>Are you sure?</span>",
-                    // text:  "<span style='color: #3BB77E;'>Success!</span>",
-                    html: "<span style='color: black;'>Are you sure to cancel the order?</span>",
-                    // showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonColor: '#3BB77E',
-                    confirmButtonText: 'Yes',
-                    // denyButtonText: `Don't save`
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
+                const input = document.getElementById('dateInput').value
+                if (input == 'Custom') {
 
-                        axios.post('/admin/cancelOrder', { orderId: orderId })
-                            .then(res => {
-                                if (res.data.success) {
-                                    Swal.fire({
-                                        title: "<span style='color: #3BB77E;'>Success!</span>",
-                                        html: "<span style='color: black;'>Order cancelled successfully.</span>",
-                                        icon: "success",
-                                        confirmButtonColor: "#3BB77E", // Bootstrap's success color
-                                        confirmButtonText: "OK"
-                                    }).then(result => {
-                                        if(result.isConfirmed){
-                                            window.location.reload()
-                                        }
-                                    })
-                                }
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
+                    document.getElementById('startDate').style.display = 'block'
+                    document.getElementById('endDate').style.display = 'block'
 
-                    }
-                })
+                }else{
 
+                    document.getElementById('startDate').style.display = 'none'
+                    document.getElementById('endDate').style.display = 'none'
+
+                }
+
+                
 
             }
         </script>
+
 
     </body>
 

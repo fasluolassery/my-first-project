@@ -34,6 +34,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {type: String},
     totalAmount: {type: Number, required: true},
+    originalAmount: {type: Number, required: true},
     orderStatus: {type: String, required: true},
     createdAt: {
         type: Date,
