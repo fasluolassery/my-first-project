@@ -42,7 +42,8 @@ const productSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    offers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'offer' }]
 })
 
 const Products = mongoose.model('products', productSchema)

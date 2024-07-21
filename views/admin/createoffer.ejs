@@ -1,0 +1,354 @@
+<%- include('../layout/adminhead.ejs') %>
+    </head>
+
+    <body class="dark">
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="index.html" class="brand-wrap">
+                    <img src="assets/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" />
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i
+                            class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item ">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text">Users</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/products">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Products</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-category"></i>
+                            <span class="text">Categories</span>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item">
+                        <a class="menu-link" href="/admin/brands">
+                            <i class="icon material-icons md-business"></i>
+                            <span class="text">Brands</span>
+                        </a>
+                    </li> -->
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/offers">
+                            <i class="icon material-icons md-local_offer"></i>
+                            <span class="text">Offers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/coupons">
+                            <i class="icon material-icons md-card_giftcard"></i>
+                            <span class="text">coupons</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            <header class="main-header navbar">
+                <div class="col-search">
+                    <form class="searchform">
+                        <div class="input-group">
+                            <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
+                            <button class="btn btn-light bg" type="button"><i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                        <datalist id="search_terms">
+                            <option value="Products"></option>
+                            <option value="New orders"></option>
+                            <option value="Apple iphone"></option>
+                            <option value="Ahmed Hassan"></option>
+                        </datalist>
+                    </form>
+                </div>
+                <div class="col-nav">
+                    <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i
+                            class="material-icons md-apps"></i></button>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link btn-icon darkmode" href="#"> <i
+                                    class="material-icons md-nights_stay"></i> </a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Offers</h2>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up"
+                                    onclick="createOffer(event)">Create</button>
+                                <a href="/admin/offers"><button
+                                        class="btn btn-light rounded font-sm mr-5 text-body hover-up">Cancel</button></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <label for="offer-type" class="form-label">Offer Type</label>
+                                        <select id="offer-type" class="form-control">
+                                            <option value="product">Product Offer</option>
+                                            <option value="category">Category Offer</option>
+                                            <!-- <option value="referral">Referral Offer</option> -->
+                                        </select>
+                                        <!-- <div id="errmsgName" class="text-danger"></div> -->
+                                    </div>
+                                    <div class="row gx-3">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_sku" class="form-label">discount amount</label>
+                                            <input type="number" placeholder="Type here" class="form-control"
+                                                id="offerAmount" value="1500" />
+                                            <div id="errmsgAmount" class="text-danger"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_color" class="form-label">start date</label>
+                                            <input type="date" placeholder="Type here" class="form-control"
+                                                id="startDate" value="2024-07-09" />
+                                            <div id="errmsgStartDate" class="text-danger"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product_size" class="form-label">end date</label>
+                                            <input type="date" placeholder="Type here" class="form-control" id="endDate"
+                                                value="2024-07-10" />
+                                            <div id="errmsgEndDate" class="text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4" id="pro"> 
+                                        <label for="products" class="form-label">select product</label>
+                                        <select id="products" class="form-control">
+                                            <% if(products.length > 0) {%>
+                                                <% products.forEach(val => { %>
+                                            <option value="<%= val.id %>" id="productId"><%= val.productName %> </option>
+                                            <% }) %>
+                                            <% } %>
+                                            <!-- <option value="product two">product two</option>
+                                            <option value="product three">product three</option> -->
+                                            <!-- <option value="category">Category Offer</option> -->
+                                            <!-- <option value="referral">Referral Offer</option> -->
+                                        </select>
+                                        <!-- <div id="errmsgName" class="text-danger"></div> -->
+                                    </div>
+                                    
+                                    <div class="mb-4" id="cate" style="display: none;"> 
+                                        <label for="category" class="form-label">select category</label>
+                                        <select id="category" class="form-control">
+
+                                            <% if(categories.length > 0) {%>
+                                                <% categories.forEach(val => { %>
+                                            <option value="<%= val.id %>"><%= val.categoryName %> </option>
+                                            <% }) %>
+                                            <% } %>
+                                            
+                                        </select>
+                                        <!-- <div id="errmsgName" class="text-danger"></div> -->
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!-- card end// -->
+                            <!-- <div class="card mb-4">
+                                <div class="card-body">
+                                    <div>
+                                        <label class="form-label">Description</label>
+                                        <div id="errmsgDescription" class="text-danger"></div>
+                                        <textarea placeholder="Type here" class="form-control" rows="4"
+                                            id="description">hello world</textarea>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- change offer type -->
+        <script>
+            document.getElementById('offer-type').addEventListener('change', () => {
+                const type = document.getElementById('offer-type')
+                const cate = document.getElementById('cate')
+                const pro = document.getElementById('pro')
+
+                console.log(type)
+
+                if(type.value == 'category'){
+                    cate.style.display = 'block'
+                    pro.style.display = 'none'
+
+                }else{
+                    pro.style.display = 'block'
+                    cate.style.display = 'none'
+
+                }
+            })
+        </script>
+
+        <!-- creat offer -->
+        <script>
+            function createOffer(event){
+                event.preventDefault()
+
+                if (!validateOffer()) {
+                    return console.log("*validation Error")
+                }
+
+                const offerType = document.getElementById('offer-type').value
+                const discount = document.getElementById('offerAmount').value
+                const startDate = document.getElementById('startDate').value
+                const endDate = document.getElementById('endDate').value
+                const productId = document.getElementById('productId').value
+                const categoryId = document.getElementById('category').value
+
+                const offerData = {
+                    offerType,
+                    discount,
+                    startDate,
+                    endDate,
+                    productId,
+                    categoryId
+                }
+
+                axios.post('/admin/createOffer', offerData)
+                    .then(res => {
+                        if (res.data.error) {
+                            displayErrorName("*this offer already exists")
+                        } else if (res.data.success) {
+                            Swal.fire({
+                                title: "<span style='color: #3BB77E;'>Success!</span>",
+                                html: "<span style='color: black;'>Added new Offer.</span>",
+                                icon: "success",
+                                confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                confirmButtonText: "OK"
+                            }).then(result => {
+                                if(result.isConfirmed){
+                                    window.location.href = '/admin/offers'
+                                }
+                            })
+                            
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+            }
+        </script>
+
+        <!-- validations -->
+        <script>
+            function validateOffer(){
+                const offerType = document.getElementById('offer-type').value
+                const discountAmount = document.getElementById('offerAmount').value
+                const startDate = document.getElementById('startDate').value
+                const endDate = document.getElementById('endDate').value
+                const product = document.getElementById('productId').value
+                const category = document.getElementById('category').value
+
+                document.getElementById('errmsgAmount').innerHTML = '';
+                document.getElementById('errmsgStartDate').innerHTML = '';
+                document.getElementById('errmsgEndDate').innerHTML = '';
+
+                var minPrice = 100;
+                var maxPrice = 8000;
+
+                if (discountAmount === '') {
+                    displayErrorAmount('*price is required.')
+                    return false;
+                } else if (isNaN(discountAmount) || discountAmount <= 0) {
+                    displayErrorAmount('*price must be a positive number.')
+                    return false;
+                }
+
+                let dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+
+                if (!dateFormat.test(startDate)) {
+                    displayErrorStDate('*Invalid date')
+                    return false
+                }
+                if (!dateFormat.test(endDate)) {
+                    displayErrorEndDate('*Invalid date')
+                    return false
+                }
+
+                return true
+            }
+
+            function displayErrorAmount(errorMessage) {
+                const errorDiv = document.getElementById('errmsgAmount');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorStDate(errorMessage) {
+                const errorDiv = document.getElementById('errmsgStartDate');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorEndDate(errorMessage) {
+                const errorDiv = document.getElementById('errmsgEndDate');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            document.getElementById('offerAmount').addEventListener('input', validateOffer)
+            document.getElementById('startDate').addEventListener('input', validateOffer)
+            document.getElementById('endDate').addEventListener('input', validateOffer)
+
+
+        </script>
+
+        
+    </body>
+
+    </html>

@@ -9,6 +9,7 @@ const categoryController = require('../controllers/admin/categoryController')
 const productController = require('../controllers/admin/productController')
 const orderController = require('../controllers/admin/orderController')
 const couponController = require('../controllers/admin/couponController')
+const offerController = require('../controllers/admin/offerController')
 const upload = require('../config/multerConfig')
 
 
@@ -27,6 +28,8 @@ adminRouter.get('/orderview', orderController.loadOrderView)
 adminRouter.get('/orderdetails', orderController.loadOrderDetails)
 adminRouter.get('/coupons', couponController.loadCoupons)
 adminRouter.get('/createCoupon', couponController.loadCreateCoupon)
+adminRouter.get('/offers', offerController.loadOffers)
+adminRouter.get('/createOffer', offerController.loadCreateOffer)
 
 
 
@@ -44,6 +47,7 @@ adminRouter.post('/changeProductStatus', orderController.changeProductStatus)
 adminRouter.post('/cancelOrder', orderController.cancelOrders)
 adminRouter.post('/createCoupon', couponController.createCoupon)
 adminRouter.post('/deleteCoupon', couponController.deleteCoupon)
+adminRouter.post('/createOffer', offerController.createOffer)
 
 
 
