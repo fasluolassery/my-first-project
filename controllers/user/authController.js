@@ -5,7 +5,10 @@ const Otp = require('../../models/otpModel');
 
 const loadRegister = async (req, res, next) => {
     try {
-        res.render('user/registerpage');
+
+        const { reff } = req.query
+
+        res.render('user/registerpage', { reff: reff});
     } catch (error) {
         next(error)
     }
@@ -13,14 +16,13 @@ const loadRegister = async (req, res, next) => {
 
 const userRegisterDetails = async (req, res, next) => {
     try {
-
         const validationErrors = validationResult(req)
 
         if (!validationErrors.isEmpty()) {
             return console.log('error', validationErrors.array())
         }
 
-        const { userName, userEmail, userPassword, userPhone } = req.body
+        const { userName, userEmail, userPassword, userPhone, refId } = req.body
 
         const existingUser = await User.findOne({ email: userEmail })
 
@@ -35,7 +37,8 @@ const userRegisterDetails = async (req, res, next) => {
             username: userName,
             email: userEmail,
             phone: userPhone,
-            password: hashedPassword
+            password: hashedPassword,
+            refId: refId
         }
 
         req.session.userData = user

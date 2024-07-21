@@ -6,6 +6,7 @@ const productModel = require('../../models/productModel')
 const couponModel = require('../../models/couponModel')
 const categoryModel = require('../../models/categoryModel')
 
+
 const loadUserAccount = async (req, res, next) => {
     try {
 
@@ -13,18 +14,25 @@ const loadUserAccount = async (req, res, next) => {
 
         const findUserDetails = await User.findOne({ _id: userId })
 
+        let referalLink = 'localhost:7777/login/?reff=' + userId
+
         const findAddress = await addressModel.findOne({ userId: userId })
+
+        let addresses
+
         if(!findAddress){
-            res.render('user/useraccount', {userDetails: findUserDetails, user: userId })
+            // res.render('user/useraccount', {userDetails: findUserDetails, user: userId, referalLink: referalLink })
+            addresses = []
+        }else{
+            const addresses = findAddress.addresses
         }
         // console.log(findAddress.addresses)
-        const addresses = findAddress.addresses
 
         const findOrders = await orderModel.find({ user: userId})
 
         const findCoupons = await couponModel.find()
 
-        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses, orders: findOrders, coupons: findCoupons })
+        res.render('user/useraccount', { userDetails: findUserDetails, user: userId, addresses: addresses, orders: findOrders, coupons: findCoupons, referalLink: referalLink })
     } catch (error) {
         next(error)
     }

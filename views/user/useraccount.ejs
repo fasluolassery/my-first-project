@@ -143,12 +143,15 @@
 
                                         <li><a href="#dashboard" data-bs-toggle="tab"
                                                 class="nav-link active">Dashboard</a></li>
-                                                <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
-                                                <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a></li> -->
-                                                <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
-                                                <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account details</a></li>
-                                                <li> <a href="#coupon" data-bs-toggle="tab" class="nav-link">Coupons</a></li>
-                                                <li> <a href="#wallet" data-bs-toggle="tab" class="nav-link">wallet</a></li>
+                                        <li> <a href="#orders" data-bs-toggle="tab" class="nav-link">Orders</a></li>
+                                        <!-- <li><a href="#downloads" data-bs-toggle="tab" class="nav-link">Downloads</a></li> -->
+                                        <li><a href="#address" data-bs-toggle="tab" class="nav-link">Addresses</a></li>
+                                        <li><a href="#account-details" data-bs-toggle="tab" class="nav-link">Account
+                                                details</a></li>
+                                        <li><a href="#referAndEarn" data-bs-toggle="tab" class="nav-link">Refer &
+                                                Earn</a></li>
+                                        <li> <a href="#coupon" data-bs-toggle="tab" class="nav-link">Coupons</a></li>
+                                        <li> <a href="#wallet" data-bs-toggle="tab" class="nav-link">wallet</a></li>
                                         <li><a onclick="logout()" class="nav-link">Logout</a></li>
 
 
@@ -199,18 +202,27 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% if(typeof orders != 'undefined') {%>
-                                                        <% orders.forEach((val, ind) => { %>
-                                                    <tr>
-                                                        <td><%= ind + 1 %></td>
-                                                        <td><%= val.createdAt.toLocaleDateString('en-GB') %></td>
-                                                        <td><span class="success"><%= val.orderStatus %></span></td>
-                                                        <td style="font-family: sans-serif;">₹<%= val.totalAmount %></td>
-                                                        <td><a href="/orderDetails/?orderId=<%= val.id %>" class="view">view</a></td>
-                                                    </tr>
-                                                    <% }) %>
-                                                    <% } %>
-                                                    <!-- <tr>
+                                                    <% if(typeof orders !='undefined' ) {%>
+                                                        <% orders.forEach((val, ind)=> { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= ind + 1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= val.createdAt.toLocaleDateString('en-GB') %>
+                                                                </td>
+                                                                <td><span class="success">
+                                                                        <%= val.orderStatus %>
+                                                                    </span></td>
+                                                                <td style="font-family: sans-serif;">₹<%=
+                                                                        val.totalAmount %>
+                                                                </td>
+                                                                <td><a href="/orderDetails/?orderId=<%= val.id %>"
+                                                                        class="view">view</a></td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } %>
+                                                                    <!-- <tr>
                                                         <td>2</td>
                                                         <td>May 10, 2018</td>
                                                         <td>Processing</td>
@@ -219,7 +231,7 @@
                                                     </tr> -->
                                                 </tbody>
                                             </table>
-                                            
+
                                         </div>
                                     </div>
                                     <!-- <div class="tab-pane fade" id="downloads">
@@ -375,15 +387,17 @@
                                                 <% coupons.forEach((val, index)=> { %>
                                                     <div class="col-md-6 col-lg-4 mb-3">
                                                         <div class="card p-3 position-relative">
-                                                            
 
-                                                            
+
+
                                                             <address>
                                                                 <span><strong>Coupon name:</strong>
                                                                     <%= val.name %>
                                                                 </span><br>
-                                                                <span><strong >code:</strong>
-                                                                    <a id="couponCode<%= val.id %>"><%= val.code %></a>
+                                                                <span><strong>code:</strong>
+                                                                    <a id="couponCode<%= val.id %>">
+                                                                        <%= val.code %>
+                                                                    </a>
                                                                 </span><br>
                                                                 <span><strong>end Date:</strong>
                                                                     <%= val.endDate.toLocaleDateString('en-GB') %>
@@ -394,9 +408,10 @@
                                                                 <span><strong>description:</strong>
                                                                     <%= val.description %>
                                                                 </span><br>
-                                                                <a onclick="copyCode(event, '<%= val.id %>')" href>Copy Code</a>
+                                                                <a onclick="copyCode(event, '<%= val.id %>')" href>Copy
+                                                                    Code</a>
                                                             </address>
-                                                            
+
                                                         </div>
                                                     </div>
                                                     <% }) %>
@@ -415,7 +430,8 @@
 
                                             <div class="col-md-6 mb-3">
                                                 <div class="card p-3">
-                                                    <h1 style="font-family: sans-serif;">₹<%= userDetails.balance %></h1>
+                                                    <h1 style="font-family: sans-serif;">₹<%= userDetails.balance %>
+                                                    </h1>
                                                     <hr>
                                                     <a href="/wallet">view history</a>
                                                 </div>
@@ -425,6 +441,27 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="tab-pane" id="referAndEarn">
+                                        <h4>Refer & Earn</h4>
+                                        <div class="row mt-3">
+
+
+                                            <div class="col-md-12 mb-3">
+                                                <div class="card p-3">
+
+                                                    <input type="hidden" value="<%= referalLink %>" id="referalLink">
+                                                    <h5 id="inputForRef"> <a href onclick="generateRefLink(event)">Click here</a> to
+                                                        generate your referral link!</h5>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+
 
                                 </div>
                             </div>
@@ -1196,27 +1233,27 @@
                     }
 
                     axios.post('/editAddress', addressData)
-                    .then(res => {
-                        if(res.data.success){
-                            Swal.fire({
-                                icon: "success",
-                                title: "address edited",
-                                text: "",
-                                // showDenyButton: true,
-                                // showCancelButton: true,
-                                confirmButtonColor: '#0056b3',
-                                confirmButtonText: "Ok",
-                                // denyButtonText: `Don't save`
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.reload()
-                                }
-                            })
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                        .then(res => {
+                            if (res.data.success) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "address edited",
+                                    text: "",
+                                    // showDenyButton: true,
+                                    // showCancelButton: true,
+                                    confirmButtonColor: '#0056b3',
+                                    confirmButtonText: "Ok",
+                                    // denyButtonText: `Don't save`
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.reload()
+                                    }
+                                })
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
 
                 })
 
@@ -1225,7 +1262,7 @@
 
         <!-- copy code -->
         <script>
-            function copyCode(event, couponId){
+            function copyCode(event, couponId) {
                 event.preventDefault()
 
                 const couponCode = document.getElementById(`couponCode${couponId}`).innerText
@@ -1241,6 +1278,36 @@
             }
         </script>
 
+        <!-- copy link -->
+        <script>
+            function copyLink(event){
+
+                event.preventDefault()
+                const referalLink = document.getElementById('referalLink').value
+
+
+                let tempInput = document.createElement('input')
+                tempInput.value = referalLink
+                document.body.appendChild(tempInput)
+
+                tempInput.select()
+                document.execCommand('copy')
+
+                document.body.removeChild(tempInput)
+
+            }
+        </script>
+        
+        <!-- generate link -->
+        <script>
+            function generateRefLink(event) {
+                event.preventDefault()
+
+                const referalLink = document.getElementById('referalLink').value
+                const inputForRef = document.getElementById('inputForRef').innerHTML = `<p>${referalLink}</p> <hr>  <a onclick="copyLink(event)" href >copy link</a>`
+                
+            }
+        </script>
 
     </body>
 

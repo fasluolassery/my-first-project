@@ -27,7 +27,14 @@
                     <div class="container">
                         <div class="row align-items-center justify-content-center">
                             <div class="col-12 text-center">
-                                <h2 class="breadcrumb-title">Login</h2>
+                                <% if(typeof reff != 'undefined') {%>
+                                    
+                                    <h2 class="breadcrumb-title">Register</h2>
+                                    <input type="hidden" value="<%= reff %>" id="reffId">
+
+                                    <% }else{%>
+                                        <h2 class="breadcrumb-title">Login</h2>
+                                    <% }  %>
                             </div>
                         </div>
                     </div>
@@ -39,97 +46,149 @@
                         <div class="row">
                             <div class="col-lg-7 col-md-12 ml-auto mr-auto">
                                 <div class="login-register-wrapper">
+                                    <% if(typeof reff != 'undefined') {%>
+                                    
                                     <div class="login-register-tab-list nav">
-                                        <a class="active" data-bs-toggle="tab" href="#lg1">
+                                        <!-- <a class="active" data-bs-toggle="tab" href="#lg1">
                                             <h4>Login</h4>
-                                        </a>
-                                        <a data-bs-toggle="tab" href="#lg2">
+                                        </a> -->
+                                        <a >
                                             <h4>Register</h4>
                                         </a>
                                     </div>
+                                    <% }else{%>
+                                        <div class="login-register-tab-list nav">
+                                            <a class="active" data-bs-toggle="tab" href="#lg1">
+                                                <h4>Login</h4>
+                                            </a>
+                                            <a data-bs-toggle="tab" href="#lg2">
+                                                <h4>Register</h4>
+                                            </a>
+                                        </div>
+                                    <% }  %>
 
+
+                                    
                                     <div class="tab-content">
-                                        <div id="lg1" class="tab-pane active">
-                                            <div class="login-form-container">
-                                                <div class="login-register-form">
-                                                    <form action="/" method="post" id="userLogin">
-                                                        <div class="text-danger" id="sessionError">
-                                                            <%= typeof error !== 'undefined' ? error : '' %>
-                                                        </div>                                                        
-                                                        <div id="errorMessagesLoginEmail" class="text-danger"></div>
-                                                        <input type="email" name="usernamelogin" class="form-control"
-                                                            placeholder="Email" id="userMailLogin" required value="kuttippaone@gmail.com"/>
-                                                        <div id="errorMessagesLoginPassword" class="text-danger"></div>
-                                                        <input type="password" name="userpasswordlogin"
-                                                            placeholder="Password" id="userPasswordLogin" required value="kuttippa"/>
-                                                        <div class="button-box">
-                                                            <div class="login-toggle-btn">
 
-                                                                <a href="#">Forgot Password?</a>
+                                        <% if(typeof reff != 'undefined') {%>
+                                    
+                                            <div >
+                                                <div class="login-form-container">
+                                                    <div class="login-register-form">
+                                                        <form action="/register" method="post" id="userRegister">
+                                                            <div id="errorMessagesName" class="text-danger"></div>
+                                                            <input type="text" id="userName" name="userName"
+                                                                placeholder="Name" required  value="username"/>
+                                                            <div id="errorMessagesMail" class="text-danger"></div>
+                                                            <input name="userEmail" id="userEmail" placeholder="Email"
+                                                                type="email" required />
+                                                            <div id="errorMessagesPhone" class="text-danger"></div>
+                                                            <input type="tel" name="userPhone" id="userPhone"
+                                                                placeholder="Phone" required value="1234567890"/>
+                                                            <div id="errorMessagesPassword" class="text-danger"></div>
+                                                            <input type="password" name="userPassword" id="userPassword"
+                                                                placeholder="Password" required value="kuttippa"/>
+                                                            <!-- <div class="google-signin-container">
+                                                                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                                                                    data-context="signup" data-ux_mode="popup"
+                                                                    data-auto_prompt="false">
+                                                                </div>
+                                                                <div class="g_id_signin" data-type="standard"></div>
+                                                            </div> -->
+                                                            <div class="button-box">
+                                                                <div class="login-toggle-btn">
+    
+                                                                    <!-- <a href="#">Forgot Password?</a> -->
+                                                                </div>
+                                                                <button type="submit"
+                                                                    onclick="userValidateForm()"><span>Register</span></button>
                                                             </div>
-                                                            <button type="submit" class="mb-4"
-                                                                onclick="userValidateFormLogin()"><span>Login</span></button>
-                                                        </div>
-                                                    </form>
-
-                                                    <!-- <div class="google-signin-container">
-                                                        <div id="g_id_onload" href="/auth/google" data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                                                            data-context="signup" data-ux_mode="popup"
-                                                            data-auto_prompt="false">
-                                                        </div>
-                                                        <div class="g_id_signin" data-type="standard"></div>
-                                                    </div> -->
-                                                    <a href="/auth/google"><button class="google-button">
-                                                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" class="google-logo">
-                                                        Sign in with Google
-                                                    </button></a>
-
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div id="lg2" class="tab-pane">
-                                            <div class="login-form-container">
-                                                <div class="login-register-form">
-
-                                                    <form action="/register" method="post" id="userRegister">
-                                                        <div id="errorMessagesName" class="text-danger"></div>
-                                                        <input type="text" id="userName" name="userName"
-                                                            placeholder="Name" required  value="username"/>
-                                                        <div id="errorMessagesMail" class="text-danger"></div>
-                                                        <input name="userEmail" id="userEmail" placeholder="Email"
-                                                            type="email" required />
-                                                        <div id="errorMessagesPhone" class="text-danger"></div>
-                                                        <input type="tel" name="userPhone" id="userPhone"
-                                                            placeholder="Phone" required value="1234567890"/>
-                                                        <div id="errorMessagesPassword" class="text-danger"></div>
-                                                        <input type="password" name="userPassword" id="userPassword"
-                                                            placeholder="Password" required value="kuttippa"/>
-
-                                                        <!-- <div class="google-signin-container">
-                                                            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                                                                data-context="signup" data-ux_mode="popup"
-                                                                data-auto_prompt="false">
-                                                            </div>
-                                                            <div class="g_id_signin" data-type="standard"></div>
-                                                        </div> -->
-
-                                                        <div class="button-box">
-                                                            <div class="login-toggle-btn">
-
-                                                                <!-- <a href="#">Forgot Password?</a> -->
-                                                            </div>
-                                                            <button type="submit"
-                                                                onclick="userValidateForm()"><span>Register</span></button>
+        
+                                            <% }else{%>
+                                                <div id="lg1" class="tab-pane active">
+                                                    <div class="login-form-container">
+                                                        <div class="login-register-form">
+                                                            <form action="/" method="post" id="userLogin">
+                                                                <div class="text-danger" id="sessionError">
+                                                                    <%= typeof error !== 'undefined' ? error : '' %>
+                                                                </div>                                                        
+                                                                <div id="errorMessagesLoginEmail" class="text-danger"></div>
+                                                                <input type="email" name="usernamelogin" class="form-control"
+                                                                    placeholder="Email" id="userMailLogin" required value="kuttippaone@gmail.com"/>
+                                                                <div id="errorMessagesLoginPassword" class="text-danger"></div>
+                                                                <input type="password" name="userpasswordlogin"
+                                                                    placeholder="Password" id="userPasswordLogin" required value="kuttippa"/>
+                                                                <div class="button-box">
+                                                                    <div class="login-toggle-btn">
+        
+                                                                        <a href="#">Forgot Password?</a>
+                                                                    </div>
+                                                                    <button type="submit" class="mb-4"
+                                                                        onclick="userValidateFormLogin()"><span>Login</span></button>
+                                                                </div>
+                                                            </form>
+                                                            <!-- <div class="google-signin-container">
+                                                                <div id="g_id_onload" href="/auth/google" data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                                                                    data-context="signup" data-ux_mode="popup"
+                                                                    data-auto_prompt="false">
+                                                                </div>
+                                                                <div class="g_id_signin" data-type="standard"></div>
+                                                            </div> -->
+                                                            <a href="/auth/google"><button class="google-button">
+                                                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" class="google-logo">
+                                                                Sign in with Google
+                                                            </button></a>
+        
                                                         </div>
-                                                    </form>
-
-
-
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+        
+                                                <div id="lg2" class="tab-pane">
+                                                    <div class="login-form-container">
+                                                        <div class="login-register-form">
+                                                            <form action="/register" method="post" id="userRegister">
+                                                                <div id="errorMessagesName" class="text-danger"></div>
+                                                                <input type="text" id="userName" name="userName"
+                                                                    placeholder="Name" required  value="username"/>
+                                                                <div id="errorMessagesMail" class="text-danger"></div>
+                                                                <input name="userEmail" id="userEmail" placeholder="Email"
+                                                                    type="email" required />
+                                                                <div id="errorMessagesPhone" class="text-danger"></div>
+                                                                <input type="tel" name="userPhone" id="userPhone"
+                                                                    placeholder="Phone" required value="1234567890"/>
+                                                                <div id="errorMessagesPassword" class="text-danger"></div>
+                                                                <input type="password" name="userPassword" id="userPassword"
+                                                                    placeholder="Password" required value="kuttippa"/>
+                                                                <!-- <div class="google-signin-container">
+                                                                    <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                                                                        data-context="signup" data-ux_mode="popup"
+                                                                        data-auto_prompt="false">
+                                                                    </div>
+                                                                    <div class="g_id_signin" data-type="standard"></div>
+                                                                </div> -->
+                                                                <div class="button-box">
+                                                                    <div class="login-toggle-btn">
+        
+                                                                        <!-- <a href="#">Forgot Password?</a> -->
+                                                                    </div>
+                                                                    <button type="submit"
+                                                                        onclick="userValidateForm()"><span>Register</span></button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% }  %>
                                     </div>
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -282,11 +341,22 @@
 
                     console.log("validation success...")//! TO REMOVE
 
+                    const reffDiv = document.getElementById('reffId')
+
+                    let refId
+
+                    if(reffDiv){
+                        refId = reffDiv.value
+                    }else{
+                        refId = ''
+                    }
+
                     const formData = {
                         userName: document.getElementById('userName').value.trim(),
                         userEmail: document.getElementById('userEmail').value.trim(),
                         userPhone: document.getElementById('userPhone').value.trim(),
-                        userPassword: document.getElementById('userPassword').value.trim()
+                        userPassword: document.getElementById('userPassword').value.trim(),
+                        refId: refId
                     };
 
                     // console.log(formData) //! TO REMOVE

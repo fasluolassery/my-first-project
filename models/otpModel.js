@@ -4,7 +4,7 @@ const otpSchema = new mongoose.Schema({
     userMail: {
         type: String,
         required:true,
-        unique: true
+        // unique: true
     },
     otp: {
         type: Number,

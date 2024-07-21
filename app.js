@@ -44,6 +44,7 @@ const port = process.env.PORT || 7777;
 
 //routes
 app.use('/public', express.static('public'));
+app.use('/login', express.static('public'));
 app.use('/cart', express.static('public'));
 app.use('/admin/orderdetails', express.static('public'));
 app.use('/orderDetails', express.static('public'));
