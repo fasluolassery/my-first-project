@@ -1,60 +1,60 @@
 const orderModel = require('../../models/orderModel')
 
 const loadOrders = async (req, res, next) => {
-    try{
+    try {
         const page = parseInt(req.query.page) || 1
         const limit = 5
         const skip = (page - 1) * limit
 
-        const findAllOrders = await orderModel.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const findAllOrders = await orderModel.find().sort({ createdAt: 1 }).limit(limit).skip(skip);
         const totalOrders = await orderModel.countDocuments();
         const totalPages = Math.ceil(totalOrders / limit);
-        
-        res.render('admin/order', { orders: findAllOrders, currentPage: page, totalPages})
-    }catch(error){
+
+        res.render('admin/order', { orders: findAllOrders, currentPage: page, totalPages })
+    } catch (error) {
         next(error)
     }
 }
 
 const loadOrderView = async (req, res, next) => {
-    try{
+    try {
         res.render('admin/orderview')
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const loadOrderDetails = async (req, res, next) => {
-    try{
+    try {
         const { orderId } = req.query
 
-        if(!orderId){
+        if (!orderId) {
             return console.log("can't get order id at load order details")
         }
 
         const findOrder = await orderModel.findOne({ _id: orderId }).populate('user').populate('products.product')
-        
-        res.render('admin/orderdetails', { orderDetails: findOrder})
-    }catch(error){
+
+        res.render('admin/orderdetails', { orderDetails: findOrder })
+    } catch (error) {
         next(error)
     }
 }
 
 const changeOrderStatus = async (req, res, next) => {
-    try{
+    try {
         const { orderId, newStatus } = req.body
 
-        if(newStatus.length <= 0){
+        if (newStatus.length <= 0) {
             return console.log("there is no new status to change at change order status")
         }
 
-        if(!orderId){
+        if (!orderId) {
             return console.log("can't get orderid here at change order status")
         }
 
-        const findOrder = await orderModel.findOne({ _id: orderId})
+        const findOrder = await orderModel.findOne({ _id: orderId })
 
-        if(!findOrder){
+        if (!findOrder) {
             return console.log("can't find the order at change order status")
         }
 
@@ -62,17 +62,17 @@ const changeOrderStatus = async (req, res, next) => {
 
         const hello = await findOrder.save()
 
-        if(hello){
-            res.send({ success: 7})
+        if (hello) {
+            res.send({ success: 7 })
         }
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const cancelOrders = async (req, res, next) => {
-    try{
+    try {
         const { orderId } = req.body
 
         const findOrder = await orderModel.findById(orderId)
@@ -85,19 +85,19 @@ const cancelOrders = async (req, res, next) => {
 
         const update = await findOrder.save()
 
-        if(update){
+        if (update) {
             console.log("order canceled success at cancel order")
-            res.send({ success: true})
+            res.send({ success: true })
         }
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const changeProductStatus = async (req, res, next) => {
-    try{
-        const { productId, newStatus, orderId} = req.body
+    try {
+        const { productId, newStatus, orderId } = req.body
 
         const findOrder = await orderModel.findById(orderId)
 
@@ -108,8 +108,8 @@ const changeProductStatus = async (req, res, next) => {
         find.productStatus = newStatus
 
         await findOrder.save()
-        
-    }catch(error){
+
+    } catch (error) {
         next(error)
     }
 }

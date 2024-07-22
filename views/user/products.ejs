@@ -107,7 +107,7 @@
 
                                                         <% products.forEach(product=> { %>
                                                             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
-                                                                <!-- Single Product -->
+                                                               
                                                                 <div class="product">
                                                                     <% if (product.isNew) { %>
                                                                         <!-- Assuming you have an `isNew` property to indicate new products -->
@@ -140,8 +140,13 @@
                                                                                         <%= product.productName %>
                                                                                     </a></h5>
                                                                                 <span class="price">
-                                                                                    <span class="new">₹<%=
-                                                                                            product.price.toFixed(2) %>
+                                                                                    <span class="new">
+                                                                                        <% if(product.offerPrice > 0) {%>
+                                                                                            ₹<%=  product.offerPrice.toFixed(2) %> |
+                                                                                            <del>₹<%= product.price.toFixed(2) %></del>
+                                                                                            <% }else{ %>
+                                                                                        ₹<%=  product.price.toFixed(2) %>
+                                                                                        <% } %>
                                                                                     </span>
                                                                                 </span>
                                                                             </div>

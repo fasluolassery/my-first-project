@@ -3,27 +3,27 @@ const cartModel = require('../../models/cartModel')
 const couponModel = require('../../models/couponModel')
 
 const loadCheckout = async (req, res, next) => {
-    try{
+    try {
         const { userId } = req.session
 
-        if(!userId){
+        if (!userId) {
             return console.log("user is not found in checkout")
         }
 
-        const findUserCart = await cartModel.findOne({ userId: userId}).populate('items.productId')
+        const findUserCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
 
-        if(!findUserCart){
+        if (!findUserCart) {
             return console.log("can't find user cart in loadcheckout")
         }
 
         let findAddresses = await addressModel.findOne({ userId: userId })
-        
-        let addresses 
 
-        if(!findAddresses){
+        let addresses
+
+        if (!findAddresses) {
             // console.log("Can't find findAddresses in loadcheckout")
             addresses = []
-        }else{
+        } else {
             addresses = findAddresses.addresses
         }
 
@@ -31,30 +31,30 @@ const loadCheckout = async (req, res, next) => {
 
         const findCoupons = await couponModel.find()
 
-        if(!findCoupons){
+        if (!findCoupons) {
             return console.log("Can't find coupons in loadcheckout")
         }
 
-        res.render('user/checkoutpage', { addresses: addresses, userCartItems: findUserCart.items, coupons: findCoupons})
+        res.render('user/checkoutpage', { addresses: addresses, userCartItems: findUserCart.items, coupons: findCoupons })
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const checkoutTotal = async (req, res, next) => {
-    try{
+    try {
         const { userId } = req.session
 
-        const findUserCart = await cartModel.findOne({userId: userId}).populate('items.productId')
+        const findUserCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
 
-        if(!findUserCart){
+        if (!findUserCart) {
             return console.log("can't find user cart in checkout total")
         }
 
-        res.send({productsDeatails: findUserCart.items})
+        res.send({ productsDeatails: findUserCart.items })
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }

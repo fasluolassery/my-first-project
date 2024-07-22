@@ -7,7 +7,7 @@ const orderModel = require('../../models/orderModel')
 const couponModel = require('../../models/couponModel')
 
 const createOrder = async (req, res, next) => {
-    try{
+    try {
 
         const { address, coupon } = req.body
 
@@ -15,19 +15,19 @@ const createOrder = async (req, res, next) => {
 
         const { user } = req.session
 
-        
+
         const findUserDetails = await userModel.findOne({ _id: userId })
-        
+
         if (!findUserDetails) {
             return console.log("can't find user at place order")
         }
-        
+
         const findUserAddress = await addressModel.findOne({ userId: userId })
-        
+
         if (!findUserAddress) {
             return console.log("can't find user address at place order")
         }
-        
+
         let checkedAddress = ''
         findUserAddress.addresses.forEach((val) => {
             if (val.id == address) {
@@ -47,7 +47,7 @@ const createOrder = async (req, res, next) => {
         if (!products) {
             return console.log("can't find user products at order place")
         }
-        
+
         const productsDetails = []
         products.items.forEach(val => {
             productsDetails.push({
@@ -58,10 +58,10 @@ const createOrder = async (req, res, next) => {
                 productStatus: 'Pending'
             })
         })
-        
+
         let totalAmount = 40
-        let  originalAmount 
-        
+        let originalAmount
+
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
         })
@@ -136,11 +136,11 @@ const createOrder = async (req, res, next) => {
 
             for (let item of productsDetails) {
                 const product = await productModel.findOne({ _id: item.product });
-    
+
                 if (!product) {
                     return console.log("product not found")
                 }
-    
+
                 // Decrease product quantity
                 product.stock -= item.quantity;
                 await product.save();
@@ -153,8 +153,8 @@ const createOrder = async (req, res, next) => {
             console.log("order success")
         }
 
-        res.send({order: order})
-    }catch(error){
+        res.send({ order: order })
+    } catch (error) {
         next(error)
     }
 }

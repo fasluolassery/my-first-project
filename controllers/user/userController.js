@@ -20,15 +20,15 @@ const loadUserAccount = async (req, res, next) => {
 
         let addresses
 
-        if(!findAddress){
+        if (!findAddress) {
             // res.render('user/useraccount', {userDetails: findUserDetails, user: userId, referalLink: referalLink })
             addresses = []
-        }else{
+        } else {
             addresses = findAddress.addresses
         }
         // console.log(findAddress.addresses)
 
-        const findOrders = await orderModel.find({ user: userId})
+        const findOrders = await orderModel.find({ user: userId })
 
         const findCoupons = await couponModel.find()
 
@@ -114,17 +114,17 @@ const addAddress = async (req, res, next) => {
             const saveAdd = await createAdd.save()
             if (saveAdd) {
                 console.log("new Address added")
-                res.send({status: 7})
+                res.send({ status: 7 })
             }
 
         }
 
-        checkExistingAddress.addresses.push({street, city, state, zip, country})
+        checkExistingAddress.addresses.push({ street, city, state, zip, country })
 
         const updateAddress = await checkExistingAddress.save()
-        if(updateAddress){
+        if (updateAddress) {
             console.log("added new address")
-            res.send({status: 7})
+            res.send({ status: 7 })
         }
 
 
@@ -135,20 +135,20 @@ const addAddress = async (req, res, next) => {
 }
 
 const editAddress = async (req, res, next) => {
-    try{
+    try {
         const { addressId, street, city, state, zip, country } = req.body
 
         const { userId } = req.session
 
-        const findAddressArray = await addressModel.findOne( { userId: userId } )
+        const findAddressArray = await addressModel.findOne({ userId: userId })
 
-        if(!findAddressArray){
+        if (!findAddressArray) {
             return console.log("Error at findAddressArray in edit address")
         }
 
         const correctAdd = findAddressArray.addresses.find(val => val.id == addressId)
 
-        if(!correctAdd){
+        if (!correctAdd) {
             return console.log("can't get correct address form user in edit address")
         }
 
@@ -157,50 +157,50 @@ const editAddress = async (req, res, next) => {
         correctAdd.state = state
         correctAdd.zip = zip
         correctAdd.country = country
-        
+
         const saveEditAddress = await findAddressArray.save()
 
-        if(!saveEditAddress){
+        if (!saveEditAddress) {
             return console.log("Error at save edit address in edit address")
         }
 
-        res.send({success: 7})
-        
-    }catch(error){
+        res.send({ success: 7 })
+
+    } catch (error) {
         console.log(error)
     }
 }
 
 const removeAddress = async (req, res, next) => {
-    try{
+    try {
         const { indexOfAddress } = req.body
 
         const { userId } = req.session
-        
+
         const findAddresses = await addressModel.findOne({ userId: userId })
 
         findAddresses.addresses.splice(indexOfAddress, 1)
 
         const saveRemove = await findAddresses.save()
 
-        if(saveRemove){
+        if (saveRemove) {
             console.log("address remove success")
-            res.send({status: 7})
+            res.send({ status: 7 })
         }
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const search = async (req, res, next) => {
-    try{
+    try {
         const { value } = req.body
 
-        if(value.length <= 0){
+        if (value.length <= 0) {
             return console.log("there is no value at search")
         }
 
-        const findProducts = await productModel.find({productName: new RegExp(value, 'i')})
+        const findProducts = await productModel.find({ productName: new RegExp(value, 'i') })
 
         // const findCategories = await categoryModel.find({categoryName: new RegExp(value, 'i')})
 
@@ -208,26 +208,26 @@ const search = async (req, res, next) => {
             products: findProducts,
             // categories: findCategories
         })
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const filterByCategory = async (req, res, next) => {
-    try{
+    try {
         const { category } = req.body
 
-        if(!category){
-            return 
+        if (!category) {
+            return
         }
 
-        const findProducts = await productModel.find({ category: category})
+        const findProducts = await productModel.find({ category: category })
 
         res.send({
             products: findProducts
         })
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }

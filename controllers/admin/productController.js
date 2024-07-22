@@ -6,21 +6,21 @@ const cartModel = require('../../models/cartModel')
 
 const loadProducts = async (req, res, next) => {
     try {
-        const page = parseInt(req.query.page) || 1; 
-        const limit = 5; 
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
 
         const skip = (page - 1) * limit;
 
-        const products = await Product.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const products = await Product.find().sort({ createdAt: 1 }).limit(limit).skip(skip);
 
         const totalProducts = await Product.countDocuments();
 
         const totalPages = Math.ceil(totalProducts / limit);
 
-        res.render('admin/products', { 
-            products, 
-            currentPage: page, 
-            totalPages 
+        res.render('admin/products', {
+            products,
+            currentPage: page,
+            totalPages
         });
     } catch (error) {
         next(error);

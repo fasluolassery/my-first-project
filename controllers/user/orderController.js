@@ -65,7 +65,7 @@ const placeOrder = async (req, res, next) => {
         })
 
         let totalAmount = 40
-        let originalAmount 
+        let originalAmount
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
@@ -236,10 +236,10 @@ const cancelSingleProduct = async (req, res, next) => {
 
         const saveCancel = await findOrder.save()
 
-        if(findOrder.paymentMethod == 'Razor Pay' || findOrder.paymentMethod == 'wallet'){
+        if (findOrder.paymentMethod == 'Razor Pay' || findOrder.paymentMethod == 'wallet') {
             const user = await userModel.findById(userId)
             user.balance += findOrder.totalAmount
-            await user.save()   
+            await user.save()
 
             const transaction = new transactionModel({
                 userId: userId,
@@ -248,9 +248,9 @@ const cancelSingleProduct = async (req, res, next) => {
             })
 
             await transaction.save()
-            
-            res.send({success: 8})
-        }else if(saveCancel){
+
+            res.send({ success: 8 })
+        } else if (saveCancel) {
             console.log("cancel product success")
             res.send({ success: 7 })
         }

@@ -5,14 +5,14 @@ const { userLoginDetails } = require('./authController');
 
 const loadHome = async (req, res, next) => {
     try {
-        
+
         const { user, userId } = req.session
-        const findAllProducts = await Products.find({isBlock: false}).sort({createdAt: -1}).limit(4)
-        if(user){
-            
-            res.render('user/homepage', {products: findAllProducts, user: userId})
-        }else{
-            res.render('user/homepage', {products: findAllProducts})
+        const findAllProducts = await Products.find({ isBlock: false }).sort({ createdAt: -1 }).limit(4)
+        if (user) {
+
+            res.render('user/homepage', { products: findAllProducts, user: userId })
+        } else {
+            res.render('user/homepage', { products: findAllProducts })
         }
 
     } catch (error) {

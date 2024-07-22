@@ -7,7 +7,7 @@ const loadOffers = async (req, res, next) => {
 
         const fetchOffers = await offerModel.find({}).populate('productId').populate('categoryId')
 
-        res.render('admin/offers', {offers: fetchOffers})
+        res.render('admin/offers', { offers: fetchOffers })
     } catch (error) {
         next(error)
     }
@@ -40,17 +40,17 @@ const createOffer = async (req, res, next) => {
         })
 
 
-        if (offerType ==='product') {
+        if (offerType === 'product') {
 
-            const offerId= newOffer.id
+            const offerId = newOffer.id
 
             await productModel.findOneAndUpdate(
-              { _id: productId }, 
-              { $push: { offers: offerId } },
-              { upsert: true, returnOriginal: false }
+                { _id: productId },
+                { $push: { offers: offerId } },
+                { upsert: true, returnOriginal: false }
             );
 
-          } else if (offerType === 'category') {
+        } else if (offerType === 'category') {
 
             const fetchCategory = await categoryModel.findById(categoryId)
 
@@ -58,11 +58,33 @@ const createOffer = async (req, res, next) => {
 
             const product = await productModel.updateMany({ category: fetchCategory.categoryName }, { $push: { offers: offerId } })
 
-          }
+        }
 
         await newOffer.save()
 
-        res.send({success: 7})
+        res.send({ success: 7 })
+
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+const deleteOffer = async (req, res, next) => {
+    try {
+        const { offerId } = req.body
+
+        if (!offerId) {
+            return console.log("can't get any coupon id at delete coupon")
+        }
+
+        const deleting = await offerModel.findByIdAndDelete(offerId)
+
+        if (deleting) {
+            console.log('deleting coupon success')
+            res.send({ success: 7 })
+        }
 
 
     } catch (error) {
@@ -73,5 +95,6 @@ const createOffer = async (req, res, next) => {
 module.exports = {
     loadOffers,
     loadCreateOffer,
-    createOffer
+    createOffer,
+    deleteOffer
 }

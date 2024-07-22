@@ -7,29 +7,29 @@ const couponModel = require('../../models/couponModel')
 const transactionModel = require('../../models/transactionSchema')
 
 const loadWallet = async (req, res, next) => {
-    try{
+    try {
         const { userId } = req.session
 
-        if(!userId){
+        if (!userId) {
             return console.log("can't get userId at loadWallet")
         }
 
         const fetchUser = await userModel.findById(userId)
 
-        if(!fetchUser){
+        if (!fetchUser) {
             return console.log("user not found")
         }
 
-        const transactions = await transactionModel.find({userId: userId}).sort({createdAt: -1})
+        const transactions = await transactionModel.find({ userId: userId }).sort({ createdAt: -1 })
 
-        res.render('user/wallet',{ transactions: transactions, user: fetchUser})
-    }catch(error){
+        res.render('user/wallet', { transactions: transactions, user: fetchUser })
+    } catch (error) {
         next(error)
     }
 }
 
 const orderWithWallet = async (req, res, next) => {
-    try{
+    try {
         const { address, coupon } = req.body
 
         const { userId, user } = req.session
@@ -61,7 +61,7 @@ const orderWithWallet = async (req, res, next) => {
         let checkedAddress = ''
         findUserAddress.addresses.forEach((val) => {
             if (val.id == address) {
-                checkedAddress = val    
+                checkedAddress = val
             }
         })
 
@@ -90,7 +90,7 @@ const orderWithWallet = async (req, res, next) => {
         })
 
         let totalAmount = 40
-        let  originalAmount 
+        let originalAmount
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
@@ -112,9 +112,9 @@ const orderWithWallet = async (req, res, next) => {
             await fetchCoupon.save()
         }
 
-        if(totalAmount > findUserDetails.balance){
+        if (totalAmount > findUserDetails.balance) {
             console.log("Insufficient Balance in Wallet")
-            return res.send({error: 'Insufficient Balance'})
+            return res.send({ error: 'Insufficient Balance' })
         }
 
         for (let item of productsDetails) {
@@ -195,7 +195,7 @@ const orderWithWallet = async (req, res, next) => {
 
 
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }

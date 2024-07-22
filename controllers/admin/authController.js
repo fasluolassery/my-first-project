@@ -17,26 +17,26 @@ const verifyAdminLogin = async (req, res, next) => {
         if (!AdminValidationErrors.isEmpty()) {
             return console.log('error', validationErrors.array())
         }
-        
+
         const { loginEmail, loginPassword } = req.body
 
-        const findAdmin = await userModel.findOne({email: loginEmail})
+        const findAdmin = await userModel.findOne({ email: loginEmail })
 
-        if(!findAdmin){
+        if (!findAdmin) {
             res.send({ next: 0 })
             return console.log("Error: Admin Not Found")
         }
 
-        if(!findAdmin.isAdmin){
+        if (!findAdmin.isAdmin) {
             res.send({ next: 0 })
             return console.log("Error: Admin Not Found")
         }
 
         const adminPass = await bcrypt.compare(loginPassword, findAdmin.password)
 
-        if(!adminPass){
+        if (!adminPass) {
             res.send({ next: 100 })
-                return console.log("Error: Incorrect password")
+            return console.log("Error: Incorrect password")
         }
 
         req.session.admin = loginEmail

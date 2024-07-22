@@ -2,39 +2,39 @@ const otpGenerator = require('otp-generator');
 const couponModel = require('../../models/couponModel')
 
 const loadCoupons = async (req, res, next) => {
-    try{
+    try {
 
         const page = parseInt(req.query.page) || 1
         const limit = 5
         const skip = (page - 1) * limit
 
-        const findAllCoupons = await couponModel.find().sort({createdAt: 1}).limit(limit).skip(skip);
+        const findAllCoupons = await couponModel.find().sort({ createdAt: 1 }).limit(limit).skip(skip);
         const totalCoupons = await couponModel.countDocuments();
         const totalPages = Math.ceil(totalCoupons / limit);
 
-        res.render('admin/coupons', {coupons: findAllCoupons, currentPage: page, totalPages})
-    }catch(error){
+        res.render('admin/coupons', { coupons: findAllCoupons, currentPage: page, totalPages })
+    } catch (error) {
         next(error)
     }
 }
 
 const loadCreateCoupon = async (req, res, next) => {
-    try{
+    try {
         res.render('admin/createcoupon')
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const createCoupon = async (req, res, next) => {
-    try{
-        const { name, amount, startDate, endDate, minPurchaseAmount, description} = req.body
+    try {
+        const { name, amount, startDate, endDate, minPurchaseAmount, description } = req.body
 
-        const existingCoupon = await couponModel.findOne({name: name})
+        const existingCoupon = await couponModel.findOne({ name: name })
 
-        if(existingCoupon){
+        if (existingCoupon) {
             console.log("this coupon already exists")
-            return res.send({error: 5})
+            return res.send({ error: 5 })
         }
 
         const code = otpGenerator.generate(4, { lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false })
@@ -51,32 +51,32 @@ const createCoupon = async (req, res, next) => {
 
         const saveNewCoupon = await newCoupon.save()
 
-        if(saveNewCoupon){
+        if (saveNewCoupon) {
             console.log("success created new coupon")
-            res.send({success: 7})
+            res.send({ success: 7 })
         }
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }
 
 const deleteCoupon = async (req, res, next) => {
-    try{
+    try {
         const { couponId } = req.body
 
-        if(!couponId){
+        if (!couponId) {
             return console.log("can't get any coupon id at delete coupon")
         }
 
         const deleting = await couponModel.findByIdAndDelete(couponId)
 
-        if(deleting){
+        if (deleting) {
             console.log('deleting coupon success')
-            res.send({success: 7})
+            res.send({ success: 7 })
         }
 
 
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 }

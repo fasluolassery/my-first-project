@@ -21,6 +21,9 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    offerPrice: {type: Number,
+        default: 0
+    },
     category: {
         type: String,
         required: true

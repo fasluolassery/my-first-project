@@ -50,6 +50,8 @@ adminRouter.post('/cancelOrder', orderController.cancelOrders)
 adminRouter.post('/createCoupon', couponController.createCoupon)
 adminRouter.post('/deleteCoupon', couponController.deleteCoupon)
 adminRouter.post('/createOffer', offerController.createOffer)
+adminRouter.post('/deleteOffer', offerController.deleteOffer)
+
 
 
 

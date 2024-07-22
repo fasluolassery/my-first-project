@@ -83,12 +83,12 @@ const removeProduct = async (req, res, next) => {
             { new: true }
         )
 
-        if(!findList){
+        if (!findList) {
             return console.log("wishlist not found")
         }
 
         console.log("successfully removed product from wishlist")
-        res.send({status: 7})
+        res.send({ status: 7 })
 
     } catch (error) {
         next(error)

@@ -104,7 +104,12 @@
                                     </h2>
                                     <div class="pricing-meta">
                                         <ul class="d-flex">
-                                            <li class="new-price">₹<%= product.price.toFixed(2) %>
+                                            <li class="new-price"><% if(product.offerPrice > 0) {%>
+                                                ₹<%=  product.offerPrice.toFixed(2) %> |
+                                                <del>₹<%= product.price.toFixed(2) %></del>
+                                                <% }else{ %>
+                                            ₹<%=  product.price.toFixed(2) %>
+                                            <% } %>
                                             </li>
                                         </ul>
                                     </div>

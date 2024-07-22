@@ -8,7 +8,7 @@ const loadRegister = async (req, res, next) => {
 
         const { reff } = req.query
 
-        res.render('user/registerpage', { reff: reff});
+        res.render('user/registerpage', { reff: reff });
     } catch (error) {
         next(error)
     }

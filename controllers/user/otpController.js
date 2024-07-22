@@ -17,8 +17,8 @@ const userVerifyOtp = async (req, res, next) => {
 
             let balance
 
-            if(otpVerifyUser.refId.length > 0){
-                const findRefUser = await User.findOne({_id: otpVerifyUser.refId})
+            if (otpVerifyUser.refId.length > 0) {
+                const findRefUser = await User.findOne({ _id: otpVerifyUser.refId })
                 findRefUser.balance += 301
                 await findRefUser.save()
 
@@ -29,9 +29,9 @@ const userVerifyOtp = async (req, res, next) => {
                     amount: 301,
                     type: 'referral'
                 })
-    
+
                 await RefTransaction.save()
-            }else{
+            } else {
                 balance = 0
             }
 
@@ -46,11 +46,11 @@ const userVerifyOtp = async (req, res, next) => {
 
 
             const saving = await saveNewUser.save()
-            if(saving){
+            if (saving) {
                 req.session.userId = saving.id
 
-                if(otpVerifyUser.refId.length > 0){
-                    
+                if (otpVerifyUser.refId.length > 0) {
+
                     const RefTransactionNewUser = new transactionModel({
                         userId: saving.id,
                         amount: 301,
@@ -61,7 +61,7 @@ const userVerifyOtp = async (req, res, next) => {
                 }
 
                 console.log("user saved successfully")
-                res.send({next: 1})
+                res.send({ next: 1 })
             }
 
             // res.send({ next: 1 })
