@@ -97,7 +97,7 @@ const changePass = async (req, res, next) => {
 const addAddress = async (req, res, next) => {
     try {
         //!handle errors
-        const { street, city, state, zip, country } = req.body
+        const { name, phone, street, city, state, zip, country } = req.body
         const { userId } = req.session
 
         const checkExistingAddress = await addressModel.findOne({ userId: userId })
@@ -107,7 +107,7 @@ const addAddress = async (req, res, next) => {
             const createAdd = new addressModel({
 
                 userId: userId,
-                addresses: [{ street, city, state, zip, country }]
+                addresses: [{ name, phone, street, city, state, zip, country }]
 
             })
 
@@ -119,7 +119,7 @@ const addAddress = async (req, res, next) => {
 
         }
 
-        checkExistingAddress.addresses.push({ street, city, state, zip, country })
+        checkExistingAddress.addresses.push({ name, phone, street, city, state, zip, country })
 
         const updateAddress = await checkExistingAddress.save()
         if (updateAddress) {
@@ -136,7 +136,7 @@ const addAddress = async (req, res, next) => {
 
 const editAddress = async (req, res, next) => {
     try {
-        const { addressId, street, city, state, zip, country } = req.body
+        const { addressId, name, phone, street, city, state, zip, country } = req.body
 
         const { userId } = req.session
 
@@ -152,6 +152,8 @@ const editAddress = async (req, res, next) => {
             return console.log("can't get correct address form user in edit address")
         }
 
+        correctAdd.name = name
+        correctAdd.phone = phone
         correctAdd.street = street
         correctAdd.city = city
         correctAdd.state = state

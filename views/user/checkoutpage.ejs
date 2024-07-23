@@ -375,6 +375,12 @@
 
                                                         <div class="flex-grow-1 ms-4">
                                                             <address class="mb-0">
+                                                                <span><strong>Name:</strong>
+                                                                    <%= add.name%>
+                                                                </span><br>
+                                                                <span><strong>Phone:</strong>
+                                                                    <%= add.phone %>
+                                                                </span><br>
                                                                 <span><strong>Street:</strong>
                                                                     <%= add.street %>
                                                                 </span><br>
@@ -428,6 +434,22 @@
                                                     <input type="text" />
                                                 </div>
                                             </div> -->
+                                            <div class="col-lg-12">
+                                                <div class="billing-info mb-4">
+                                                    <label>Name</label>
+                                                    <input class="billing-address" placeholder="name" type="text"
+                                                        id="name" />
+                                                    <!-- <input placeholder="Apartment, suite, unit etc." type="text" /> -->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="billing-info mb-4">
+                                                    <label>Phone</label>
+                                                    <input class="billing-address" placeholder="phone" type="text"
+                                                        id="phone" />
+                                                    <!-- <input placeholder="Apartment, suite, unit etc." type="text" /> -->
+                                                </div>
+                                            </div>
                                             <div class="col-lg-12">
                                                 <div class="billing-select mb-4">
                                                     <div class="billing-info mb-4">
@@ -853,6 +875,9 @@
             function addAddressFromCheckout(event) {
                 event.preventDefault()
 
+                
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
                 const street = document.getElementById('street').value;
                 const city = document.getElementById('city').value;
                 const state = document.getElementById('state').value;
@@ -863,6 +888,8 @@
                 // alert(`Address Saved: ${street}, ${city}, ${state}, ${zip}, ${country}`);
 
                 const addressData = {
+                    name: name,
+                    phone: phone,
                     street: street,
                     city: city,
                     state: state,

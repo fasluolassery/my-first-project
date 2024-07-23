@@ -285,10 +285,16 @@
                                                                 aria-label="Close"
                                                                 onclick="removeAddress(event, '<%= index %>')"></button>
 
-                                                            <p class="mb-2"><strong>
+                                                            <!-- <p class="mb-2"><strong>
                                                                     <%= userDetails.username %>
-                                                                </strong></p>
+                                                                </strong></p> -->
                                                             <address>
+                                                                <span><strong>Name:</strong>
+                                                                    <%= add.name %>
+                                                                </span><br>
+                                                                <span><strong>Phone:</strong>
+                                                                    <%= add.phone %>
+                                                                </span><br>
                                                                 <span><strong>Street:</strong>
                                                                     <%= add.street %>
                                                                 </span><br>
@@ -305,7 +311,7 @@
                                                                     <%= add.country %>
                                                                 </span>
                                                             </address>
-                                                            <a onclick="editAddress(event, '<%= add.id %>','<%= add.street %>','<%= add.city %>','<%= add.state %>',' <%= add.zip %>','<%= add.country %>')"
+                                                            <a onclick="editAddress(event, '<%= add.id %>', '<%= add.name %>', '<%= add.phone %>','<%= add.street %>', '<%= add.city %>', '<%= add.state %>', ' <%= add.zip %>', '<%= add.country %>')"
                                                                 href>edit</a>
                                                         </div>
                                                     </div>
@@ -905,6 +911,16 @@
                             <div class="account_login_form">
                                 <form>
                                     <div class="default-form-box mb-20">
+                                        <label>Name</label>
+                                        <div id="errorMessageName" class="text-danger"></div>
+                                        <input type="text" id="name" required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>Phone</label>
+                                        <div id="errorMessagePhone" class="text-danger"></div>
+                                        <input type="text" id="phone" required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
                                         <label>Street</label>
                                         <div id="errorMessageStreet" class="text-danger"></div>
                                         <input type="text" id="street" required>
@@ -945,12 +961,28 @@
                 // Replace the current content with the form
                 addressContainer.innerHTML = formHtml;
 
+                document.getElementById('name').addEventListener('input', addressValidation)
+                document.getElementById('phone').addEventListener('input', addressValidation)
                 document.getElementById('street').addEventListener('input', addressValidation)
                 document.getElementById('city').addEventListener('input', addressValidation)
                 document.getElementById('state').addEventListener('input', addressValidation)
                 document.getElementById('zip').addEventListener('input', addressValidation)
                 document.getElementById('country').addEventListener('input', addressValidation)
 
+            }
+
+            function displayErrorName(errorMessage) {
+                const errorDiv = document.getElementById('errorMessageName');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
+            }
+
+            function displayErrorPhone(errorMessage) {
+                const errorDiv = document.getElementById('errorMessagePhone');
+                const errorParagraph = document.createElement('p');
+                errorParagraph.textContent = errorMessage;
+                errorDiv.appendChild(errorParagraph);
             }
 
             function displayErrorStreet(errorMessage) {
@@ -999,7 +1031,32 @@
                 return regex.test(value)
             }
 
+            function validateName(username) {
+                const nameRegex = /^[a-zA-Z\s'-]{2,50}$/;
+
+                if (username === '') {
+                    displayErrorName('*Please enter your name');
+                    return false;
+                } else if (!nameRegex.test(username)) {
+                    displayErrorName('*Please enter a valid name');
+                    // (letters, spaces, hyphens, and apostrophes only)
+                    return false;
+                } else {
+                    // clearErrorName(); // Function to clear the error message
+                    return true;
+                }
+            }
+
+             // Function to check if phone number is valid
+             function isValidPhoneNumber(phone) {
+                // Regular expression for validating phone number format
+                const phoneRegex = /^\d{10}$/;
+                return phoneRegex.test(phone);
+            }
+
             function addressValidation() {
+                const name = document.getElementById('name').value
+                const phone = document.getElementById('phone').value
                 const street = document.getElementById('street').value;
                 const city = document.getElementById('city').value;
                 const state = document.getElementById('state').value;
@@ -1007,12 +1064,27 @@
                 const country = document.getElementById('country').value;
 
 
+                document.getElementById('errorMessageName').innerHTML = '';
+                document.getElementById('errorMessagePhone').innerHTML = '';
                 document.getElementById('errorMessageStreet').innerHTML = '';
                 document.getElementById('errorMessageCity').innerHTML = '';
                 document.getElementById('errorMessageState').innerHTML = '';
                 document.getElementById('errorMessageCountry').innerHTML = '';
                 document.getElementById('errorMessageZip').innerHTML = '';
 
+                // Validate username
+                if (!validateName(name)) {
+                    return false;
+                }
+
+                // Validate phone
+                if (phone === '') {
+                    displayErrorPhone('*Please enter your phone number');
+                    return false;
+                } else if (!isValidPhoneNumber(phone)) {
+                    displayErrorPhone('*Please enter a valid phone number');
+                    return false;
+                }
 
                 if (street === '') {
                     displayErrorStreet('*Please enter your street');
@@ -1065,7 +1137,8 @@
                 }
 
                 // Retrieve input values
-                // const name = document.getElementById('name').value;
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
                 const street = document.getElementById('street').value;
                 const city = document.getElementById('city').value;
                 const state = document.getElementById('state').value;
@@ -1076,6 +1149,8 @@
                 // alert(`Address Saved: ${street}, ${city}, ${state}, ${zip}, ${country}`);
 
                 const addressData = {
+                    name: name,
+                    phone: phone,
                     street: street,
                     city: city,
                     state: state,
@@ -1159,10 +1234,12 @@
 
         <!-- edit address -->
         <script>
-            function editAddress(event, addressId, street, city, state, zip, country) {
+            function editAddress(event, addressId, name, phone, street, city, state, zip, country) {
                 event.preventDefault()
 
                 // console.log(addressId, street, city, state, zip, country)
+
+                console.log(name)
 
                 const addressContainer = document.getElementById('address');
 
@@ -1172,6 +1249,16 @@
                         <div class="login_form_container">
                             <div class="account_login_form">
                                 <form>
+                                    <div class="default-form-box mb-20">
+                                        <label>Name</label>
+                                        <div id="errorMessageName" class="text-danger"></div>
+                                        <input type="text" id="name" value=${name} required>
+                                    </div>
+                                    <div class="default-form-box mb-20">
+                                        <label>Phone</label>
+                                        <div id="errorMessagePhone" class="text-danger"></div>
+                                        <input type="text" id="phone" value=${phone} required>
+                                    </div>
                                     <div class="default-form-box mb-20">
                                         <label>Street</label>
                                         <div id="errorMessageStreet" class="text-danger"></div>
@@ -1217,6 +1304,8 @@
                     event.preventDefault()
 
                     const addressId = document.getElementById('addressId').value
+                    const name = document.getElementById('name').value
+                    const phone = document.getElementById('phone').value
                     const street = document.getElementById('street').value
                     const city = document.getElementById('city').value
                     const state = document.getElementById('state').value
@@ -1224,6 +1313,8 @@
                     const country = document.getElementById('country').value
 
                     const addressData = {
+                        name: name,
+                        phone: phone,
                         addressId: addressId,
                         street: street,
                         city: city,
