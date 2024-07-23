@@ -6,7 +6,7 @@ const loadOrders = async (req, res, next) => {
         const limit = 5
         const skip = (page - 1) * limit
 
-        const findAllOrders = await orderModel.find().sort({ createdAt: 1 }).limit(limit).skip(skip);
+        const findAllOrders = await orderModel.find().sort({ createdAt: -1 }).limit(limit).skip(skip);
         const totalOrders = await orderModel.countDocuments();
         const totalPages = Math.ceil(totalOrders / limit);
 

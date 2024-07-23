@@ -7,7 +7,7 @@ const applyCoupon = async (req, res, next) => {
 
         if (!couponCode) {
             console.log("can't get coupon code")
-            return res.send({ error: 1 })
+            return res.send({ error: "can't get coupon code" })
         }
 
         const { userId } = req.session
@@ -56,7 +56,7 @@ const applyCoupon = async (req, res, next) => {
 
         await fetchCoupon.save();
 
-        res.send({ discountedAmount: lastAmount + 40 });
+        res.send({ discountedAmount: lastAmount + 40 , discount: fetchCoupon.discountAmount});
 
     } catch (error) {
         next(error)

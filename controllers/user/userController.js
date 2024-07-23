@@ -28,7 +28,7 @@ const loadUserAccount = async (req, res, next) => {
         }
         // console.log(findAddress.addresses)
 
-        const findOrders = await orderModel.find({ user: userId })
+        const findOrders = await orderModel.find({ user: userId }).sort({createdAt: -1})
 
         const findCoupons = await couponModel.find()
 

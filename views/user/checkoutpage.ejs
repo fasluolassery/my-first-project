@@ -559,11 +559,17 @@
                                                 </div>
                                             </div>
 
-                                            <form>
-                                                <input type="text" required="" id="coupon-code" />
-                                                <button class="cart-btn-2" onclick="applycoupon(event)"
-                                                    type="button">Apply Coupon</button>
+                                            <form class="d-flex flex-column">
+                                                <input type="text" required="" id="coupon-code" class="mb-2" />
+                                                <div class="d-flex justify-content-between">
+                                                    <button class="cart-btn-2 btn btn-primary"
+                                                        onclick="applycoupon(event)" type="button">Apply Coupon</button>
+                                                    <button onclick="reload(event)"
+                                                            class="cart-btn-2 bg-secondary btn btn-secondary"
+                                                            type="button">Cancel</button>
+                                                </div>
                                             </form>
+
                                         </div>
                                     </div>
                                     <h3>Your order</h3>
@@ -592,9 +598,13 @@
                                                 </ul>
                                             </div>
                                             <div class="your-order-bottom">
-                                                <ul>
+                                                <ul class="mb-2">
                                                     <li class="your-order-shipping">Shipping</li>
                                                     <li class="new">₹40.00</li>
+                                                </ul>
+                                                <ul hidden id="discount-div">
+                                                    <li class="your-order-shipping">Discount</li>
+                                                    <li class="new" id="discount-price-div">₹</li>
                                                 </ul>
                                             </div>
                                             <div class="your-order-total">
@@ -875,7 +885,7 @@
             function addAddressFromCheckout(event) {
                 event.preventDefault()
 
-                
+
                 const name = document.getElementById('name').value;
                 const phone = document.getElementById('phone').value;
                 const street = document.getElementById('street').value;
@@ -1161,6 +1171,12 @@
 
                         if (res.data.discountedAmount) {
                             const totalDiv = document.getElementById('ordertotal')
+                            const discoundDiv = document.getElementById('discount-div')
+                            const discountPriceDiv = document.getElementById('discount-price-div')
+
+                            discoundDiv.removeAttribute('hidden')
+                            discountPriceDiv.innerHTML = `₹${res.data.discount}`
+
                             totalDiv.innerHTML = res.data.discountedAmount
                             succesMsg.classList.remove('text-danger')
                             succesMsg.classList.add('text-success')
@@ -1197,6 +1213,14 @@
                 input.value = couponCode
 
                 document.body.removeChild(tempInput)
+            }
+        </script>
+
+        <script>
+            function reload(event){
+                event.preventDefault()
+
+                window.location.reload()
             }
         </script>
 
