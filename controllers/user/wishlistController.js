@@ -11,7 +11,8 @@ const loadWishlist = async (req, res, next) => {
         let findUserList = await wishlistModel.findOne({ userId: userId }).populate('items.productId')
 
         if (!findUserList) {
-            findUserList.items = []
+            findUserList = []
+            // findUserList.items = []
         }
 
 

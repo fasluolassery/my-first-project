@@ -145,7 +145,7 @@ const placeOrder = async (req, res, next) => {
             await products.save()
 
             console.log("order success")
-            res.send({ success: 7 })
+            res.send({ success: 7, orderId: newOrder.id })
         } else {
             return console.log("order placing failed")
         }
@@ -175,24 +175,53 @@ const loadOrderDetails = async (req, res, next) => {
 const cancelOrder = async (req, res, next) => {
     try {
         const { orderId } = req.body
+        const { userId } = req.session
 
         if (!orderId) {
-            return console.log("can't get order id at cancel order")
+            return res.status(400).send("Order ID is required")
         }
 
         const findOrder = await orderModel.findById(orderId)
 
+        if (!findOrder) {
+            return res.status(404).send("Order not found")
+        }
+
         findOrder.orderStatus = 'Cancelled'
 
-        findOrder.products.forEach(val => {
-            val.productStatus = 'Cancelled'
-        })
+        for (const productOrder of findOrder.products) {
+            productOrder.productStatus = 'Cancelled'
 
-        const updateCancel = await findOrder.save()
+            // Update stock of the product
+            const product = await productModel.findById(productOrder.product)
+            if (product) {
+                product.stock += productOrder.quantity
+                await product.save()
+            } else {
+                return res.status(404).send("Product not found")
+            }
+        }
 
-        if (updateCancel) {
-            console.log("order cancelled success")
-            res.send({ success: 7 })
+        const updateReturn = await findOrder.save()
+
+        if (findOrder.paymentMethod === 'Razor Pay' || findOrder.paymentMethod === 'wallet') {
+            const user = await userModel.findById(userId)
+            user.balance += findOrder.totalAmount
+            await user.save()
+
+            const transaction = new transactionModel({
+                userId: userId,
+                amount: findOrder.totalAmount,
+                type: 'credit'
+            })
+
+            await transaction.save()
+
+            res.send({ success: 8, message: 'Order returned, balance credited, and stock updated' })
+        } else if (updateReturn) {
+            res.send({ success: 7, message: 'Order returned successfully and stock updated' })
+        } else {
+            res.status(500).send("Failed to update order status")
         }
 
     } catch (error) {
@@ -233,6 +262,11 @@ const cancelSingleProduct = async (req, res, next) => {
         await findProduct.save()
 
         product.productStatus = 'Cancelled'
+
+        const allCancelled = findOrder.products.every(p => p.productStatus === 'Cancelled');
+        if (allCancelled) {
+            findOrder.orderStatus = 'Cancelled';
+        }
 
         const saveCancel = await findOrder.save()
 

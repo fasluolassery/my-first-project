@@ -565,8 +565,8 @@
                                                     <button class="cart-btn-2 btn btn-primary"
                                                         onclick="applycoupon(event)" type="button">Apply Coupon</button>
                                                     <button onclick="reload(event)"
-                                                            class="cart-btn-2 bg-secondary btn btn-secondary"
-                                                            type="button">Cancel</button>
+                                                        class="cart-btn-2 bg-secondary btn btn-secondary"
+                                                        type="button">Cancel</button>
                                                 </div>
                                             </form>
 
@@ -973,6 +973,8 @@
 
                     axios.post('/placeOrder', { address: address, coupon: couponApplied })
                         .then(res => {
+
+                            console.log(res.data.orderId)
                             if (res.data.error == 1) {
                                 Swal.fire({
                                     icon: "error",
@@ -993,11 +995,11 @@
                                     title: "Order Placed!",
                                     text: "Your order was placed successfully.",
                                     showConfirmButton: true,
-                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonText: "View details",
                                     confirmButtonColor: '#266bf9'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/products';
+                                        window.location.href = `/orderDetails/?orderId=${res.data.orderId}`;
                                     }
                                 });
 
@@ -1031,13 +1033,13 @@
                                     // }
                                 });
                             } else {
-                                razorpayPayment(res.data.order)
+                                razorpayPayment(res.data.order, res.data.orderId)
                             }
                         })
                         .catch(err => {
                             console.log(err)
                         })
-                    function razorpayPayment(order) {
+                    function razorpayPayment(order, orderId) {
                         const option = {
                             key: "rzp_test_i8191KFpq7S1w1",
                             amount: order.amount * 100,
@@ -1056,11 +1058,11 @@
                                     title: "Order Placed!",
                                     text: "Your order was placed successfully.",
                                     showConfirmButton: true,
-                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonText: "View details",
                                     confirmButtonColor: '#266bf9'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/products';
+                                        window.location.href = `/orderDetails/?orderId=${orderId}`;
                                     }
                                 });
                             },
@@ -1074,7 +1076,20 @@
                             },
                             theme: {
                                 color: '#3399cc'
-                            }
+                            },
+                            // modal: {
+                            //     ondismiss: function () {
+                            //         // Handle the payment failure here
+                            //         Swal.fire({
+                            //             icon: "error",
+                            //             title: "Payment Failed!",
+                            //             text: "Your payment was not successful. Please try again.",
+                            //             showConfirmButton: true,
+                            //             confirmButtonText: "OK",
+                            //             confirmButtonColor: '#d33'
+                            //         });
+                            //     }
+                            // }
                         };
                         const rzp1 = new Razorpay(option);
                         rzp1.open()
@@ -1123,11 +1138,11 @@
                                     title: "Order Placed!",
                                     text: "Your order was placed successfully.",
                                     showConfirmButton: true,
-                                    confirmButtonText: "Continue Shopping",
+                                    confirmButtonText: "View details",
                                     confirmButtonColor: '#266bf9'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/products';
+                                        window.location.href = `/orderDetails/?orderId=${res.data.orderId}`;
                                     }
                                 });
 
@@ -1217,7 +1232,7 @@
         </script>
 
         <script>
-            function reload(event){
+            function reload(event) {
                 event.preventDefault()
 
                 window.location.reload()

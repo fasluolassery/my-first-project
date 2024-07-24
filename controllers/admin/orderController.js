@@ -52,13 +52,21 @@ const changeOrderStatus = async (req, res, next) => {
             return console.log("can't get orderid here at change order status")
         }
 
-        const findOrder = await orderModel.findOne({ _id: orderId })
+        const findOrder = await orderModel.findById(orderId)
 
         if (!findOrder) {
             return console.log("can't find the order at change order status")
         }
 
         findOrder.orderStatus = newStatus
+
+
+
+        findOrder.products.forEach(val => {
+
+            val.productStatus = newStatus
+        })
+
 
         const hello = await findOrder.save()
 
@@ -78,6 +86,8 @@ const cancelOrders = async (req, res, next) => {
         const findOrder = await orderModel.findById(orderId)
 
         findOrder.orderStatus = 'Cancelled'
+
+
 
         findOrder.products.forEach(val => {
             val.productStatus = 'Cancelled'
@@ -106,6 +116,11 @@ const changeProductStatus = async (req, res, next) => {
         const find = findOrder.products.find(val => val.product.toString() == productId)
 
         find.productStatus = newStatus
+
+        const allCancelled = findOrder.products.every(p => p.productStatus === 'Cancelled');
+        if (allCancelled) {
+            findOrder.orderStatus = 'Cancelled';
+        }
 
         await findOrder.save()
 

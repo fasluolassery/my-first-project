@@ -153,7 +153,7 @@ const createOrder = async (req, res, next) => {
             console.log("order success")
         }
 
-        res.send({ order: order })
+        res.send({ order: order, orderId: saveOrder.id })
     } catch (error) {
         next(error)
     }

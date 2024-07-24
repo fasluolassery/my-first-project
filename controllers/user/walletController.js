@@ -187,7 +187,7 @@ const orderWithWallet = async (req, res, next) => {
             await transaction.save()
 
             console.log("order success")
-            res.send({ success: 7 })
+            res.send({ success: 7, orderId: saveOrder.id})
         } else {
             return console.log("order placing failed")
         }
