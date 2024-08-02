@@ -73,24 +73,49 @@ const createOffer = async (req, res, next) => {
 
 const deleteOffer = async (req, res, next) => {
     try {
-        const { offerId } = req.body
+        const { offerId } = req.body;
 
         if (!offerId) {
-            return console.log("can't get any coupon id at delete coupon")
+            return console.log("can't get any offer id at delete offer");
         }
 
-        const deleting = await offerModel.findByIdAndDelete(offerId)
+        const offer = await offerModel.findById(offerId);
+
+        if (!offer) {
+            return console.log('Offer not found');
+        }
+
+        const { offerType, productId, categoryId } = offer;
+
+        const deleting = await offerModel.findByIdAndDelete(offerId);
 
         if (deleting) {
-            console.log('deleting coupon success')
-            res.send({ success: 7 })
+            if (offerType === 'product') {
+                await productModel.findByIdAndUpdate(
+                    productId,
+                    { $pull: { offers: offerId } },
+                    { returnOriginal: false }
+                );
+            } else if (offerType === 'category') {
+                const fetchCategory = await categoryModel.findById(categoryId);
+                if (fetchCategory) {
+                    await productModel.updateMany(
+                        { category: fetchCategory.categoryName },
+                        { $pull: { offers: offerId } }
+                    );
+                }
+            }
+
+            console.log('Deleting offer success');
+            res.send({ success: 7 });
+        } else {
+            console.log('Failed to delete offer');
         }
 
-
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 module.exports = {
     loadOffers,

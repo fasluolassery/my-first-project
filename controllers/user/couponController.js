@@ -34,10 +34,10 @@ const applyCoupon = async (req, res, next) => {
             return res.send({ error: '*Coupon not valid yet' })
         }
 
-        if (fetchCoupon.userList.some(user => user.userId === userId)) {
-            console.log("Coupon already used by this user");
-            return res.send({ error: '*Coupon already used' })
-        }
+        // if (fetchCoupon.userList.some(user => user.userId === userId)) {
+        //     console.log("Coupon already used by this user");
+        //     return res.send({ error: '*Coupon already used' })
+        // }
 
         const findCart = await cartModel.findOne({ userId: userId }).populate('items.productId');
 

@@ -231,8 +231,13 @@
                                                                             </div>
                                                                             <div class="box-inner">
                                                                                 <span class="price">
-                                                                                    <span class="new">₹<%=
-                                                                                            product.price.toFixed(2) %>
+                                                                                    <span class="new">
+                                                                                        <% if(product.offerPrice > 0) {%>
+                                                                                            ₹<%=  product.offerPrice.toFixed(2) %> |
+                                                                                            <del>₹<%= product.price.toFixed(2) %></del>
+                                                                                            <% }else{ %>
+                                                                                        ₹<%=  product.price.toFixed(2) %>
+                                                                                        <% } %>
                                                                                     </span>
                                                                                 </span>
                                                                                 <div class="actions">
@@ -300,10 +305,11 @@
                                         <h4 class="sidebar-title">Top Categories</h4>
                                         <div class="sidebar-widget-category">
                                             <ul>
-                                                <li><a href="/products" class="selected m-0"> All
+                                                <li><a href onclick="filterByCategory(event, 'All')" class="selected m-0"> All
                                                         <span>(<%= categories.length %>)</span> </a></li>
                                                 <% if(categories) { %>
                                                     <% categories.forEach(category=> { %>
+                                                        
                                                         <input type="hidden" value="<%= category.categoryName %>" id="categoryForFilter">
                                                         <li><a href
                                                                 onclick="filterByCategory(event, '<%= category.categoryName %>')">

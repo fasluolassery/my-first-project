@@ -2,6 +2,36 @@ const productModel = require('../../models/productModel')
 const cartModel = require('../../models/cartModel')
 const userModel = require('../../models/userModel')
 
+const updatedPrice = async (products) => {
+    try {
+        const updatedProducts = await Promise.all(products.map(async (product) => {
+
+            const activeOffers = product.offers.filter(offer => new Date(offer.endDate) > new Date());
+
+            if (activeOffers.length > 0) {
+
+                const latestOffer = activeOffers[activeOffers.length - 1];
+
+                product.offerPrice = product.price - latestOffer.discount;
+
+            } else {
+
+                product.offerPrice = 0;
+            }
+
+            await product.save();
+
+            return product;
+
+        }));
+
+        return updatedProducts;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const loadCart = async (req, res, next) => {
     try {
         const { userId } = req.session
@@ -35,65 +65,64 @@ const loadCart = async (req, res, next) => {
     }
 }
 
-
-
 const getProductsToAdd = async (req, res, next) => {
     try {
         const { productId } = req.body;
-        // console.log(productId) //! to remove
-
 
         if (!req.session.user) {
-            console.log("User is not logged in to add product to cart")
-            return res.send({ status: 1 })
+            console.log("User is not logged in to add product to cart");
+            return res.send({ status: 1 });
         }
 
-        const { user } = req.session
+        const { user } = req.session;
 
-        const findUserData = await userModel.findOne({ email: user })
+        const findUserData = await userModel.findOne({ email: user });
 
         if (!findUserData) {
-            console.log("User session out")
-            return res.send({ status: 1 })
+            console.log("User session out");
+            return res.send({ status: 1 });
         }
+
+        const product = await productModel.findById(productId).populate('offers');
+
+        if (!product) {
+            return res.send({ status: 1, message: 'Product not found' });
+        }
+
+        // Calculate updated price with offers
+        const productsWithUpdatedPrice = await updatedPrice([product]);
+        const updatedProduct = productsWithUpdatedPrice[0];
 
         let userCart = await cartModel.findOne({ userId: findUserData.id });
 
         if (!userCart) {
-
             const newCart = new cartModel({
                 userId: findUserData.id,
-                items: [{ productId: productId, quantity: 1 }]
-            })
+                items: [{ productId: productId, quantity: 1, price: updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price }]
+            });
 
             const saveCart = await newCart.save();
 
             if (saveCart) {
-                res.send({ status: 2 })
+                res.send({ status: 2 });
             }
         } else {
-
-            // Find index of the item if it already exists in the cart
             const itemIndex = userCart.items.findIndex(item => item.productId.toString() === productId);
 
             if (itemIndex > -1) {
-                // If item exists, send a message that the product is already in the cart
                 res.send({ status: 3 });
             } else {
-                // If item does not exist, add new item to the cart
-                userCart.items.push({ productId, quantity: 1 });
+                userCart.items.push({ productId, quantity: 1, price: updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price });
 
-                // Save the updated cart
                 await userCart.save();
                 res.send({ status: 2 });
             }
         }
 
-
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 const removeProduct = async (req, res, next) => {
     try {
@@ -119,98 +148,90 @@ const removeProduct = async (req, res, next) => {
 
 const addQuantity = async (req, res, next) => {
     try {
-        let { productId, quantity } = req.body
-        const { userId } = req.session
+        let { productId, quantity } = req.body;
+        const { userId } = req.session;
 
         if (!userId) {
-            return console.log("userid is not here at addquantity")
+            return console.log("User ID is not present");
         }
 
-        const findProductCart = await cartModel.findOne({ userId: userId })
+        const findProductCart = await cartModel.findOne({ userId: userId });
 
         if (!findProductCart) {
-            return console.log("can't find cart of user at addquantity")
+            return console.log("Cart not found");
         }
 
-        const productStock = await productModel.findOne({ _id: productId })
-        if (!productStock) {
-            return console.log("product not found in addquantity")
+        const product = await productModel.findById(productId).populate('offers');
+
+        if (!product) {
+            return console.log("Product not found");
         }
 
-        if (productStock.stock < quantity) {
-            let error = ''
-            if (!productStock.stock) {
-                error = '*out of stock'
-            } else {
-                error = `*only ${productStock.stock} in stock`
+        // Calculate updated price with offers
+        const productsWithUpdatedPrice = await updatedPrice([product]);
+        const updatedProduct = productsWithUpdatedPrice[0];
+
+        if (updatedProduct.stock < quantity) {
+            let error = updatedProduct.stock ? `*only ${updatedProduct.stock} in stock` : '*out of stock';
+            return res.send({ error: error });
+        }
+
+        findProductCart.items.forEach((item) => {
+            if (item.productId.toString() === productId) {
+                item.quantity = quantity;
+                item.price = updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price;
             }
-            return res.send({ error: error })
-        }
+        });
 
-        const stockCheck = findProductCart.items.forEach((val, ind) => {
-            if (val.productId == productId) {
-                // console.log(val)
-                if (quantity <= productStock.stock) {
-                    val.quantity = quantity
-                } else {
-                    return quantity = productStock.stock
-                }
-            }
-        })
-
-        const saveIncQuantity = await findProductCart.save()
-        if (saveIncQuantity) {
-            // console.log("quantity addedd to the cart, product at addquantity")
-            const productSubtotal = quantity * productStock.price
-            return res.send({ quantity: quantity, productSubtotal: productSubtotal })
-        }
+        await findProductCart.save();
+        const productSubtotal = quantity * (updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price);
+        return res.send({ quantity: quantity, productSubtotal: productSubtotal });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 const decQuantity = async (req, res, next) => {
     try {
-        let { productId, quantity } = req.body
-        const { userId } = req.session
+        let { productId, quantity } = req.body;
+        const { userId } = req.session;
 
         if (!userId) {
-            return console.log("userid is not here at addquantity")
+            return console.log("User ID is not present");
         }
 
-        const findProductCart = await cartModel.findOne({ userId: userId })
+        const findProductCart = await cartModel.findOne({ userId: userId });
 
         if (!findProductCart) {
-            return console.log("can't find cart of user at addquantity")
+            return console.log("Cart not found");
         }
 
-        const productStock = await productModel.findOne({ _id: productId })
-        if (!productStock) {
-            return console.log("product not found in addquantity")
+        const product = await productModel.findById(productId).populate('offers');
+
+        if (!product) {
+            return console.log("Product not found");
         }
 
-        findProductCart.items.forEach((val, ind) => {
-            if (val.productId == productId) {
-                if (quantity <= productStock.stock) {
-                    val.quantity = quantity
-                } else {
-                    return quantity = productStock.stock
-                }
+        // Calculate updated price with offers
+        const productsWithUpdatedPrice = await updatedPrice([product]);
+        const updatedProduct = productsWithUpdatedPrice[0];
+
+        findProductCart.items.forEach((item) => {
+            if (item.productId.toString() === productId) {
+                item.quantity = quantity;
+                item.price = updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price;
             }
-        })
+        });
 
-        const saveDecQuantity = await findProductCart.save()
-        if (saveDecQuantity) {
-            // console.log("quantity decrement at the cart, product at addquantity")
-            const productSubtotal = quantity * productStock.price
-            return res.send({ quantity: quantity, productSubtotal: productSubtotal })
-        }
+        await findProductCart.save();
+        const productSubtotal = quantity * (updatedProduct.offerPrice > 0 ? updatedProduct.offerPrice : updatedProduct.price);
+        return res.send({ quantity: quantity, productSubtotal: productSubtotal });
+
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
-
+};
 
 module.exports = {
     getProductsToAdd,

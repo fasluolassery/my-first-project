@@ -399,7 +399,14 @@
                                                                 </a>
                                                             </h5>
                                                             <span class="price">
-                                                                <span class="new">₹<%= rp.price%></span>
+                                                                <span class="new">
+                                                                    <% if(rp.offerPrice > 0) {%>
+                                                                        ₹<%=  rp.offerPrice.toFixed(2) %> |
+                                                                        <del>₹<%= rp.price.toFixed(2) %></del>
+                                                                        <% }else{ %>
+                                                                    ₹<%=  rp.price.toFixed(2) %>
+                                                                    <% } %>
+                                                                </span>
                                                             </span>
                                                         </div>
                                                         <div class="actions">

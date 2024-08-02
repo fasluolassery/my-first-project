@@ -262,20 +262,15 @@
                     <div class="container">
 
                         <div class="d-flex justify-content-between align-items-center pb-3">
-                            <% if(order.orderStatus === 'Cancelled') { %>
-                                <h3 class="cart-page-title mb-0 text-danger">Your Cancelled Order Details</h3>
-                            <% } else if(order.orderStatus === 'Delivered') { %>
-                                <h3 class="cart-page-title mb-0 text-success">Your Delivered Order Details</h3>
-                            <% } else if(order.orderStatus === 'Returned') { %>
-                                <h3 class="cart-page-title mb-0 text-danger">Your Returned Order Details</h3>
-                            <% } else { %>
-                                <div>
-                                    <h3 class="cart-page-title mb-3">Your Order Details</h3>
-                                    <h3 class="ms-2 h5 mb-0 h6">Status: <%= order.orderStatus %></h3>
-                                </div>
-                            <% } %>
+
+                            <div>
+                                <h3 class="cart-page-title mb-3">Your Order Details</h3>
+                                <h3 class="ms-2 h5 mb-0 h6">Status: <%= order.orderStatus %>
+                                </h3>
+                            </div>
                             <div class="d-flex">
-                                <% if(order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Delivered' && order.orderStatus !== 'Returned') { %>
+                                <% if(order.orderStatus !=='Cancelled' && order.orderStatus !=='Delivered' &&
+                                    order.orderStatus !=='Returned' ) { %>
                                     <button class="btn btn-primary me-2"
                                         onclick="cancelBulkOrder(event, '<%= order.id %>')"
                                         style="background-color: #007bff; color: #fff; width: auto; height: auto;">
@@ -283,18 +278,17 @@
                                             Cancel Order
                                         </p>
                                     </button>
-                                <% } %>
-                                <button class="btn btn-primary"
-                                    onclick="backtoAccount(event)"
-                                    style="background-color: #007bff; color: #fff; width: auto; height: auto;">
-                                    <p class="p-3 mb-0">
-                                        Go Back
-                                    </p>
-                                </button>
+                                    <% } %>
+                                        <button class="btn btn-primary" onclick="backtoAccount(event)"
+                                            style="background-color: #007bff; color: #fff; width: auto; height: auto;">
+                                            <p class="p-3 mb-0">
+                                                Go Back
+                                            </p>
+                                        </button>
                             </div>
                         </div>
-                        
-                        
+
+
 
 
                         <div class="row">
@@ -331,31 +325,51 @@
                                                                 <%= pro.quantity %>
                                                             </span>
 
-                                                        <td class="product-subtotal">$<%= pro.quantity * pro.price %></td>
-                                                        <td class="product-subtotal"><%= pro.productStatus %></td>
-                                                        
-                                                        <% if(pro.productStatus=='Pending' ) {%>
-                                                            <td class="product-wishlist-cart">
-                                                                <a href=""
-                                                                    onclick="cancelSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Cancel</a>
+                                                        <td class="product-subtotal">$<%= pro.quantity * pro.price %>
+                                                        </td>
+                                                        <td class="product-subtotal">
+                                                            <%= pro.productStatus %>
+                                                        </td>
+                                                        <% if (pro.returnStatus=='Approved' ) { %>
+                                                            <td>
+                                                                <p class="error-message text-success mt-1">
+                                                                    Returned</p>
                                                             </td>
-                                                            <% }else if(pro.productStatus=='Delivered' ){ %>
-                                                                <td class="product-wishlist-cart">
-                                                                    <a href=""
-                                                                        onclick="returnSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Return</a>
+                                                            <%}else if(pro.returnStatus=='Rejected') {%>
+                                                                <td>
+                                                                    <p class="error-message text-danger mt-1">
+                                                                        *return Rejected</p>
                                                                 </td>
+                                                                <%}else if(pro.returnRequested==true) {%>
+                                                                    <td>
+                                                                        <p class="error-message text-danger mt-1">
+                                                                            *request send for return</p>
+                                                                    </td>
+                                                                    <%}else if(pro.productStatus=='Pending' ) {%>
+                                                                        <td class="product-wishlist-cart">
+                                                                            <a href=""
+                                                                                onclick="cancelSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Cancel</a>
+                                                                        </td>
+                                                                        <% }else if(pro.productStatus=='Delivered' ){ %>
+                                                                            <td class="product-wishlist-cart">
+                                                                                <a href=""
+                                                                                    onclick="returnSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Return</a>
+                                                                            </td>
 
-                                                                <% } else if (pro.productStatus=='Returned') { %>
-                                                                    <td>
-                                                                        <p class="error-message text-danger mt-1">
-                                                                            *returned</p>
-                                                                    </td>
-                                                                <% }else{ %>
-                                                                    <td>
-                                                                        <p class="error-message text-danger mt-1">
-                                                                            *cancelled</p>
-                                                                    </td>
-                                                                    <% } %>
+                                                                            <% } else if (pro.productStatus=='Returned'
+                                                                                ) { %>
+                                                                                <td>
+                                                                                    <p
+                                                                                        class="error-message text-danger mt-1">
+                                                                                        *returned</p>
+                                                                                </td>
+                                                                                <% }else{ %>
+                                                                                    <td>
+                                                                                        <p
+                                                                                            class="error-message text-danger mt-1">
+                                                                                            *cancelled</p>
+                                                                                    </td>
+                                                                                    <% } %>
                                                     </tr>
                                                     <% }) %>
                                                         <!-- <tr>
@@ -408,8 +422,8 @@
                                                 <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
                                             </ul>
                                         </div>
-                                        <h4 class="grand-totall-title">Grand Total <span
-                                                id="grand-total-amount">₹<%= order.totalAmount %></span></h4>
+                                        <h4 class="grand-totall-title">Grand Total <span id="grand-total-amount">₹<%=
+                                                    order.totalAmount %></span></h4>
                                         <!-- <a href="/checkout">Proceed to Checkout</a> -->
                                     </div>
                                 </div>
@@ -606,7 +620,7 @@
                                             window.location.href = '/myAccount'
                                         }
                                     })
-                                }else if(res.data.success = 8){
+                                } else if (res.data.success = 8) {
                                     Swal.fire({
                                         icon: "success",
                                         title: "Order Cancelled",
@@ -664,7 +678,7 @@
                                             window.location.href = '/myAccount'
                                         }
                                     })
-                                }else if(res.data.success == 8){
+                                } else if (res.data.success == 8) {
                                     Swal.fire({
                                         icon: "success",
                                         title: "Order Cancelled",
@@ -701,7 +715,7 @@
                 Swal.fire({
                     icon: "question",
                     title: "Are you sure?",
-                    text: "",
+                    text: "send a request for return!",
                     // showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonColor: '#0056b3',
@@ -714,7 +728,7 @@
                                 if (res.data.success) {
                                     Swal.fire({
                                         icon: "success",
-                                        title: "Order Return send",
+                                        title: "request send",
                                         text: "",
                                         // showDenyButton: true,
                                         // showCancelButton: true,
@@ -742,7 +756,7 @@
 
         <!-- back Button -->
         <script>
-            function backtoAccount(event){
+            function backtoAccount(event) {
                 event.preventDefault()
                 window.location.href = '/myAccount'
             }

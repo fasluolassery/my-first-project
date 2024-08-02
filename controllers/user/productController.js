@@ -54,18 +54,22 @@ const loadProductsUser = async (req, res, next) => {
 const loadSingleProductUser = async (req, res, next) => {
     try {
         const productId = req.query.id;
-        const findProduct = await Product.findOne({ _id: productId });
 
-
-
-        const findRelatedProducts = await Product.find({ category: findProduct.category })
-        // console.log(findRelatedProducts) //!to remove
-
-        const { user, userId } = req.session
-
+        // Find the single product and populate offers
+        let findProduct = await Product.findOne({ _id: productId }).populate('offers');
+        
         if (!findProduct) {
             throw new Error('Product not found');
         }
+
+        // Update the product price based on offers
+        const productsWithUpdatedPrice = await updatedPrice([findProduct]);
+        findProduct = productsWithUpdatedPrice[0]; // Extract the updated product
+
+        // Find related products
+        const findRelatedProducts = await Product.find({ category: findProduct.category }).populate('offers');
+
+        const { user, userId } = req.session;
 
         const breadcrumbs = [
             { name: 'Home', url: '/' },
@@ -75,40 +79,11 @@ const loadSingleProductUser = async (req, res, next) => {
 
         res.render('user/productview', { product: findProduct, breadcrumbs: breadcrumbs, relatedProducts: findRelatedProducts, user: userId });
 
-
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
-const sortProducts = async (req, res, next) => {
-    try {
-        const { index } = req.body
-        if (index == 1) {
-            const findProducts = await Product.find().sort({ productName: 1 })
-
-            res.send({ products: findProducts })
-        } else if (index == 2) {
-            const findProducts = await Product.find().sort({ productName: -1 })
-
-            res.send({ products: findProducts })
-        } else if (index == 3) {
-            const findProducts = await Product.find().sort({ price: 1 })
-
-            res.send({ products: findProducts })
-        } else if (index == 4) {
-            const findProducts = await Product.find().sort({ price: -1 })
-
-            res.send({ products: findProducts })
-        } else if (!index) {
-            const findProducts = await Product.find()
-
-            res.send({ products: findProducts })
-        }
-    } catch (error) {
-        next(error)
-    }
-}
 
 const combinedController = async (req, res, next) => {
     try {
@@ -124,7 +99,9 @@ const combinedController = async (req, res, next) => {
         }
 
         // Filter by category
-        if (category) {
+        if (category == "All") {
+            
+        }else if(category){
             query.category = category;
         }
 
@@ -158,13 +135,9 @@ const combinedController = async (req, res, next) => {
     }
 };
 
-
-
-
 module.exports = {
 
     loadProductsUser,
     loadSingleProductUser,
-    sortProducts,
     combinedController,
 };

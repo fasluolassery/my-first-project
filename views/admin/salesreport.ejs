@@ -1,7 +1,7 @@
 <%- include('../layout/adminhead.ejs') %>
     </head>
 
-    <body class="dark">
+    <body class="dark" id="body">
         <div class="screen-overlay"></div>
         <aside class="navbar-aside" id="offcanvas_aside">
             <div class="aside-top">
@@ -114,12 +114,15 @@
                             </div>
                             <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="startDate">
 
-                                <input type="date" placeholder="Type here" class="form-control" value="2024-07-10" />
+                                <input type="date" placeholder="Type here" class="form-control" id="startDateInput"
+                                    value="2024-07-10"/>
 
                             </div>
+                            
                             <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="endDate">
 
-                                <input type="date" placeholder="Type here" class="form-control" value="2024-07-31" />
+                                <input type="date" placeholder="Type here" class="form-control" id="endDateInput"
+                                    value="2024-07-31" onchange="customDate(event)" />
 
                             </div>
                             <div class="col-lg-2 col-6 col-md-3">
@@ -300,20 +303,30 @@
                 event.preventDefault()
 
                 const input = document.getElementById('dateInput').value
+                let dateRange
+
                 if (input == 'Custom') {
 
                     document.getElementById('startDate').style.display = 'block'
                     document.getElementById('endDate').style.display = 'block'
 
-                }else{
+                } else {
 
                     document.getElementById('startDate').style.display = 'none'
                     document.getElementById('endDate').style.display = 'none'
 
+                    window.location.href = `/admin/salesReport?type=${input}`
                 }
 
-                
+            }
 
+            function customDate(event) {
+                event.preventDefault()
+
+                const startDate = document.getElementById('startDateInput').value
+                const endDate = document.getElementById('endDateInput').value
+
+                window.location.href = `/admin/salesReport?startDate=${startDate}&endDate=${endDate}`
             }
         </script>
 

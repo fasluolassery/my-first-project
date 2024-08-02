@@ -101,7 +101,90 @@
                         <p>Lorem ipsum dolor sit amet.</p>
                     </div>
                     <div>
-                        <input type="text" placeholder="Search order ID" class="form-control bg-white" />
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal"
+                            data-bs-target="#returnRequestModal">
+                            Requests
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="returnRequestsBadge">
+                                <%= reqCount %>
+                                    <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="returnRequestModal" tabindex="-1"
+                            aria-labelledby="returnRequestModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="returnRequestModalLabel" style="color: black;">
+                                            Return Requests</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Table to display return requests -->
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Product Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th class="text-end">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="returnRequestsTableBody" class="bg-secondary text-dark">
+                                                <% if (returns.length> 0) { %>
+                                                    <% returns.forEach(order=> { %>
+                                                        <% order.products.forEach(product=> { %>
+                                                            <% if (product.returnRequested) { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= order.shippingAddress.userName %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.name %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.quantity %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="badge rounded-pill
+                                                                            <% if (product.returnStatus === 'Pending') { %>
+                                                                                alert-warning
+                                                                            <% } else if (product.returnStatus === 'Approved') { %>
+                                                                                alert-success
+                                                                            <% } else if (product.returnStatus === 'Rejected') { %>
+                                                                                alert-danger
+                                                                            <% } %>">
+                                                                            <%= product.returnStatus %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <% if (product.returnStatus==='Pending' ) { %>
+                                                                            <button class="btn btn-brand btn-sm me-2"
+                                                                                onclick="updateReturnRequest('<%= order._id %>', '<%= product.product._id %>', 'Approved')">Approve</button>
+                                                                            <button class="btn btn-light btn-sm"
+                                                                                onclick="updateReturnRequest('<%= order._id %>', '<%= product.product._id %>', 'Rejected')">Reject</button>
+                                                                            <% } %>
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
+                                                                    <% }) %>
+                                                                        <% }) %>
+                                                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
                 <div class="card mb-4">
@@ -236,7 +319,7 @@
                                                                                     style="height: 37px;">
                                                                                     <i class="fas fa-times"></i>
                                                                                 </button>
-                                                                                
+
                                                                             </td>
                                             </tr>
                                             <% }) %>
@@ -310,6 +393,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- cancel order -->
         <script>
             function cancelOrder(event, orderId) {
                 event.preventDefault()
@@ -338,7 +422,7 @@
                                         confirmButtonColor: "#3BB77E", // Bootstrap's success color
                                         confirmButtonText: "OK"
                                     }).then(result => {
-                                        if(result.isConfirmed){
+                                        if (result.isConfirmed) {
                                             window.location.reload()
                                         }
                                     })
@@ -352,6 +436,31 @@
                 })
 
 
+            }
+        </script>
+
+        <!-- updateReturnRequest -->
+        <script>
+            function updateReturnRequest(orderId, productId, status) {
+                axios.post('/admin/updateReturnRequest', { orderId, productId, status })
+                    .then(res => {
+                        if (res.data.success) {
+                            Swal.fire({
+                                title: "<span style='color: #3BB77E;'>Success!</span>",
+                                html: `<span style='color: black;'>Return ${status}</span>`,
+                                icon: "success",
+                                confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                confirmButtonText: "OK"
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    window.location.reload()
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         </script>
 

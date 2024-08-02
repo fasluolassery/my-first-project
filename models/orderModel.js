@@ -16,7 +16,9 @@ const orderSchema = new mongoose.Schema({
             name: { type: String, required: true},
             quantity: {type: Number, required: true},
             price: {type: Number, required: true},
-            productStatus: {type: String, required: true}
+            productStatus: {type: String, required: true},
+            returnRequested: { type: Boolean, default: false },
+            returnStatus: { type: String, default: 'None' } // 'None', 'Pending', 'Approved', 'Rejected'
         }
     ],
     shippingAddress: {

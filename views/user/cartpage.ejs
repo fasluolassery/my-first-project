@@ -291,8 +291,13 @@
                                                                 <%= item.productName %>
                                                             </a></td>
                                                         <td class="product-price-cart">
-                                                            <span class="amount" data-price="<%= item.price %>">₹<%=
-                                                                    item.price %></span>
+                                                            <span class="amount" data-price="<%= item.price %>"><% if(item.offerPrice > 0) {%>
+                                                                ₹<%=  item.offerPrice.toFixed(2) %> 
+                                                                
+                                                                <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
+                                                                <% }else{ %>
+                                                            ₹<%=  item.price.toFixed(2) %>
+                                                            <% } %></span>
                                                         </td>
                                                         <td class="product-quantity">
                                                             <% if(item.stock <=0) {%>
@@ -319,8 +324,13 @@
                                                                     </div>
                                                                     <% } %>
                                                         </td>
-                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">₹<%=
-                                                                item.price %>
+                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>"><% if(item.offerPrice > 0) {%>
+                                                            ₹<%=  item.offerPrice.toFixed(2) %> 
+                                                            
+                                                            <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
+                                                            <% }else{ %>
+                                                        ₹<%=  item.price.toFixed(2) %>
+                                                        <% } %>
                                                         </td>
                                                         <td class="product-remove">
                                                             <a onclick="removeitemFromCart('<%= item.id %>')"><i

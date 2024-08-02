@@ -194,47 +194,6 @@ const removeAddress = async (req, res, next) => {
     }
 }
 
-const search = async (req, res, next) => {
-    try {
-        const { value } = req.body
-
-        if (value.length <= 0) {
-            return console.log("there is no value at search")
-        }
-
-        const findProducts = await productModel.find({ productName: new RegExp(value, 'i') })
-
-        // const findCategories = await categoryModel.find({categoryName: new RegExp(value, 'i')})
-
-        res.send({
-            products: findProducts,
-            // categories: findCategories
-        })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const filterByCategory = async (req, res, next) => {
-    try {
-        const { category } = req.body
-
-        if (!category) {
-            return
-        }
-
-        const findProducts = await productModel.find({ category: category })
-
-        res.send({
-            products: findProducts
-        })
-
-    } catch (error) {
-        next(error)
-    }
-}
-
-
 module.exports = {
 
     loadUserAccount,
@@ -243,7 +202,4 @@ module.exports = {
     addAddress,
     removeAddress,
     editAddress,
-    search,
-    filterByCategory,
-
 };

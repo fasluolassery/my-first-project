@@ -10,7 +10,13 @@ const loadOrders = async (req, res, next) => {
         const totalOrders = await orderModel.countDocuments();
         const totalPages = Math.ceil(totalOrders / limit);
 
-        res.render('admin/order', { orders: findAllOrders, currentPage: page, totalPages })
+        // Fetch return requests
+        const returnRequests = await orderModel.find({ 'products.returnRequested': true }).sort({ createdAt: -1})
+            .populate('products.product') // Populate product details
+            
+        const returnRequestsCount = await orderModel.find({ 'products.returnRequested': true }).countDocuments();
+
+        res.render('admin/order', { orders: findAllOrders, currentPage: page, totalPages, reqCount: returnRequestsCount, returns: returnRequests })
     } catch (error) {
         next(error)
     }
@@ -117,9 +123,10 @@ const changeProductStatus = async (req, res, next) => {
 
         find.productStatus = newStatus
 
-        const allCancelled = findOrder.products.every(p => p.productStatus === 'Cancelled');
+        const allCancelled = findOrder.products.every(p => p.productStatus === newStatus);
+
         if (allCancelled) {
-            findOrder.orderStatus = 'Cancelled';
+            findOrder.orderStatus = newStatus;
         }
 
         await findOrder.save()
@@ -129,6 +136,53 @@ const changeProductStatus = async (req, res, next) => {
     }
 }
 
+const updateReturnRequest = async (req, res, next) => {
+    try {
+        const { orderId, productId, status } = req.body;
+
+        if (!orderId || !productId || !status) {
+            return res.status(400).json({ message: 'Order ID, Product ID, and Status are required' });
+        }
+
+        // Find the order and update the product's return status
+        const order = await orderModel.findOne({ _id: orderId, 'products.product': productId });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        const product = order.products.find(val => val.product.toString() === productId);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found in the order' });
+        }
+
+        // Update the return status of the product
+        product.returnStatus = status;
+        // product.returnRequested = false;
+
+        // Update the product status to 'Returned' if the return status is 'Approved'
+        if (status === 'Approved') {
+            product.productStatus = 'Returned';
+        }
+
+        // Check if all products have been returned
+        const allReturned = order.products.every(p => p.returnStatus === 'Approved');
+
+        if (allReturned) {
+            order.orderStatus = 'Returned';
+        }
+
+        // Save the order with updated product
+        await order.save();
+
+        res.status(200).json({ success: 'Return request updated successfully' });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = {
     loadOrders,
     loadOrderView,
@@ -136,4 +190,5 @@ module.exports = {
     changeOrderStatus,
     cancelOrders,
     changeProductStatus,
+    updateReturnRequest,
 }

@@ -294,48 +294,83 @@ const cancelSingleProduct = async (req, res, next) => {
     }
 }
 
+// const returnSingleOrderfake = async (req, res, next) => {
+//     try {
+//         const { orderId, productId } = req.body
+
+//         if (!orderId || !productId) {
+//             return console.log("can't get order id and product id at cancel single product")
+//         }
+
+//         const findOrder = await orderModel.findById({ _id: orderId })
+
+//         if (!findOrder) {
+//             return console.log("can't find order at cancel single products")
+//         }
+
+//         const product = findOrder.products.find(val => val.id == productId)
+
+//         if (!product) {
+//             return console.log("can't find product at cancel single products")
+//         }
+
+//         const findProduct = await productModel.findById(product.product.toString())
+
+//         if (!findProduct) {
+//             return console.log("can't find findProduct in cancel single product")
+//         }
+
+//         findProduct.stock += product.quantity
+
+//         await findProduct.save()
+
+//         product.productStatus = 'Returned'
+
+//         const saveCancel = await findOrder.save()
+
+//         if (saveCancel) {
+//             console.log("cancel product success")
+//             res.send({ success: 7 })
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// }
+
 const returnSingleOrder = async (req, res, next) => {
     try {
-        const { orderId, productId } = req.body
+        const { orderId, productId } = req.body;
 
         if (!orderId || !productId) {
-            return console.log("can't get order id and product id at cancel single product")
+            return console.log("Order ID and Product ID are required.");
         }
 
-        const findOrder = await orderModel.findById({ _id: orderId })
-
+        const findOrder = await orderModel.findById(orderId);
         if (!findOrder) {
-            return console.log("can't find order at cancel single products")
+            return console.log("Order not found.");
         }
 
-        const product = findOrder.products.find(val => val.id == productId)
-
+        const product = findOrder.products.find(val => val.id == productId);
         if (!product) {
-            return console.log("can't find product at cancel single products")
+            return console.log("Product not found in order.");
         }
 
-        const findProduct = await productModel.findById(product.product.toString())
-
-        if (!findProduct) {
-            return console.log("can't find findProduct in cancel single product")
+        if (product.returnRequested) {
+            return console.log("Return request already submitted for this product.");
         }
 
-        findProduct.stock += product.quantity
+        // Mark the product as return requested
+        product.returnRequested = true;
+        product.returnStatus = 'Pending';
 
-        await findProduct.save()
+        await findOrder.save();
 
-        product.productStatus = 'Returned'
-
-        const saveCancel = await findOrder.save()
-
-        if (saveCancel) {
-            console.log("cancel product success")
-            res.send({ success: 7 })
-        }
+        res.send({ success: 7, message: "Return request submitted. Awaiting admin approval." });
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
+
 
 
 module.exports = {
