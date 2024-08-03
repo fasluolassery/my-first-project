@@ -176,8 +176,12 @@
                                                         <h5 class="title"><a href="productview?id=<%= product.id %>">
                                                                 <%= product.productName %>
                                                             </a></h5>
-                                                        <span class="price"><span class="new">₹<%=
-                                                                    product.price.toFixed(2) %></span></span>
+                                                        <span class="price"><span class="new"><% if(product.offerPrice > 0) {%>
+                                                            ₹<%=  product.offerPrice.toFixed(2) %> |
+                                                            <del>₹<%= product.price.toFixed(2) %></del>
+                                                            <% }else{ %>
+                                                        ₹<%=  product.price %>
+                                                        <% } %></span></span>
                                                     </div>
                                                     <div class="actions">
                                                         <button title="Add To Cart" class="action add-to-cart"

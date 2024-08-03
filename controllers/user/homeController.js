@@ -1,13 +1,45 @@
 const cartModel = require('../../models/cartModel');
 const Products = require('../../models/productModel')
 const userModel = require('../../models/userModel');
-const { userLoginDetails } = require('./authController');
+
+const updatedPrice = async (products) => {
+    try {
+        const updatedProducts = await Promise.all(products.map(async (product) => {
+
+            const activeOffers = product.offers.filter(offer => new Date(offer.endDate) > new Date());
+
+            if (activeOffers.length > 0) {
+
+                const latestOffer = activeOffers[activeOffers.length - 1];
+
+                product.offerPrice = product.price - latestOffer.discount;
+
+            } else {
+
+                product.offerPrice = 0;
+            }
+
+            await product.save();
+
+            return product;
+
+        }));
+
+        return updatedProducts;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const loadHome = async (req, res, next) => {
     try {
 
         const { user, userId } = req.session
-        const findAllProducts = await Products.find({ isBlock: false }).sort({ createdAt: -1 }).limit(4)
+        let findAllProducts = await Products.find({ isBlock: false }).sort({ createdAt: -1 }).limit(4).populate('offers')
+
+        findAllProducts = await updatedPrice(findAllProducts)
+
         if (user) {
 
             res.render('user/homepage', { products: findAllProducts, user: userId })

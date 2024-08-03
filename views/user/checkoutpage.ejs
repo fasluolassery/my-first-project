@@ -590,8 +590,13 @@
                                                                     <%= item.productId.productName %> X <%=
                                                                             item.quantity %>
                                                                 </span>
-                                                                <span class="order-price">₹<%= (item.productId.price *
-                                                                        item.quantity).toFixed(2) %></span>
+                                                                <span class="order-price">
+                                                                    <% if(item.productId.offerPrice> 0) {%>
+                                                                        ₹<%= (item.productId.offerPrice * item.quantity)%>
+                                                                            <% }else{ %>
+                                                                                ₹<%= (item.productId.price * item.quantity) %>
+                                                                                    <% } %>
+                                                                </span>
                                                             </li>
                                                             <% }) %>
                                                                 <% } %>
@@ -600,7 +605,7 @@
                                             <div class="your-order-bottom">
                                                 <ul class="mb-2">
                                                     <li class="your-order-shipping">Shipping</li>
-                                                    <li class="new">₹40.00</li>
+                                                    <li class="new">₹40</li>
                                                 </ul>
                                                 <ul hidden id="discount-div">
                                                     <li class="your-order-shipping">Discount</li>
@@ -862,22 +867,20 @@
             document.addEventListener('DOMContentLoaded', () => {
                 axios.post('/checkoutTotal')
                     .then(res => {
-                        const productsDeatails = res.data.productsDeatails
-                        let total = 0
+                        const productsDetails = res.data.productsDetails;
+                        let total = 0;
 
-                        productsDeatails.forEach(item => {
-                            // console.log(typeof item.productId.price)
-                            // console.log(parseInt(item.productId.price))
-                            // console.log( parseInt(item.quantity))
-                            total += item.productId.price * item.quantity
+                        productsDetails.forEach(item => {
+                            total += item.effectivePrice * item.quantity;
                         });
 
-                        const totalDiv = document.getElementById('ordertotal')
-                        totalDiv.innerHTML = `₹${total + 40}`
+                        const totalDiv = document.getElementById('ordertotal');
+                        totalDiv.innerHTML = `₹${(total + 40).toFixed(2)}`;
                     })
                     .catch(err => {
-                        console.log(err)
-                    })
+                        console.log(err);
+                    });
+
             })
         </script>
         <!-- add address -->

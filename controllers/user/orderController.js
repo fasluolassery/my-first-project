@@ -40,12 +40,7 @@ const placeOrder = async (req, res, next) => {
             }
         })
 
-        let id = checkedAddress.id
-        let street = checkedAddress.street
-        let city = checkedAddress.city
-        let state = checkedAddress.state
-        let zip = checkedAddress.zip
-        let country = checkedAddress.country
+        const { id, street, city, state, zip, country } = checkedAddress;
 
         const products = await cartModel.findOne({ userId: userId }).populate('items.productId')
 
@@ -59,7 +54,7 @@ const placeOrder = async (req, res, next) => {
                 product: val.productId.id,
                 name: val.productId.productName,
                 quantity: val.quantity,
-                price: val.productId.price,
+                price: val.productId.offerPrice > 0 ? val.productId.offerPrice : val.productId.price,
                 productStatus: 'Pending'
             })
         })
@@ -68,8 +63,12 @@ const placeOrder = async (req, res, next) => {
         let originalAmount
 
         productsDetails.forEach(val => {
+
+            console.log(val)
             totalAmount += val.quantity * val.price
         })
+
+        console.log(totalAmount)
 
         originalAmount = totalAmount
 
@@ -94,16 +93,11 @@ const placeOrder = async (req, res, next) => {
                 return console.log("product not found")
             }
 
-            // console.log(product.stock, "and", item.quantity)
-
             if (product.stock < item.quantity) {
                 res.send({ error: 1 })
                 return console.log("product don't have enough quantity")
             }
 
-            // // Decrease product quantity
-            // product.stock -= item.quantity;
-            // await product.save();
         }
 
         const newOrder = new orderModel({
@@ -293,49 +287,6 @@ const cancelSingleProduct = async (req, res, next) => {
         next(error)
     }
 }
-
-// const returnSingleOrderfake = async (req, res, next) => {
-//     try {
-//         const { orderId, productId } = req.body
-
-//         if (!orderId || !productId) {
-//             return console.log("can't get order id and product id at cancel single product")
-//         }
-
-//         const findOrder = await orderModel.findById({ _id: orderId })
-
-//         if (!findOrder) {
-//             return console.log("can't find order at cancel single products")
-//         }
-
-//         const product = findOrder.products.find(val => val.id == productId)
-
-//         if (!product) {
-//             return console.log("can't find product at cancel single products")
-//         }
-
-//         const findProduct = await productModel.findById(product.product.toString())
-
-//         if (!findProduct) {
-//             return console.log("can't find findProduct in cancel single product")
-//         }
-
-//         findProduct.stock += product.quantity
-
-//         await findProduct.save()
-
-//         product.productStatus = 'Returned'
-
-//         const saveCancel = await findOrder.save()
-
-//         if (saveCancel) {
-//             console.log("cancel product success")
-//             res.send({ success: 7 })
-//         }
-//     } catch (error) {
-//         next(error)
-//     }
-// }
 
 const returnSingleOrder = async (req, res, next) => {
     try {

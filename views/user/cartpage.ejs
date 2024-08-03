@@ -291,13 +291,15 @@
                                                                 <%= item.productName %>
                                                             </a></td>
                                                         <td class="product-price-cart">
-                                                            <span class="amount" data-price="<%= item.price %>"><% if(item.offerPrice > 0) {%>
-                                                                ₹<%=  item.offerPrice.toFixed(2) %> 
-                                                                
-                                                                <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
-                                                                <% }else{ %>
-                                                            ₹<%=  item.price.toFixed(2) %>
-                                                            <% } %></span>
+                                                            <span class="amount" data-price="<%= item.price %>">
+                                                                <% if(item.offerPrice> 0) {%>
+                                                                    ₹<%= item.offerPrice.toFixed(2) %>
+
+                                                                        <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
+                                                                        <% }else{ %>
+                                                                            ₹<%= item.price.toFixed(2) %>
+                                                                                <% } %>
+                                                            </span>
                                                         </td>
                                                         <td class="product-quantity">
                                                             <% if(item.stock <=0) {%>
@@ -324,13 +326,14 @@
                                                                     </div>
                                                                     <% } %>
                                                         </td>
-                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>"><% if(item.offerPrice > 0) {%>
-                                                            ₹<%=  item.offerPrice.toFixed(2) %> 
-                                                            
-                                                            <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
-                                                            <% }else{ %>
-                                                        ₹<%=  item.price.toFixed(2) %>
-                                                        <% } %>
+                                                        <td class="product-subtotal" id="subtotal-<%= item.id %>">
+                                                            <% if(item.offerPrice> 0) {%>
+                                                                ₹<%= item.offerPrice.toFixed(2) %>
+
+                                                                    <!-- <del> |₹<%= item.price.toFixed(2) %></del> -->
+                                                                    <% }else{ %>
+                                                                        ₹<%= item.price.toFixed(2) %>
+                                                                            <% } %>
                                                         </td>
                                                         <td class="product-remove">
                                                             <a onclick="removeitemFromCart('<%= item.id %>')"><i
@@ -538,32 +541,30 @@
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
 
-
+        <!-- total amount -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 axios.post('/checkoutTotal')
                     .then(res => {
-                        const productsDeatails = res.data.productsDeatails
-                        let total = 0
+                        const productsDetails = res.data.productsDetails;
+                        let total = 0;
 
-                        productsDeatails.forEach(item => {
-                            // console.log(typeof item.productId.price)
-                            // console.log(parseInt(item.productId.price))
-                            // console.log( parseInt(item.quantity))
-                            total += item.productId.price * item.quantity
+                        productsDetails.forEach(item => {
+                            total += item.effectivePrice * item.quantity;
                         });
 
-                        const totalDiv = document.getElementById('total-products-amount')
-                        const grandTotal = document.getElementById('grand-total-amount')
-                        totalDiv.innerHTML = `₹${total}`
-                        grandTotal.innerHTML = `₹${total + 40}`
+                        const totalDiv = document.getElementById('total-products-amount');
+                        const grandTotal = document.getElementById('grand-total-amount');
+                        totalDiv.innerHTML = `₹${total.toFixed(2)}`;
+                        grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
                     })
                     .catch(err => {
-                        console.log(err)
-                    })
-            })
+                        console.log(err);
+                    });
+            });
         </script>
 
+        <!-- increament quantity -->
         <script>
             function quantityInc(event, itemId) {
                 event.preventDefault()
@@ -587,24 +588,21 @@
 
                             axios.post('/checkoutTotal')
                                 .then(res => {
-                                    const productsDeatails = res.data.productsDeatails
-                                    let total = 0
+                                    const productsDetails = res.data.productsDetails;
+                                    let total = 0;
 
-                                    productsDeatails.forEach(item => {
-                                        // console.log(typeof item.productId.price)
-                                        // console.log(parseInt(item.productId.price))
-                                        // console.log( parseInt(item.quantity))
-                                        total += item.productId.price * item.quantity
+                                    productsDetails.forEach(item => {
+                                        total += item.effectivePrice * item.quantity;
                                     });
 
-                                    const totalDiv = document.getElementById('total-products-amount')
-                                    const grandTotal = document.getElementById('grand-total-amount')
-                                    totalDiv.innerHTML = `₹${total}`
-                                    grandTotal.innerHTML = `₹${total + 40}`
+                                    const totalDiv = document.getElementById('total-products-amount');
+                                    const grandTotal = document.getElementById('grand-total-amount');
+                                    totalDiv.innerHTML = `₹${total.toFixed(2)}`;
+                                    grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
                                 })
                                 .catch(err => {
-                                    console.log(err)
-                                })
+                                    console.log(err);
+                                });
 
                         } else if (res.data.error) {
                             const errordiv = document.getElementById(`errMsgQnt-${itemId}`)
@@ -619,6 +617,7 @@
             }
         </script>
 
+        <!-- decrement quantity -->
         <script>
             function quantityDec(event, productId) {
                 event.preventDefault()
@@ -648,24 +647,21 @@
 
                             axios.post('/checkoutTotal')
                                 .then(res => {
-                                    const productsDeatails = res.data.productsDeatails
-                                    let total = 0
+                                    const productsDetails = res.data.productsDetails;
+                                    let total = 0;
 
-                                    productsDeatails.forEach(item => {
-                                        // console.log(typeof item.productId.price)
-                                        // console.log(parseInt(item.productId.price))
-                                        // console.log( parseInt(item.quantity))
-                                        total += item.productId.price * item.quantity
+                                    productsDetails.forEach(item => {
+                                        total += item.effectivePrice * item.quantity;
                                     });
 
-                                    const totalDiv = document.getElementById('total-products-amount')
-                                    const grandTotal = document.getElementById('grand-total-amount')
-                                    totalDiv.innerHTML = `₹${total}`
-                                    grandTotal.innerHTML = `₹${total + 40}`
+                                    const totalDiv = document.getElementById('total-products-amount');
+                                    const grandTotal = document.getElementById('grand-total-amount');
+                                    totalDiv.innerHTML = `₹${total.toFixed(2)}`;
+                                    grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
                                 })
                                 .catch(err => {
-                                    console.log(err)
-                                })
+                                    console.log(err);
+                                });
                         }
                     })
                     .catch(err => {
@@ -675,6 +671,7 @@
             }
         </script>
 
+        <!-- remove product from cart -->
         <script>
             function removeitemFromCart(productId) {
                 const userId = '<%= user %>'

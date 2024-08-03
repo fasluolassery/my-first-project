@@ -44,20 +44,33 @@ const loadCheckout = async (req, res, next) => {
 
 const checkoutTotal = async (req, res, next) => {
     try {
-        const { userId } = req.session
+        const { userId } = req.session;
 
-        const findUserCart = await cartModel.findOne({ userId: userId }).populate('items.productId')
+        const findUserCart = await cartModel.findOne({ userId: userId }).populate('items.productId');
 
         if (!findUserCart) {
-            return console.log("can't find user cart in checkout total")
+            return res.status(404).send({ error: "User cart not found" });
         }
 
-        res.send({ productsDeatails: findUserCart.items })
+        const itemsWithEffectivePrice = findUserCart.items.map(item => {
+            const product = item.productId;
+            const effectivePrice = product.offerPrice > 0 ? product.offerPrice : product.price;
+
+            return {
+                productId: product._id,
+                productName: product.productName,
+                effectivePrice: effectivePrice,
+                quantity: item.quantity
+            };
+        });
+
+        res.send({ productsDetails: itemsWithEffectivePrice });
 
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
+
 
 module.exports = {
     loadCheckout,
