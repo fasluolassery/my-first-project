@@ -237,6 +237,25 @@
                     <!-- card-body end// -->
                 </div>
                 <!-- card end// -->
+               
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Overall Summary</h5>
+                        <p>Total Sales Count: <%= totalOrders %></p>
+                        <p>Total Order Amount: ₹<%= totalPrice %></p>
+                        <!-- <p>Total Discount: ₹</p> -->
+                        <button id="download-pdf-btn" class="btn btn-primary">
+                            <i class="icon material-icons md-file_download"></i>
+                            <span class="text">Download PDF</span>
+                        </button>
+                        <button id="download-excel-btn" class="btn btn-primary">
+                            <i class="icon material-icons md-file_download"></i>
+                            <span class="text">Download Excel</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="pagination-area mt-15 mb-50">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
@@ -271,6 +290,7 @@
                         </ul>
                     </nav>
                 </div>
+
             </section>
             <!-- content-main end// -->
             <footer class="main-footer font-xs">
@@ -296,6 +316,40 @@
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+        <script>
+            document.getElementById('download-pdf-btn').addEventListener('click', function() {
+                var element = document.querySelector('.table'); // Select the table element
+                html2pdf(element); // Convert the table element to PDF
+            });
+        </script>
+
+        <script>
+            document.getElementById('download-excel-btn').addEventListener('click', exportToExcel);
+        
+            function exportToExcel() {
+            // Get the table element
+            var table = document.querySelector('.table');
+        
+            // Convert the table rows to an array of arrays representing rows and cells
+            var rows = Array.from(table.querySelectorAll('tr')).map(row => 
+                Array.from(row.querySelectorAll('td, th')).map(cell => cell.innerText)
+            );
+        
+            // Create a new workbook
+            var wb = XLSX.utils.book_new();
+        
+            // Add a worksheet with the table data
+            var ws = XLSX.utils.aoa_to_sheet(rows);
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        
+            XLSX.writeFile(wb, 'table_data.xlsx');
+        }
+        
+        </script>
 
         <!-- trigger dates -->
         <script>

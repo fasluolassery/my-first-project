@@ -45,7 +45,7 @@ const applyCoupon = async (req, res, next) => {
             return console.log("Cart not found for user");
         }
 
-        const totalAmount = findCart.items.reduce((acc, val) => acc + (val.productId.price * val.quantity), 0);
+        const totalAmount = findCart.items.reduce((acc, val) => acc + ((val.productId.offerPrice ? val.productId.offerPrice : val.productId.price) * val.quantity), 0);
 
         if (totalAmount < fetchCoupon.minPurchaseAmount) {
             console.log("Minimum purchase amount not met");

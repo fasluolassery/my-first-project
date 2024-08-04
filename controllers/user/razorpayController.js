@@ -54,19 +54,22 @@ const createOrder = async (req, res, next) => {
                 product: val.productId.id,
                 name: val.productId.productName,
                 quantity: val.quantity,
-                price: val.productId.price,
+                originalPrice: val.productId.price,
+                price:  val.productId.offerPrice > 0 ? val.productId.offerPrice : val.productId.price,
                 productStatus: 'Pending'
             })
         })
 
         let totalAmount = 40
         let originalAmount
+        let totalAmountTwo = 40
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
+            totalAmountTwo += val.quantity * val.originalPrice
         })
 
-        originalAmount = totalAmount
+        originalAmount = totalAmountTwo
 
         if (coupon.length > 0) {
             const fetchCoupon = await couponModel.findOne({ code: coupon })

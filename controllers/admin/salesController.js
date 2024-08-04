@@ -56,19 +56,25 @@ const loadSalesReport = async (req, res, next) => {
             };
         }
 
-        const fetchAllOrders = await orderModel.find({ 
+        const fetchAllOrders = await orderModel.find({
             orderStatus: 'Delivered',
-            ...dateFilter 
-        }).sort({ createdAt: -1 }).limit(limit).skip(skip);
+            ...dateFilter
+        }).sort({ createdAt: -1 }).limit(limit).skip(skip).populate('products');
 
-        const totalOrders = await orderModel.countDocuments({ 
+        const totalOrders = await orderModel.countDocuments({
             orderStatus: 'Delivered',
-            ...dateFilter 
+            ...dateFilter
         });
+
+        const totalPrice = fetchAllOrders
+            .map(order => order.totalAmount)
+            .reduce((acc, amount) => acc + amount, 0);
 
         const totalPages = Math.ceil(totalOrders / limit);
 
         res.render('admin/salesreport', {
+            totalPrice,
+            totalOrders,
             fetchAllOrders,
             currentPage: page,
             totalPages
