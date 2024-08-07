@@ -60,7 +60,7 @@ const placeOrder = async (req, res, next) => {
             })
         })
 
-        let totalAmount = 40
+        let totalAmount = 40 //? pending
         let originalAmount
         let totalAmountTwo = 40
 

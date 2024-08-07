@@ -269,8 +269,7 @@
                                 </h3>
                             </div>
                             <div class="d-flex">
-                                <% if(order.orderStatus !=='Cancelled' && order.orderStatus !=='Delivered' &&
-                                    order.orderStatus !=='Returned' ) { %>
+                                <% if(order.orderStatus !=='Cancelled' && order.orderStatus !=='Delivered' && order.orderStatus !=='Returned' ) { %>
                                     <button class="btn btn-primary me-2"
                                         onclick="cancelBulkOrder(event, '<%= order.id %>')"
                                         style="background-color: #007bff; color: #fff; width: auto; height: auto;">
@@ -356,8 +355,7 @@
                                                                                     onclick="returnSingleProduct(event, '<%= order.id %>', '<%= pro.id %>')">Return</a>
                                                                             </td>
 
-                                                                            <% } else if (pro.productStatus=='Returned'
-                                                                                ) { %>
+                                                                            <% } else if (pro.productStatus=='Returned') { %>
                                                                                 <td>
                                                                                     <p
                                                                                         class="error-message text-danger mt-1">
@@ -419,7 +417,8 @@
                                         <div class="total-shipping">
                                             <h5>Total shipping</h5>
                                             <ul>
-                                                <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
+                                                <li>total <span id="total-shipping-amount">₹<%= order.originalAmount %></span></li>
+                                                <li>discount <span id="total-shipping-amount">₹<%= order.originalAmount - order.totalAmount %> </span></li>
                                             </ul>
                                         </div>
                                         <h4 class="grand-totall-title">Grand Total <span id="grand-total-amount">₹<%=
