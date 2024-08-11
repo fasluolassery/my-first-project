@@ -170,8 +170,7 @@
                                                         style="width: 45%;">
                                                         <input class="form-check-input" name="mycategory" type="radio"
                                                             value="<%= category.categoryName %>" <% if
-                                                            (category.categoryName===product.category) { %>checked<% }
-                                                            %>>
+                                                            (category.categoryName===product.category) { %>checked<% } %>
                                                             <span class="form-check-label">
                                                                 <%= category.categoryName %>
                                                             </span>
@@ -312,7 +311,7 @@
             }
 
             //product price validation
-            var minPrice = 5000;
+            var minPrice = 0;
             var maxPrice = 200000;
 
             if (cost === '') {

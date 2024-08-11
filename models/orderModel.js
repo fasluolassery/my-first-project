@@ -24,6 +24,7 @@ const orderSchema = new mongoose.Schema({
     shippingAddress: {
         userName: { type: String, required: true},
         email: {type: String, required: true},
+        phone: {type: Number, required: true},
         address: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'addresses',
@@ -35,6 +36,7 @@ const orderSchema = new mongoose.Schema({
         country: {type: String, required: true}
     },
     paymentMethod: {type: String},
+    razorpayId: {type: String},
     totalAmount: {type: Number, required: true},
     originalAmount: {type: Number, required: true},
     orderStatus: {type: String, required: true},

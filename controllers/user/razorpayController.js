@@ -5,10 +5,11 @@ const cartModel = require('../../models/cartModel')
 const productModel = require('../../models/productModel')
 const orderModel = require('../../models/orderModel')
 const couponModel = require('../../models/couponModel')
+const crypto = require('crypto');
+require('dotenv').config();
 
-const createOrder = async (req, res, next) => {
+const createInstance = async (req, res, next) => {
     try {
-
         const { address, coupon } = req.body
 
         const { userId } = req.session
@@ -41,6 +42,7 @@ const createOrder = async (req, res, next) => {
         let state = checkedAddress.state
         let zip = checkedAddress.zip
         let country = checkedAddress.country
+        let phone = checkedAddress.phone
 
         const products = await cartModel.findOne({ userId: userId }).populate('items.productId')
 
@@ -60,9 +62,9 @@ const createOrder = async (req, res, next) => {
             })
         })
 
-        let totalAmount = 40
+        let totalAmount = 0
         let originalAmount
-        let totalAmountTwo = 40
+        let totalAmountTwo = 0
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
@@ -98,10 +100,7 @@ const createOrder = async (req, res, next) => {
                 res.send({ error: 1 })
                 return console.log("product don't have enough quantity")
             }
-
-            // // Decrease product quantity
-            // product.stock -= item.quantity;
-            // await product.save();
+            
         }
 
 
@@ -112,7 +111,7 @@ const createOrder = async (req, res, next) => {
             payment_capture: '1'
         }
 
-        const order = await instance.orders.create(options)
+        const razorpayOrder = await instance.orders.create(options)
 
         const newOrder = new orderModel({
             user: userId,
@@ -120,6 +119,7 @@ const createOrder = async (req, res, next) => {
             shippingAddress: {
                 userName: findUserDetails.username,
                 email: user,
+                phone: phone,
                 address: id,
                 street: street,
                 city: city,
@@ -128,40 +128,66 @@ const createOrder = async (req, res, next) => {
                 country: country
             },
             paymentMethod: 'Razor Pay',
+            razorpayId: razorpayOrder.id,
             totalAmount: totalAmount,
             originalAmount: originalAmount,
-            orderStatus: 'Pending'
+            orderStatus: 'Payment Pending'
         })
 
         const saveOrder = await newOrder.save()
 
-        if (saveOrder) {
+        res.send({ order: razorpayOrder, orderId: saveOrder.id });
+    } catch (error) {
+        next(error);
+    }
+};
 
-            for (let item of productsDetails) {
-                const product = await productModel.findOne({ _id: item.product });
+
+const verifyPayment = async (req, res, next) => {
+    try {
+        const { paymentId, orderId, signature, id } = req.body;
+
+        const order = await orderModel.findById(id).populate('products.product');
+
+        if (!order) {
+            return res.status(400).json({ success: false, message: "Order not found" });
+        }
+
+        const generatedSignature = crypto.createHmac('sha256', process.env.RAZOR_KEY_SECRET)
+            .update(orderId + "|" + paymentId)
+            .digest('hex');
+
+        if (generatedSignature === signature) {
+            order.orderStatus = "Pending";
+            await order.save();
+
+            for (let item of order.products) {
+                const product = await productModel.findById(item.product._id);
 
                 if (!product) {
-                    return console.log("product not found")
+                    return console.log("Product not found:", item.product._id);
                 }
 
-                // Decrease product quantity
                 product.stock -= item.quantity;
                 await product.save();
             }
 
-            products.items = []
+            const cart = await cartModel.findOne({ userId: order.user });
+            if (cart) {
+                cart.items = [];
+                await cart.save();
+            }
 
-            await products.save()
-
-            console.log("order success")
+            res.json({ success: true, orderId: order._id });
+        } else {
+            res.json({ success: false, message: "Verification failed." });
         }
-
-        res.send({ order: order, orderId: saveOrder.id })
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 module.exports = {
-    createOrder,
+    createInstance,
+    verifyPayment
 }

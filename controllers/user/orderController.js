@@ -40,7 +40,7 @@ const placeOrder = async (req, res, next) => {
             }
         })
 
-        const { id, street, city, state, zip, country } = checkedAddress;
+        const { id, street, city, state, zip, country, phone } = checkedAddress;
 
         const products = await cartModel.findOne({ userId: userId }).populate('items.productId')
 
@@ -60,9 +60,9 @@ const placeOrder = async (req, res, next) => {
             })
         })
 
-        let totalAmount = 40 //? pending
+        let totalAmount = 0 //? pending
         let originalAmount
-        let totalAmountTwo = 40
+        let totalAmountTwo = 0
 
         productsDetails.forEach(val => {
             totalAmount += val.quantity * val.price
@@ -105,6 +105,7 @@ const placeOrder = async (req, res, next) => {
             shippingAddress: {
                 userName: findUserDetails.username,
                 email: user,
+                phone: phone,
                 address: id,
                 street: street,
                 city: city,

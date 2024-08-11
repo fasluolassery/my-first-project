@@ -12,7 +12,7 @@ const loadWishlist = async (req, res, next) => {
 
         if (!findUserList) {
             findUserList = []
-            // findUserList.items = []
+            findUserList.items = []
         }
 
 

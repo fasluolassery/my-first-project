@@ -592,9 +592,11 @@
                                                                 </span>
                                                                 <span class="order-price">
                                                                     <% if(item.productId.offerPrice> 0) {%>
-                                                                        ₹<%= (item.productId.offerPrice * item.quantity)%>
+                                                                        ₹<%= (item.productId.offerPrice *
+                                                                            item.quantity)%>
                                                                             <% }else{ %>
-                                                                                ₹<%= (item.productId.price * item.quantity) %>
+                                                                                ₹<%= (item.productId.price *
+                                                                                    item.quantity) %>
                                                                                     <% } %>
                                                                 </span>
                                                             </li>
@@ -603,10 +605,10 @@
                                                 </ul>
                                             </div>
                                             <div class="your-order-bottom">
-                                                <ul class="mb-2">
+                                                <!-- <ul class="mb-2">
                                                     <li class="your-order-shipping">Shipping</li>
                                                     <li class="new">₹40</li>
-                                                </ul>
+                                                </ul> -->
                                                 <ul hidden id="discount-div">
                                                     <li class="your-order-shipping">Discount</li>
                                                     <li class="new" id="discount-price-div">₹</li>
@@ -631,32 +633,39 @@
                                                                 <h4 class="panel-title">
                                                                     <label style="font-weight: normal;">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="razorPay" style="width: 15px;">
+                                                                            value="razorPay" style="width: 15px;"
+                                                                            checked>
                                                                         Razor pay
                                                                     </label>
                                                                 </h4>
                                                             </div>
                                                         </div>
+
                                                         <div class="panel panel-default single-my-account m-0">
                                                             <div class="panel-heading my-account-title">
                                                                 <h4 class="panel-title">
                                                                     <label style="font-weight: normal;">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="cashOnDelivery" style="width: 15px;"
-                                                                            checked>
-                                                                        Cash on delivery
+                                                                            value="Wallet" style="width: 15px;">
+                                                                        Wallet
                                                                     </label>
                                                                 </h4>
                                                             </div>
                                                         </div>
+
                                                         <div class="panel panel-default single-my-account m-0">
                                                             <div class="panel-heading my-account-title">
                                                                 <h4 class="panel-title">
-                                                                    <label style="font-weight: normal;">
+                                                                    <label style="font-weight: normal;" id="cod">
                                                                         <input type="radio" name="payment-method"
-                                                                            value="Wallet" style="width: 15px;" checked>
-                                                                        Wallet
+                                                                            value="cashOnDelivery" style="width: 15px;">
+                                                                        Cash on delivery
                                                                     </label>
+                                                                    <p id="cod-error"
+                                                                        style="display: none; color: black;">*Orders
+                                                                        above Rs 2000 are not eligible for Cash on
+                                                                        Delivery.</p>
+
                                                                 </h4>
                                                             </div>
                                                         </div>
@@ -874,8 +883,16 @@
                             total += item.effectivePrice * item.quantity;
                         });
 
+                        if (total > 2000) {
+                            let codError = document.getElementById('cod-error')
+                            codError.style.display = 'block'
+
+                            let cod = document.getElementById('cod')
+                            cod.style.display = 'none'
+                        }
+
                         const totalDiv = document.getElementById('ordertotal');
-                        totalDiv.innerHTML = `₹${(total + 40).toFixed(2)}`;
+                        totalDiv.innerHTML = `₹${total.toFixed(2)}`;
                     })
                     .catch(err => {
                         console.log(err);
@@ -883,6 +900,7 @@
 
             })
         </script>
+
         <!-- add address -->
         <script>
             function addAddressFromCheckout(event) {
@@ -1020,30 +1038,25 @@
 
                     axios.post('/razorPay', { address: address, coupon: couponApplied })
                         .then(res => {
-                            console.log(res.data.order)
+                            console.log(res.data);
                             if (res.data.error == 1) {
                                 Swal.fire({
                                     icon: "error",
-                                    title: "quantity!",
-                                    text: "products don't have enough quantity",
+                                    text: "Some products don't have enough quantity.",
                                     showCancelButton: true,
                                     showConfirmButton: false,
                                     cancelButtonText: "OK",
-                                }).then((result) => {
-                                    // if (result.dismiss === Swal.DismissReason.cancel) {
-                                    //     otpInputs.forEach(input => input.value = '');
-                                    //     otpInputs[0].focus();
-                                    // }
                                 });
                             } else {
-                                razorpayPayment(res.data.order, res.data.orderId)
+                                razorpayPayment(res.data.order, res.data.orderId);
                             }
                         })
                         .catch(err => {
-                            console.log(err)
-                        })
+                            console.log(err);
+                        });
+
                     function razorpayPayment(order, orderId) {
-                        const option = {
+                        const options = {
                             key: "rzp_test_i8191KFpq7S1w1",
                             amount: order.amount * 100,
                             currency: order.currency,
@@ -1051,52 +1064,73 @@
                             description: 'Purchase Description',
                             order_id: order.id,
                             handler: function (response) {
-                                // Handle the success response here
-                                console.log('Payment successful:', response);
+                                // Verify payment on the server
+                                axios.post('/verifyPayment', {
+                                    id: orderId,
+                                    paymentId: response.razorpay_payment_id,
+                                    orderId: response.razorpay_order_id,
+                                    signature: response.razorpay_signature,
+                                    address: address,
+                                    coupon: couponApplied
+                                })
+                                    .then(verifyRes => {
+                                        if (verifyRes.data.success) {
+                                            Swal.fire({
+                                                icon: "success",
+                                                title: "Order Placed!",
+                                                text: "Your order was placed successfully.",
+                                                confirmButtonText: "View details",
+                                                confirmButtonColor: '#266bf9'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.href = `/orderDetails/?orderId=${verifyRes.data.orderId}`;
+                                                }
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "Verification Failed!",
+                                                text: "There was an issue verifying your payment. Please contact support.",
+                                                confirmButtonText: "OK",
+                                                confirmButtonColor: '#d33'
+                                            });
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Server Error!",
+                                            text: "Unable to verify payment. Please try again later.",
+                                            confirmButtonText: "OK",
+                                            confirmButtonColor: '#d33'
+                                        });
+                                    });
+                            },
+                            modal: {
+                                ondismiss: function ondismiss() {
 
-                                // verifyPayment(response,order)
-                                // Redirect or show success message
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Order Placed!",
-                                    text: "Your order was placed successfully.",
-                                    showConfirmButton: true,
-                                    confirmButtonText: "View details",
-                                    confirmButtonColor: '#266bf9'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = `/orderDetails/?orderId=${orderId}`;
-                                    }
-                                });
+                                    // Redirect the user to the order details page
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Payment Incomplete!",
+                                        text: "Your payment was not completed. You can continue your payment from the order details page.",
+                                        confirmButtonText: "Go to Orders",
+                                        confirmButtonColor: '#266bf9'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = `/orderDetails/?orderId=${orderId}`;
+                                        }
+                                    });
+                                }
                             },
-                            prefill: {
-                                name: 'Customer Name',
-                                email: 'customer@example.com',
-                                contact: '9999999999'
-                            },
-                            notes: {
-                                address: 'Customer Address'
-                            },
-                            theme: {
-                                color: '#3399cc'
-                            },
-                            // modal: {
-                            //     ondismiss: function () {
-                            //         // Handle the payment failure here
-                            //         Swal.fire({
-                            //             icon: "error",
-                            //             title: "Payment Failed!",
-                            //             text: "Your payment was not successful. Please try again.",
-                            //             showConfirmButton: true,
-                            //             confirmButtonText: "OK",
-                            //             confirmButtonColor: '#d33'
-                            //         });
-                            //     }
-                            // }
+                            // Other options...
                         };
-                        const rzp1 = new Razorpay(option);
-                        rzp1.open()
+                        const rzp1 = new Razorpay(options);
+                        rzp1.open();
                     }
+
+
 
                 } else if (paymentMethod == 'Wallet') {
                     let checkedAddress = document.querySelector('input[name="addressSelection"]:checked');

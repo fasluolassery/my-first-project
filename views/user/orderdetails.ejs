@@ -1,5 +1,81 @@
 <%- include('../layout/userMeta.ejs') %>
-    </head>
+
+
+<style>
+    #invoice {
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 20px; /* Added margin to all sides */
+    }
+
+    .invoice-header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .invoice-header h1 {
+      font-size: 2.5em;
+      color: #333;
+    }
+
+    .invoice-header p {
+      font-size: 1em;
+      color: #666;
+    }
+
+    .brand-name {
+      font-size: 2em;
+      color: #007bff;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .invoice-details, .customer-details {
+      margin-bottom: 20px;
+    }
+
+    .customer-details h3 {
+      font-size: 1.5em;
+      color: #333;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    .customer-details p {
+      font-size: 1em;
+      color: #666;
+    }
+
+    .invoice-table th, .invoice-table td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    .invoice-table th {
+      background-color: #f2f2f2;
+      color: #333;
+      border-bottom: 2px solid #007bff;
+    }
+
+    .invoice-table td {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .invoice-total {
+      font-size: 1.5em;
+      color: #333;
+      text-align: right;
+      margin-top: 20px;
+      border-top: 2px solid #007bff;
+      padding-top: 10px;
+    }
+  </style>
+
+</head>
 
     <body>
         <div class="main-wrapper">
@@ -265,7 +341,12 @@
 
                             <div>
                                 <h3 class="cart-page-title mb-3">Your Order Details</h3>
-                                <h3 class="ms-2 h5 mb-0 h6">Status: <%= order.orderStatus %>
+                                <% if(order.orderStatus == 'Payment Pending') {%>
+                                    <h3 class="ms-2 h5 mb-0 h6 text-danger">Status: *<%= order.orderStatus %>
+                                <% }else{ %>
+                                    <h3 class="ms-2 h5 mb-0 h6">Status: <%= order.orderStatus %>
+                                <% } %>
+                                
                                 </h3>
                             </div>
                             <div class="d-flex">
@@ -370,6 +451,8 @@
                                                                                     <% } %>
                                                     </tr>
                                                     <% }) %>
+
+                                                    
                                                         <!-- <tr>
                                             <td class="product-thumbnail">
                                                 <a href="#"><img class="img-responsive ml-15px" src="assets/images/product-image/2.webp" alt="" /></a>
@@ -407,6 +490,14 @@
                                     </div>
                                 </form>
                             </div>
+                            <% if(order.orderStatus == 'Payment Pending') {%>
+                            <button class="btn btn-primary ms-3 mt-4" onclick="countinueRazorpayPayment('<%= order.id %>', '<%= order.totalAmount %>', '<%= order.razorpayId %>')"
+                               style="background-color: #007bff; color: #fff; width: auto; height: auto;">
+                                 <p class="p-3 mb-0">
+                                      Countinue Payment
+                                </p>
+                            </button>
+                             <% } %>
                             <div class="row mt-5">
                                 <div class="col-lg-4 col-md-12 mt-md-30px ml-auto">
                                     <div class="grand-totall">
@@ -415,7 +506,7 @@
                                         </div>
                                         <!-- <h5>Total products <span id="total-products-amount"></span></h5> -->
                                         <div class="total-shipping">
-                                            <h5>Total shipping</h5>
+                                            <!-- <h5>Total shipping</h5> -->
                                             <ul>
                                                 <li>total <span id="total-shipping-amount">₹<%= order.originalAmount %></span></li>
                                                 <li>discount <span id="total-shipping-amount">₹<%= order.originalAmount - order.totalAmount %> </span></li>
@@ -425,6 +516,55 @@
                                                     order.totalAmount %></span></h4>
                                         <!-- <a href="/checkout">Proceed to Checkout</a> -->
                                     </div>
+
+                                    <a class="ms-1" onclick="downloadInvoice(event)" href="#">Download Invoice</a>
+
+                                    <div class="container" id="invoice" style="display: none;">
+                                      <!-- Invoice Content -->
+                                      <div class="row invoice-header">
+                                        <div class="col">
+                                          <div class="brand-name">Gadget Galaxy</div>
+                                          <h1>Invoice</h1>
+                                          <p>Date: <%= order.createdAt.toLocaleDateString('en-Gb') %></p>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col customer-details">
+                                          <h3>Customer Details</h3>
+                                          <p>Name: <%= order.shippingAddress.userName %></p>
+                                          <p>Address: <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %></p>
+                                          <p>Email: <%= order.shippingAddress.email %></p>
+                                          <p>Phone: <%= order.shippingAddress.phone %></p>
+                                        </div>
+                                      </div>
+                                      <div class="row invoice-details">
+                                        <div class="col">
+                                          <table class="table invoice-table">
+                                            <thead>
+                                              <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <% order.products.forEach(p => { %>
+                                              <tr>
+                                                <td><%= p.name %></td>
+                                                <td><%= p.quantity %></td>
+                                                <td><%= p.price %></td>
+                                                <td><%= p.quantity * p.price %></td>
+                                              </tr>
+                                              <% }) %>
+                                            </tbody>
+                                          </table>
+                                          <p class="invoice-total">Total: <%= order.totalAmount %></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  
+
                                 </div>
                             </div>
                         </div>
@@ -577,6 +717,9 @@
         <script src="assets/js/plugins/mailchimp-ajax.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
         <!-- Minify Version -->
         <!-- <script src="assets/js/vendor.min.js"></script>
@@ -585,6 +728,82 @@
 
         <!--Main JS (Common Activation Codes)-->
         <script src="assets/js/main.js"></script>
+
+        <!-- continue payment -->
+        <script>
+            function countinueRazorpayPayment(orderId, amount, razorpayId) {
+                        const options = {
+                            key: "rzp_test_i8191KFpq7S1w1",
+                            amount: amount * 100,
+                            currency: 'INR',
+                            name: 'Gadget Galaxy',
+                            description: 'Purchase Description',
+                            order_id: razorpayId,
+                            handler: function (response) {
+                                // Verify payment on the server
+                                axios.post('/verifyPayment', {
+                                    id: orderId,
+                                    paymentId: response.razorpay_payment_id,
+                                    orderId: response.razorpay_order_id,
+                                    signature: response.razorpay_signature,
+                                })
+                                    .then(verifyRes => {
+                                        if (verifyRes.data.success) {
+                                            Swal.fire({
+                                                icon: "success",
+                                                title: "Order Placed!",
+                                                text: "Your order was placed successfully.",
+                                                confirmButtonText: "View details",
+                                                confirmButtonColor: '#266bf9'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.href = `/orderDetails/?orderId=${verifyRes.data.orderId}`;
+                                                }
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "Verification Failed!",
+                                                text: "There was an issue verifying your payment. Please contact support.",
+                                                confirmButtonText: "OK",
+                                                confirmButtonColor: '#d33'
+                                            });
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Server Error!",
+                                            text: "Unable to verify payment. Please try again later.",
+                                            confirmButtonText: "OK",
+                                            confirmButtonColor: '#d33'
+                                        });
+                                    });
+                            },
+                            modal: {
+                                ondismiss: function ondismiss() {
+
+                                    // Redirect the user to the order details page
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Payment Incomplete!",
+                                        text: "Your payment was not completed. You can continue your payment from the order details page.",
+                                        confirmButtonText: "Go to Orders",
+                                        confirmButtonColor: '#266bf9'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = `/orderDetails/?orderId=${orderId}`;
+                                        }
+                                    });
+                                }
+                            },
+                            // Other options...
+                        };
+                        const rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+        </script>
 
         <!-- cancel bulk order -->
         <script>
@@ -760,6 +979,43 @@
                 window.location.href = '/myAccount'
             }
         </script>
+
+        <!-- invoice download -->
+        <script>
+            function downloadInvoice(event) {
+              event.preventDefault(); // Prevent the default link behavior
+        
+              // Get the invoice container element
+              const invoiceElement = document.getElementById('invoice');
+        
+              // Clone the invoice element
+              const invoiceClone = invoiceElement.cloneNode(true);
+        
+              // Temporarily show the clone by setting display to block
+              invoiceClone.style.display = 'block';
+        
+              // Append the clone to the body (or another part of the DOM)
+              document.body.appendChild(invoiceClone);
+        
+              // Configure html2pdf options
+              const opt = {
+                margin: 1, // Margins in inches
+                filename: 'invoice.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+              };
+        
+              // Generate the PDF
+              html2pdf().from(invoiceClone).set(opt).save()
+                .then(() => {
+                  // Remove the clone from the DOM
+                  document.body.removeChild(invoiceClone);
+                });
+            }
+          </script>
+          
+          
     </body>
 
 

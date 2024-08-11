@@ -370,10 +370,10 @@
                                             </div>
                                             <h5>Total products <span id="total-products-amount"></span></h5>
                                             <div class="total-shipping">
-                                                <h5>Total shipping</h5>
+                                                <!-- <h5>Total shipping</h5>
                                                 <ul>
                                                     <li>Standard <span id="total-shipping-amount">₹40.00</span></li>
-                                                </ul>
+                                                </ul> -->
                                             </div>
                                             <h4 class="grand-totall-title">Grand Total <span
                                                     id="grand-total-amount"></span></h4>
@@ -556,7 +556,7 @@
                         const totalDiv = document.getElementById('total-products-amount');
                         const grandTotal = document.getElementById('grand-total-amount');
                         totalDiv.innerHTML = `₹${total.toFixed(2)}`;
-                        grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
+                        grandTotal.innerHTML = `₹${total.toFixed(2)}`;
                     })
                     .catch(err => {
                         console.log(err);
@@ -598,7 +598,7 @@
                                     const totalDiv = document.getElementById('total-products-amount');
                                     const grandTotal = document.getElementById('grand-total-amount');
                                     totalDiv.innerHTML = `₹${total.toFixed(2)}`;
-                                    grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
+                                    grandTotal.innerHTML = `₹${total .toFixed(2)}`;
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -657,7 +657,7 @@
                                     const totalDiv = document.getElementById('total-products-amount');
                                     const grandTotal = document.getElementById('grand-total-amount');
                                     totalDiv.innerHTML = `₹${total.toFixed(2)}`;
-                                    grandTotal.innerHTML = `₹${(total + 40).toFixed(2)}`;
+                                    grandTotal.innerHTML = `₹${total.toFixed(2)}`;
                                 })
                                 .catch(err => {
                                     console.log(err);

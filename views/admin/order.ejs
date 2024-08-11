@@ -304,7 +304,12 @@
                                                                                 class="badge rounded-pill alert-danger"
                                                                                 style="height: 20px; width: 65px;">Returned</span>
                                                                         </td>
-                                                                        <% } %>
+                                                                        <% }else if(order.orderStatus=='Payment Pending' ) {%>
+                                                                            <td><span
+                                                                                    class="badge rounded-pill alert-danger"
+                                                                                    style="height: 20px; width: 100px;">Payment Pending</span>
+                                                                            </td>
+                                                                            <% } %>
 
                                                                             <td>
                                                                                 <%= order.createdAt.toLocaleDateString('en-GB')
