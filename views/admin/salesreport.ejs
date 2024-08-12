@@ -98,14 +98,14 @@
                 <div class="content-header">
                     <div>
                         <h2 class="content-title card-title">Sales Reports</h2>
-                        <p>Lorem ipsum dolor sit amet.</p>
+                        <!-- <p>Lorem ipsum dolor sit amet.</p> -->
                     </div>
                     <div>
                         <!-- <input type="text" placeholder="Search order ID" class="form-control bg-white" /> -->
                     </div>
                 </div>
                 <div class="card mb-4">
-                    <header class="card-header">
+                    <header class="card-header" id="dateHeader"> 
                         <div class="row gx-3">
                             <div class="col-lg-4 col-md-6 me-auto">
                                 <!-- <input type="text" placeholder="Search..." class="form-control" /> -->
@@ -115,10 +115,10 @@
                             <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="startDate">
 
                                 <input type="date" placeholder="Type here" class="form-control" id="startDateInput"
-                                    value="2024-07-10"/>
+                                    value="2024-07-10" />
 
                             </div>
-                            
+
                             <div class="col-lg-2 col-6 col-md-3" style="display: none;" id="endDate">
 
                                 <input type="date" placeholder="Type here" class="form-control" id="endDateInput"
@@ -153,46 +153,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr>
-                                        <td>0901</td>
-                                        <td><b>Marvin McKinney</b></td>
-                                        <td>marvin@example.com</td>
-                                        <td>$9.00</td>
-                                        <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                        <td>03.12.2020</td>
-                                        <td class="text-end">
-                                            <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item" href="#">Edit info</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td>1233</td>
-                                        <td><b>Esther Howard</b></td>
-                                        <td>esther@example.com</td>
-                                        <td>$12.00</td>
-                                        <td><span class="badge rounded-pill alert-danger">Canceled</span></td>
-                                        <td>03.07.2020</td>
-                                        <td class="text-end">
-                                            <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item" href="#">Edit info</a>
-                                                    <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr> -->
-
                                     <% fetchAllOrders.forEach((val, ind)=> { %>
                                         <tr>
                                             <td>
@@ -237,14 +197,17 @@
                     <!-- card-body end// -->
                 </div>
                 <!-- card end// -->
-               
+
 
                 <div class="card mt-4">
                     <div class="card-body">
                         <h5 class="card-title">Overall Summary</h5>
-                        <p>Total Sales Count: <%= totalOrders %></p>
-                        <p>Total Order Amount: ₹<%= totalPrice %></p>
+                        <p>Total Sales Count: <%= totalOrders %>
+                        </p>
+                        <p>Total Order Amount: ₹<%= totalPrice %>
+                        </p>
                         <!-- <p>Total Discount: ₹</p> -->
+                        <div id="buttons">
                         <button id="download-pdf-btn" class="btn btn-primary">
                             <i class="icon material-icons md-file_download"></i>
                             <span class="text">Download PDF</span>
@@ -254,9 +217,10 @@
                             <span class="text">Download Excel</span>
                         </button>
                     </div>
+                    </div>
                 </div>
 
-                <div class="pagination-area mt-15 mb-50">
+                <div class="pagination-area mt-15 mb-50" id="pagination">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
 
@@ -320,35 +284,48 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
+        <!-- sales report pdf -->
         <script>
-            document.getElementById('download-pdf-btn').addEventListener('click', function() {
-                var element = document.querySelector('.table'); // Select the table element
-                html2pdf(element); // Convert the table element to PDF
+            document.getElementById('download-pdf-btn').addEventListener('click', function () {
+
+                document.getElementById('dateHeader').style.display = 'none'
+                document.getElementById('buttons').style.display = 'none'
+                document.getElementById('pagination').style.display = 'none'
+                
+
+                var element = document.querySelector('.content-main'); // Select the table element
+
+                html2pdf(element).then(() => {
+                    document.getElementById('dateHeader').style.display = 'block'
+                    document.getElementById('buttons').style.display = 'block'
+                    document.getElementById('pagination').style.display = 'block'
+                })
             });
         </script>
 
+        <!-- exel -->
         <script>
             document.getElementById('download-excel-btn').addEventListener('click', exportToExcel);
-        
+
             function exportToExcel() {
-            // Get the table element
-            var table = document.querySelector('.table');
-        
-            // Convert the table rows to an array of arrays representing rows and cells
-            var rows = Array.from(table.querySelectorAll('tr')).map(row => 
-                Array.from(row.querySelectorAll('td, th')).map(cell => cell.innerText)
-            );
-        
-            // Create a new workbook
-            var wb = XLSX.utils.book_new();
-        
-            // Add a worksheet with the table data
-            var ws = XLSX.utils.aoa_to_sheet(rows);
-            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        
-            XLSX.writeFile(wb, 'table_data.xlsx');
-        }
-        
+                // Get the table element
+                var table = document.querySelector('.table');
+
+                // Convert the table rows to an array of arrays representing rows and cells
+                var rows = Array.from(table.querySelectorAll('tr')).map(row =>
+                    Array.from(row.querySelectorAll('td, th')).map(cell => cell.innerText)
+                );
+
+                // Create a new workbook
+                var wb = XLSX.utils.book_new();
+
+                // Add a worksheet with the table data
+                var ws = XLSX.utils.aoa_to_sheet(rows);
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+                XLSX.writeFile(wb, 'table_data.xlsx');
+            }
+
         </script>
 
         <!-- trigger dates -->
