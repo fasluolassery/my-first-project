@@ -1,4 +1,6 @@
 const orderModel = require('../../models/orderModel')
+const userModel = require('../../models/userModel')
+const transactionModel = require('../../models/transactionSchema')
 
 const loadOrders = async (req, res, next) => {
     try {
@@ -144,7 +146,6 @@ const updateReturnRequest = async (req, res, next) => {
             return res.status(400).json({ message: 'Order ID, Product ID, and Status are required' });
         }
 
-        // Find the order and update the product's return status
         const order = await orderModel.findOne({ _id: orderId, 'products.product': productId });
 
         if (!order) {
@@ -157,23 +158,34 @@ const updateReturnRequest = async (req, res, next) => {
             return res.status(404).json({ message: 'Product not found in the order' });
         }
 
-        // Update the return status of the product
-        product.returnStatus = status;
-        // product.returnRequested = false;
+        const findUser = await userModel.findById(order.user)
 
-        // Update the product status to 'Returned' if the return status is 'Approved'
-        if (status === 'Approved') {
-            product.productStatus = 'Returned';
+        if(!findUser){
+            return console.log("user not found at updateReturnRequest")
         }
 
-        // Check if all products have been returned
+        product.returnStatus = status;
+
+        if (status === 'Approved') {
+            product.productStatus = 'Returned';
+            findUser.balance += product.price
+            await findUser.save()
+
+            const transaction = new transactionModel({
+                userId: findUser.id,
+                amount: product.price,
+                type: 'credit'
+            })
+
+            await transaction.save()
+        }
+
         const allReturned = order.products.every(p => p.returnStatus === 'Approved');
 
         if (allReturned) {
             order.orderStatus = 'Returned';
         }
 
-        // Save the order with updated product
         await order.save();
 
         res.status(200).json({ success: 'Return request updated successfully' });

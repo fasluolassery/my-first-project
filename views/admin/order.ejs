@@ -1,7 +1,7 @@
 <%- include('../layout/adminhead.ejs') %>
     </head>
 
-    <body class="dark">
+    <body>
         <div class="screen-overlay"></div>
         <aside class="navbar-aside" id="offcanvas_aside">
             <div class="aside-top">
@@ -133,6 +133,7 @@
                                                     <th>Product Name</th>
                                                     <th>Quantity</th>
                                                     <th>Status</th>
+                                                    <th>Reason</th>
                                                     <th class="text-end">Action</th>
                                                 </tr>
                                             </thead>
@@ -162,6 +163,9 @@
                                                                             <% } %>">
                                                                             <%= product.returnStatus %>
                                                                         </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.returnReason %>
                                                                     </td>
                                                                     <td class="text-end">
                                                                         <% if (product.returnStatus==='Pending' ) { %>

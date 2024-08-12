@@ -290,7 +290,7 @@ const cancelSingleProduct = async (req, res, next) => {
 
 const returnSingleOrder = async (req, res, next) => {
     try {
-        const { orderId, productId } = req.body;
+        const { orderId, productId, reason } = req.body;
 
         if (!orderId || !productId) {
             return console.log("Order ID and Product ID are required.");
@@ -313,6 +313,7 @@ const returnSingleOrder = async (req, res, next) => {
         // Mark the product as return requested
         product.returnRequested = true;
         product.returnStatus = 'Pending';
+        product.returnReason = reason
 
         await findOrder.save();
 
