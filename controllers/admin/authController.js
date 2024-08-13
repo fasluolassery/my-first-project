@@ -14,10 +14,10 @@ const loadAdminLogin = async (req, res, next) => {
 
 const loadAdminDashboard = async (req, res, next) => {
     try {
-        // Aggregating sales data for the line chart, considering only delivered orders
+        // Aggregating sales data
         const salesData = await orderModel.aggregate([
             {
-                $match: { orderStatus: 'Delivered' } // Filter to include only delivered orders
+                $match: { orderStatus: 'Delivered' }
             },
             {
                 $group: {
@@ -26,11 +26,11 @@ const loadAdminDashboard = async (req, res, next) => {
                 }
             },
             {
-                $sort: { _id: 1 } // Sort by month
+                $sort: { _id: 1 }
             }
         ]);
 
-        // Initialize all months with zero sales
+        // Initialize all months
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const salesValues = new Array(12).fill(0);
 
@@ -48,12 +48,12 @@ const loadAdminDashboard = async (req, res, next) => {
         const totalRevenue = salesValues.reduce((sum, value) => sum + value, 0);
 
         // Count total products
-        const totalProducts = await productModel.countDocuments({}); // Count all products
+        const totalProducts = await productModel.countDocuments({});
 
         // Get best-selling products
         const bestSellingProducts = await orderModel.aggregate([
             {
-                $match: { orderStatus: 'Delivered' } // Filter to include only delivered orders
+                $match: { orderStatus: 'Delivered' }
             },
             {
                 $unwind: "$products"
@@ -68,13 +68,13 @@ const loadAdminDashboard = async (req, res, next) => {
                 $sort: { totalSold: -1 }
             },
             {
-                $limit: 5 // Limit to top 5 best-selling products
+                $limit: 5
             }
         ]);
 
         // Fetch product details for best-selling products
         const productIds = bestSellingProducts.map(p => p._id);
-        const products = await productModel.find({ _id: { $in: productIds } }).select('productName'); // Fetch product names
+        const products = await productModel.find({ _id: { $in: productIds } }).select('productName');
 
         // Map product details to best-selling data
         const bestSellingDetails = bestSellingProducts.map(selling => {
@@ -85,24 +85,18 @@ const loadAdminDashboard = async (req, res, next) => {
             };
         });
 
-        // Get top-selling categories
+        // Get top-selling categories with total sold
         const topCategories = await orderModel.aggregate([
             {
-                $match: { orderStatus: 'Delivered' } // Filter to include only delivered orders
+                $match: { orderStatus: 'Delivered' }
             },
             {
                 $unwind: "$products"
             },
             {
-                $group: {
-                    _id: "$products.product",
-                    totalSold: { $sum: "$products.quantity" }
-                }
-            },
-            {
                 $lookup: {
                     from: 'products',
-                    localField: '_id',
+                    localField: 'products.product',
                     foreignField: '_id',
                     as: 'productDetails'
                 }
@@ -113,65 +107,46 @@ const loadAdminDashboard = async (req, res, next) => {
             {
                 $group: {
                     _id: "$productDetails.category",
-                    totalSold: { $sum: "$totalSold" }
+                    totalSold: { $sum: "$products.quantity" },
+                    products: { $push: { name: "$productDetails.productName", productId: "$productDetails._id" } }
                 }
             },
             {
                 $sort: { totalSold: -1 }
             },
             {
-                $limit: 5 // Limit to top 5 categories
+                $limit: 5
             }
         ]);
 
-        // Get products for top-selling categories
-        const categoryProductPromises = topCategories.map(async (category) => {
-            const productsInCategory = await orderModel.aggregate([
-                {
-                    $match: { orderStatus: 'Delivered' } // Filter to include only delivered orders
-                },
-                {
-                    $unwind: "$products"
-                },
-                {
-                    $lookup: {
-                        from: 'products',
-                        localField: 'products.product',
-                        foreignField: '_id',
-                        as: 'productDetails'
-                    }
-                },
-                {
-                    $unwind: "$productDetails"
-                },
-                {
-                    $match: { 'productDetails.category': category._id }
-                },
-                {
-                    $group: {
-                        _id: "$productDetails._id",
-                        name: { $first: "$productDetails.productName" },
-                        totalSold: { $sum: "$products.quantity" }
-                    }
-                },
-                {
-                    $sort: { totalSold: -1 }
-                }
-            ]);
-            return { category: category._id, products: productsInCategory };
-        });
+        // Map category data to include products and their total sold
+        const categoryProducts = await Promise.all(
+            topCategories.map(async (category) => {
+                const topProductsInCategory = category.products.slice(0, 5); // Get top 5 products for each category
+                return {
+                    category: category._id,
+                    totalSold: category.totalSold,
+                    products: await Promise.all(topProductsInCategory.map(async (p) => {
+                        const totalSold = await orderModel.aggregate([
+                            { $match: { "products.product": p.productId, orderStatus: 'Delivered' } },
+                            { $unwind: "$products" },
+                            { $match: { "products.product": p.productId } },
+                            { $group: { _id: null, totalSold: { $sum: "$products.quantity" } } }
+                        ]).then(result => result[0]?.totalSold || 0);
+                        return { name: p.name, totalSold };
+                    }))
+                };
+            })
+        );
 
-        const categoryProducts = await Promise.all(categoryProductPromises);
-
-        // Render the dashboard with the sales data, total revenue, total orders, total products, best-selling products, and top-selling categories
         res.render('admin/admindashboard', {
             salesLabels: JSON.stringify(monthNames),
             salesData: JSON.stringify(salesValues),
-            totalRevenue: totalRevenue.toFixed(2), // Pass total revenue to the template
-            totalOrders, // Pass total order count to the template
-            totalProducts, // Pass total product count to the template
-            bestSellingProducts: bestSellingDetails, // Pass best-selling products to the template
-            topCategories: categoryProducts // Pass top-selling categories and products to the template
+            totalRevenue: totalRevenue.toFixed(2),
+            totalOrders,
+            totalProducts,
+            bestSellingProducts: bestSellingDetails,
+            topCategories: categoryProducts
         });
     } catch (error) {
         next(error);

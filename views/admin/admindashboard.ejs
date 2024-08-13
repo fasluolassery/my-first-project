@@ -339,7 +339,7 @@
                                             <tr>
                                                 <th>Category</th>
                                                 <th>Total Quantity Sold</th>
-                                                <th>Top Products</th>
+                                                <!-- <th>Top Products</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -347,17 +347,7 @@
                                                 <tr>
                                                     <td><%= category.category %></td>
                                                     <td><%= category.totalSold %></td>
-                                                    <td>
-                                                        <% if (Array.isArray(category.products) && category.products.length > 0) { %>
-                                                            <ul>
-                                                                <% category.products.forEach(product => { %>
-                                                                    <li><%= product.name %></li>
-                                                                <% }) %>
-                                                            </ul>
-                                                        <% } else { %>
-                                                            No products available
-                                                        <% } %>
-                                                    </td>
+                                                    
                                                 </tr>
                                             <% }) %>
                                         </tbody>
