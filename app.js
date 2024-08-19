@@ -13,7 +13,7 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("Connected to Mongo DB Hai"))
+.then(() => console.log("Connected to Mongo DB Hai hello"))
 .catch(( error ) => console.log("Error connecting to Mongo DB", error));
 // ---------------------------------------------------------------------
 
