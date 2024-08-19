@@ -14,7 +14,7 @@ const loadAdminLogin = async (req, res, next) => {
 
 const loadAdminDashboard = async (req, res, next) => {
     try {
-        // Aggregating sales data
+        // sales data
         const salesData = await orderModel.aggregate([
             {
                 $match: { orderStatus: 'Delivered' }
@@ -72,11 +72,11 @@ const loadAdminDashboard = async (req, res, next) => {
             }
         ]);
 
-        // Fetch product details for best-selling products
+        // Fetch product details for best selling products
         const productIds = bestSellingProducts.map(p => p._id);
         const products = await productModel.find({ _id: { $in: productIds } }).select('productName');
 
-        // Map product details to best-selling data
+        // Map product details to best selling data
         const bestSellingDetails = bestSellingProducts.map(selling => {
             const product = products.find(p => p._id.toString() === selling._id.toString());
             return {
@@ -85,7 +85,7 @@ const loadAdminDashboard = async (req, res, next) => {
             };
         });
 
-        // Get top-selling categories with total sold
+        // Get top selling categories with total sold
         const topCategories = await orderModel.aggregate([
             {
                 $match: { orderStatus: 'Delivered' }
@@ -119,10 +119,10 @@ const loadAdminDashboard = async (req, res, next) => {
             }
         ]);
 
-        // Map category data to include products and their total sold
+        // Map category data
         const categoryProducts = await Promise.all(
             topCategories.map(async (category) => {
-                const topProductsInCategory = category.products.slice(0, 5); // Get top 5 products for each category
+                const topProductsInCategory = category.products.slice(0, 5);
                 return {
                     category: category._id,
                     totalSold: category.totalSold,
