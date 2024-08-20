@@ -79,4 +79,5 @@ const loadContact = async (req, res, next) => {
 module.exports = {
   loadHome,
   logout,
+  loadAbout,
 };
