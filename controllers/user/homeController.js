@@ -59,6 +59,23 @@ const logout = async (req, res, next) => {
   }
 };
 
+
+const loadAbout = async (req, res, next) => {
+  try{
+    res.render('user/about')
+  }catch(err){
+    next(err)
+  }
+}
+
+const loadContact = async (req, res, next) => {
+  try{
+    res.render('user/contact')
+  }catch(err){
+    next(err)
+  }
+}
+
 module.exports = {
   loadHome,
   logout,
