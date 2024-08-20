@@ -99,7 +99,8 @@ const userLoginDetails = async (req, res, next) => {
 const userLoginGoogle = async (req, res, next) => {
     try {
         console.log("the callback reached here")
-        console.log(req.user)
+        req.session.user = req.user.email; 
+        req.session.userId = req.user._id;
         res.redirect('/')
     } catch (error) {
         next(error)
