@@ -39,7 +39,7 @@ userRouter.get('/orderDetails', sessionCheckUser.isLogin, orderController.loadOr
 userRouter.get('/wishlist', sessionCheckUser.isLogin, wishlistController.loadWishlist)
 userRouter.get('/wallet', sessionCheckUser.isLogin, walletController.loadWallet)
 userRouter.get('/about', sessionCheckUser.isLogin, homeController.loadAbout)
-userRouter.get('/contact', sessionCheckUser.isLogin, homeController.loadHome)
+userRouter.get('/contact', sessionCheckUser.isLogin, homeController.loadContact)
 
 
 userRouter.post('/register', userValidation.validateRegistration, authController.userRegisterDetails)

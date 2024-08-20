@@ -80,4 +80,5 @@ module.exports = {
   loadHome,
   logout,
   loadAbout,
+  loadContact
 };
