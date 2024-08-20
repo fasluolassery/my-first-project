@@ -99,6 +99,7 @@ const userLoginDetails = async (req, res, next) => {
 const userLoginGoogle = async (req, res, next) => {
     try {
         console.log("the callback reached here")
+        console.log(req.user)
         res.redirect('/')
     } catch (error) {
         next(error)
