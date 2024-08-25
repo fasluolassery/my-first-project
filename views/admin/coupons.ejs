@@ -71,11 +71,11 @@
             <header class="main-header navbar">
                 <div class="col-search">
                     <form class="searchform">
-                        <div class="input-group">
+                        <!-- <div class="input-group">
                             <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
                             <button class="btn btn-light bg" type="button"><i
                                     class="material-icons md-search"></i></button>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
                 <div class="col-nav">
@@ -93,7 +93,7 @@
                 <div class="content-header">
                     <div>
                         <h2 class="content-title card-title">Coupons List</h2>
-                        <p>Lorem ipsum dolor sit amet.</p>
+                        <!-- <p>Lorem ipsum dolor sit amet.</p> -->
                     </div>
                     <div>
                         <a href="/admin/createCoupon" class="btn btn-primary btn-sm rounded">Create new</a>
@@ -154,14 +154,14 @@
                                                     <%= val.code %>
                                                 </span></td>
                                             <td><span>
-                                                    <%= val.discountAmount %>
+                                                ₹<%= val.discountAmount %>
                                                 </span></td>
                                             <!-- <td><span><%= val.startDate.toLocaleDateString('en-GB') %></span></td> -->
                                             <td><span>
                                                     <%= val.endDate.toLocaleDateString('en-GB') %>
                                                 </span></td>
                                             <td><span>
-                                                    <%= val.minPurchaseAmount %>
+                                                ₹<%= val.minPurchaseAmount %>
                                                 </span></td>
                                             <td class="text-center"><span> <a
                                                         onclick="deleteCoupon(event, '<%= val.id %>')" href

@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+    serverSelectionTimeoutMS: 30000,
   })
   .then(() => console.log("Connected to Mongo DB"))
   .catch((error) => console.log("Error connecting to Mongo DB", error));
@@ -72,11 +72,6 @@ app.use('/', userRoutes);
 // Use the admin router
 app.use('/admin', adminRoutes);
 // ---------------------------
-
-//error handle page not found
-// app.use((req, res) => {
-//     res.status(404).render('user/404');
-// });
 
 app.use(errorHandler)
 

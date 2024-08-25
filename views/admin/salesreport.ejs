@@ -70,7 +70,7 @@
             <header class="main-header navbar">
                 <div class="col-search">
                     <form class="searchform">
-                        <div class="input-group">
+                        <!-- <div class="input-group">
                             <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
                             <button class="btn btn-light bg" type="button"><i
                                     class="material-icons md-search"></i></button>
@@ -80,7 +80,7 @@
                             <option value="New orders"></option>
                             <option value="Apple iphone"></option>
                             <option value="Ahmed Hassan"></option>
-                        </datalist>
+                        </datalist> -->
                     </form>
                 </div>
                 <div class="col-nav">
@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="card mb-4">
-                    <header class="card-header" id="dateHeader"> 
+                    <header class="card-header" id="dateHeader">
                         <div class="row gx-3">
                             <div class="col-lg-4 col-md-6 me-auto">
                                 <!-- <input type="text" placeholder="Search..." class="form-control" /> -->
@@ -208,15 +208,15 @@
                         </p>
                         <!-- <p>Total Discount: ₹</p> -->
                         <div id="buttons">
-                        <button id="download-pdf-btn" class="btn btn-primary">
-                            <i class="icon material-icons md-file_download"></i>
-                            <span class="text">Download PDF</span>
-                        </button>
-                        <button id="download-excel-btn" class="btn btn-primary">
-                            <i class="icon material-icons md-file_download"></i>
-                            <span class="text">Download Excel</span>
-                        </button>
-                    </div>
+                            <button id="download-pdf-btn" class="btn btn-primary">
+                                <i class="icon material-icons md-file_download"></i>
+                                <span class="text">Download PDF</span>
+                            </button>
+                            <button id="download-excel-btn" class="btn btn-primary">
+                                <i class="icon material-icons md-file_download"></i>
+                                <span class="text">Download Excel</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -291,7 +291,7 @@
                 document.getElementById('dateHeader').style.display = 'none'
                 document.getElementById('buttons').style.display = 'none'
                 document.getElementById('pagination').style.display = 'none'
-                
+
 
                 var element = document.querySelector('.content-main'); // Select the table element
 
@@ -305,7 +305,19 @@
 
         <!-- exel -->
         <script>
-            document.getElementById('download-excel-btn').addEventListener('click', exportToExcel);
+            document.getElementById('download-excel-btn').addEventListener('click', function () {
+                // Hide elements before exporting
+                document.getElementById('dateHeader').style.display = 'none';
+                document.getElementById('buttons').style.display = 'none';
+                document.getElementById('pagination').style.display = 'none';
+
+                exportToExcel();
+
+                // Restore elements after exporting
+                document.getElementById('dateHeader').style.display = 'block';
+                document.getElementById('buttons').style.display = 'block';
+                document.getElementById('pagination').style.display = 'block';
+            });
 
             function exportToExcel() {
                 // Get the table element
@@ -323,9 +335,20 @@
                 var ws = XLSX.utils.aoa_to_sheet(rows);
                 XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-                XLSX.writeFile(wb, 'table_data.xlsx');
-            }
+                // Add the overall summary after the table
+                var summaryRows = [
+                    [], // Blank row
+                    ['Overall Summary'], // Title
+                    ['Total Sales Count:', '<%= totalOrders %>'], // Total sales count
+                    ['Total Order Amount:', '₹<%= totalPrice %>'] // Total order amount
+                ];
 
+                // Append the summary to the sheet
+                XLSX.utils.sheet_add_aoa(ws, summaryRows, { origin: -1 });
+
+                // Write the Excel file
+                XLSX.writeFile(wb, 'sales_report.xlsx');
+            }
         </script>
 
         <!-- trigger dates -->

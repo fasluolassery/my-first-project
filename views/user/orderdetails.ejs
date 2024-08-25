@@ -520,9 +520,10 @@
                                                         id="grand-total-amount">₹<%= order.totalAmount %></span></h4>
                                                 <!-- <a href="/checkout">Proceed to Checkout</a> -->
                                             </div>
-
+                                            <% if(order.orderStatus == 'Delivered') {%>
                                             <a class="ms-1" onclick="downloadInvoice(event)" href="#">Download
                                                 Invoice</a>
+                                            <% } %>
 
                                             <div class="container" id="invoice" style="display: none;">
                                                 <!-- Invoice Content -->
