@@ -170,7 +170,8 @@
                                                         style="width: 45%;">
                                                         <input class="form-check-input" name="mycategory" type="radio"
                                                             value="<%= category.categoryName %>" <% if
-                                                            (category.categoryName===product.category) { %>checked<% } %>
+                                                            (category.categoryName===product.category) { %>checked<% }
+                                                            %>
                                                             <span class="form-check-label">
                                                                 <%= category.categoryName %>
                                                             </span>
@@ -262,6 +263,8 @@
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </body>
 
     <script>
@@ -423,19 +426,45 @@
                 }
             }
 
-            axios.post('/admin/editproducts', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            Swal.fire({
+                icon: "question",
+                title: "<span style='color: black;'>Do you want to save changes?</span>",
+                // text: "Verification email sent! Kindly check your inbox.",
+                // showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonColor: '#3BB77E',
+                confirmButtonText: 'Yes',
+                // denyButtonText: `Don't save`
+            }).then((res) => {
+                if (res.isConfirmed) {
+
+
+                    axios.post('/admin/editproducts', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(res => {
+                            if (res.data.success) {
+                                Swal.fire({
+                                    title: "<span style='color: #3BB77E;'>Success!</span>",
+                                    html: "<span style='color: black;'>Your changes have been saved successfully.</span>",
+                                    icon: "success",
+                                    confirmButtonColor: "#3BB77E", // Bootstrap's success color
+                                    confirmButtonText: "OK"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/admin/products'
+                                    }
+                                })
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
                 }
             })
-                .then(res => {
-                    if (res.data.success) {
-                        window.location.href = '/admin/products';
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+
+
         }
     </script>
 

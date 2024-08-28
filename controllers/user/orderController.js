@@ -292,6 +292,8 @@ const returnSingleOrder = async (req, res, next) => {
     try {
         const { orderId, productId, reason } = req.body;
 
+        console.log("This is reason: ", reason)
+
         if (!orderId || !productId) {
             return console.log("Order ID and Product ID are required.");
         }

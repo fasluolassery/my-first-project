@@ -1,6 +1,7 @@
 const orderModel = require('../../models/orderModel')
 const userModel = require('../../models/userModel')
 const transactionModel = require('../../models/transactionSchema')
+const productModel = require('../../models/productModel')
 
 const loadOrders = async (req, res, next) => {
     try {
@@ -67,8 +68,6 @@ const changeOrderStatus = async (req, res, next) => {
         }
 
         findOrder.orderStatus = newStatus
-
-
 
         findOrder.products.forEach(val => {
 
@@ -158,26 +157,39 @@ const updateReturnRequest = async (req, res, next) => {
             return res.status(404).json({ message: 'Product not found in the order' });
         }
 
-        const findUser = await userModel.findById(order.user)
+        const findUser = await userModel.findById(order.user);
 
-        if(!findUser){
-            return console.log("user not found at updateReturnRequest")
+        if (!findUser) {
+            return console.log("User not found at updateReturnRequest");
         }
 
         product.returnStatus = status;
 
         if (status === 'Approved') {
             product.productStatus = 'Returned';
-            findUser.balance += product.price
-            await findUser.save()
 
+            // Return the user's money regardless of the reason
+            findUser.balance += product.price * product.quantity; // Increment balance by the total price of the returned products
+
+            // Create a transaction record
             const transaction = new transactionModel({
                 userId: findUser.id,
-                amount: product.price,
+                amount: product.price * product.quantity, // Total amount credited back to the user
                 type: 'credit'
-            })
+            });
 
-            await transaction.save()
+            await transaction.save();
+
+            // Update stock only if the return reason is not 'Product is damaged'
+            if (product.returnReason !== 'Product is damaged') {
+                const productToUpdate = await productModel.findById(productId);
+                if (productToUpdate) {
+                    productToUpdate.stock += product.quantity; // Increment stock by the quantity returned
+                    await productToUpdate.save();
+                } else {
+                    return res.status(404).json({ message: 'Product not found in the inventory' });
+                }
+            }
         }
 
         const allReturned = order.products.every(p => p.returnStatus === 'Approved');
@@ -193,6 +205,9 @@ const updateReturnRequest = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
 
 
 module.exports = {

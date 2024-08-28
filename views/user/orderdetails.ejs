@@ -823,88 +823,99 @@
 
         <!-- return single product -->
         <script>
-            function returnSingleProduct(event, orderId, productId) {
-                event.preventDefault()
+          function returnSingleProduct(event, orderId, productId) {
+    event.preventDefault();
 
-                Swal.fire({
-                    icon: "question",
-                    title: "Are you sure?",
-                    input: 'text',
-                    text: "Send a request for return! Add your reason",
-                    showCancelButton: true,
-                    confirmButtonColor: '#0056b3',
-                    confirmButtonText: "Ok",
-                    inputValidator: (value) => {
-                        // Check if the input is empty
-                        if (!value) {
-                            return 'Please enter a reason for the return';
-                        }
-
-                        // Optional: Check for minimum length or other criteria
-                        if (value.length < 5) {
-                            return 'The reason must be at least 5 characters long';
-                        }
-
-                        // Validation passed
-                        return null;
-                    },
-                    preConfirm: async (reason) => {
-                        try {
-                            const res = await axios.post('/returnSingleOrder', {
-                                orderId: orderId,
-                                productId: productId,
-                                reason: reason
-                            });
-
-                            if (res.data.success) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Request sent",
-                                    confirmButtonColor: '#0056b3',
-                                    confirmButtonText: "Ok",
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = '/myAccount';
-                                    }
-                                });
-                            }
-                        } catch (err) {
-                            console.log(err);
-                        }
+    Swal.fire({
+        icon: "question",
+        title: "Are you sure?",
+        html: `
+        <p style="margin-bottom: 10px;">Send a request for return! Select your reason:</p>
+        <div style="text-align: left; margin-left: 30px;">
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="radio" id="reason1" name="returnReason" value="Product is damaged" 
+                style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
+                Product is damaged
+            </label>
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="radio" id="reason2" name="returnReason" value="Wrong item delivered" 
+                style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
+                Wrong item delivered
+            </label>
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="radio" id="reason3" name="returnReason" value="Not as described" 
+                style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
+                Not as described
+            </label>
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="radio" id="reason4" name="returnReason" value="Other" 
+                style="width: 15px; height: 15px; vertical-align: middle; margin-right: 10px;">
+                Other
+            </label>
+            <input type="text" id="otherReason" placeholder="If 'Other', please specify here" 
+            style="display:none; margin-top:10px; width: 100%;" />
+        </div>
+    `,
+        showCancelButton: true,
+        confirmButtonColor: '#0056b3',
+        confirmButtonText: "Ok",
+        willOpen: () => {
+            const otherReasonInput = document.getElementById('otherReason');
+            document.querySelectorAll('input[name="returnReason"]').forEach((radio) => {
+                radio.addEventListener('change', (event) => {
+                    if (event.target.value === 'Other') {
+                        otherReasonInput.style.display = 'block';
+                    } else {
+                        otherReasonInput.style.display = 'none';
                     }
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                });
+            });
+        },
+        preConfirm: async () => {
+            const selectedReason = document.querySelector('input[name="returnReason"]:checked');
+            let reason = selectedReason ? selectedReason.value : '';
 
-
-                        // axios.post('/returnSingleOrder', { orderId: orderId, productId, productId })
-                        //     .then(res => {
-                        //         if (res.data.success) {
-                        //             Swal.fire({
-                        //                 icon: "success",
-                        //                 title: "request send",
-                        //                 text: "",
-                        //                 // showDenyButton: true,
-                        //                 // showCancelButton: true,
-                        //                 confirmButtonColor: '#0056b3',
-                        //                 confirmButtonText: "Ok",
-                        //                 // denyButtonText: `Don't save`
-                        //             }).then((result) => {
-                        //                 if (result.isConfirmed) {
-                        //                     window.location.href = '/myAccount'
-                        //                 }
-                        //             })
-                        //         }
-                        //     })
-                        //     .catch(err => {
-                        //         console.log(err)
-                        //     })
-
-
-                    }
-                })
-
-
+            if (reason === 'Other') {
+                reason = document.getElementById('otherReason').value.trim();
             }
+
+            if (!selectedReason || (reason === 'Other' && !reason)) {
+                Swal.showValidationMessage('Please select a reason for the return');
+                return null;
+            }
+
+            if (reason.length < 5) {
+                Swal.showValidationMessage('The reason must be at least 5 characters long');
+                return null;
+            }
+
+            try {
+                const res = await axios.post('/returnSingleOrder', {
+                    orderId: orderId,
+                    productId: productId,
+                    reason: reason
+                });
+
+                if (res.data.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Request sent",
+                        confirmButtonColor: '#0056b3',
+                        confirmButtonText: "Ok",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/myAccount';
+                        }
+                    });
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+            return reason; // Return the reason to ensure it's passed to the success handler
+        }
+    });
+}
         </script>
 
         <!-- back Button -->
