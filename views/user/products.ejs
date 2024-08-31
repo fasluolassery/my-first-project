@@ -277,22 +277,40 @@
                                     </div>
                                     <!-- Tab Content Area End -->
                                     <!--  Pagination Area Start -->
-                                    <!-- <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up"
-                                        data-aos-delay="200">
+                                    
+                                    <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up" data-aos-delay="200">
                                         <div class="pages">
                                             <ul>
-                                                <li class="li"><a class="page-link" href="#"><i
-                                                            class="fa fa-angle-left"></i></a>
-                                                </li>
-                                                <li class="li"><a class="page-link" href="#">1</a></li>
-                                                <li class="li"><a class="page-link active" href="#">2</a></li>
-                                                <li class="li"><a class="page-link" href="#">3</a></li>
-                                                <li class="li"><a class="page-link" href="#"><i
-                                                            class="fa fa-angle-right"></i></a>
-                                                </li>
+                                                <!-- Previous Button (only render if not on the first page) -->
+                                                <% if (currentPage > 1) { %>
+                                                    <li class="li">
+                                                        <a class="page-link" href="/products?page=<%= currentPage - 1 %>">
+                                                            <i class="fa fa-angle-left"></i>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                    
+                                                <!-- Page Numbers -->
+                                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                                    <li class="li">
+                                                        <a class="page-link <%= currentPage === i ? 'active' : '' %>" href="/products?page=<%= i %>">
+                                                            <%= i %>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                    
+                                                <!-- Next Button (only render if not on the last page) -->
+                                                <% if (currentPage < totalPages) { %>
+                                                    <li class="li">
+                                                        <a class="page-link" href="/products?page=<%= currentPage + 1 %>">
+                                                            <i class="fa fa-angle-right"></i>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
                                             </ul>
                                         </div>
-                                    </div> -->
+                                    </div>
+                                    
                                     <!--  Pagination Area End -->
                                 </div>
                                 <!-- Shop Bottom Area End -->

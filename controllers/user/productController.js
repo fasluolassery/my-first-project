@@ -35,21 +35,41 @@ const updatedPrice = async (products) => {
 
 const loadProductsUser = async (req, res, next) => {
     try {
-        let findAllProducts = await Product.find({ isBlock: false }).populate('offers')
-        const findAllCategories = await Category.find({ isBlock: false })
-        const { user, userId } = req.session
+        const page = parseInt(req.query.page) || 1;  
+        const limit = 3;
 
-        const isProduct = true
+        const count = await Product.countDocuments({ isBlock: false });
+        const totalPages = Math.ceil(count / limit);
 
-        findAllProducts = await updatedPrice(findAllProducts)
+        if (page > totalPages && totalPages !== 0) {
+            return res.redirect(`/products?page=${totalPages}`);
+        }
 
-        res.render('user/products', { products: findAllProducts, categories: findAllCategories, user: userId, isProduct: isProduct })
+        const findAllProducts = await Product.find({ isBlock: false })
+            .populate('offers')
+            .skip((page - 1) * limit)
+            .limit(limit);
 
-        // console.log(findAllProducts)
+        const findAllCategories = await Category.find({ isBlock: false });
+        const { user, userId } = req.session;
+
+        const isProduct = true;
+        const updatedProducts = await updatedPrice(findAllProducts);
+
+        res.render('user/products', {
+            products: updatedProducts,
+            categories: findAllCategories,
+            user: userId,
+            isProduct,
+            currentPage: page,
+            totalPages
+        });
     } catch (error) {
-        next(error)
+        console.error('Error loading products:', error);  
+        next(error);
     }
-}
+};
+
 
 const loadSingleProductUser = async (req, res, next) => {
     try {

@@ -22,12 +22,13 @@ const walletController = require('../controllers/user/walletController')
 
 const sessionCheckUser = require('../middlewares/sessionCheck')
 // ------------------------------------------------------------
+// sessionCheckUser.isLogin,
 
 userRouter.get('/', homeController.loadHome)
 userRouter.get('/home', homeController.loadHome)
 userRouter.get('/login', sessionCheckUser.isLogout, authController.loadRegister)
 userRouter.get('/verifyotp', emailController.loadVerifyOtp)
-userRouter.get('/products', sessionCheckUser.isLogin,productController.loadProductsUser)
+userRouter.get('/products', productController.loadProductsUser)
 userRouter.get('/productview', sessionCheckUser.isLogin,productController.loadSingleProductUser)
 userRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 userRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.userLoginGoogle)
