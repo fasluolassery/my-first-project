@@ -98,10 +98,10 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="content-header">
-                            <h2 class="content-title">Add New Coupon</h2>
+                            <h2 class="content-title">Edit Coupon</h2>
                             <div>
                                 <button class="btn btn-md rounded font-sm hover-up"
-                                    onclick="createCoupon(event)">Create</button>
+                                    onclick="updateCoupon(event)">Edit</button>
                                 <a href="/admin/coupons"><button
                                         class="btn btn-light rounded font-sm mr-5 text-body hover-up">Cancel</button></a>
                             </div>
@@ -112,33 +112,33 @@
                                     <div class="mb-4">
                                         <label for="product_title" class="form-label">Coupon name</label>
                                         <input type="text" placeholder="Type here" class="form-control" id="couponName"
-                                            />
+                                        value="<%= coupon.name %>"/>
                                         <div id="errmsgName" class="text-danger"></div>
                                     </div>
                                     <div class="row gx-3">
                                         <div class="col-md-4 mb-3">
                                             <label for="product_sku" class="form-label">Amount</label>
                                             <input type="number" placeholder="Type here" class="form-control"
-                                                id="couponAmount"/>
+                                                id="couponAmount" value="<%= coupon.discountAmount %>" />
                                             <div id="errmsgAmount" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_color" class="form-label">start date</label>
                                             <input type="date" placeholder="Type here" class="form-control"
-                                                id="startDate" />
+                                                id="startDate" value="<%= coupon.startDate.toISOString().substring(0, 10) %>" />
                                             <div id="errmsgStartDate" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_size" class="form-label">end date</label>
                                             <input type="date" placeholder="Type here" class="form-control" id="endDate"
-                                                 />
+                                            value="<%= coupon.endDate.toISOString().substring(0, 10) %>" />
                                             <div id="errmsgEndDate" class="text-danger"></div>
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="product_brand" class="form-label">Minimum Purchase Amount</label>
                                         <input type="number" placeholder="Type here" class="form-control"
-                                            id="minPurchaseAmt"/>
+                                            id="minPurchaseAmt" value="<%= coupon.minPurchaseAmount %>" />
                                         <div id="errmsgMinPA" class="text-danger"></div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                         <label class="form-label">Description</label>
                                         <div id="errmsgDescription" class="text-danger"></div>
                                         <textarea placeholder="Type here" class="form-control" rows="4"
-                                            id="description">hello world</textarea>
+                                            id="description"><%= coupon.description %></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -182,17 +182,16 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <!-- validation -->
-        <script>
+<!-- validation -->
+<script>
             function validateCoupon() {
-                const name = document.getElementById('couponName').value;
-                const amount = document.getElementById('couponAmount').value;
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
-                const minPurchaseAmount = document.getElementById('minPurchaseAmt').value;
-                const description = document.getElementById('description').value;
+                const name = document.getElementById('couponName').value
+                const amount = document.getElementById('couponAmount').value
+                const startDate = document.getElementById('startDate').value
+                const endDate = document.getElementById('endDate').value
+                const minPurchaseAmount = document.getElementById('minPurchaseAmt').value
+                const description = document.getElementById('description').value
 
-                // Clear previous error messages
                 document.getElementById('errmsgName').innerHTML = '';
                 document.getElementById('errmsgAmount').innerHTML = '';
                 document.getElementById('errmsgStartDate').innerHTML = '';
@@ -200,87 +199,84 @@
                 document.getElementById('errmsgMinPA').innerHTML = '';
                 document.getElementById('errmsgDescription').innerHTML = '';
 
+
                 const allowedCharacters = /^[a-zA-Z\s]+$/;
 
-                // Name validation
+                //name validation
                 if (name === '') {
-                    displayErrorName('*Name is required.');
+                    displayErrorName('*name is required.')
                     return false;
                 } else if (name.length < 3) {
-                    displayErrorName(`*Name must be at least 3 characters long.`);
+                    displayErrorName(`*name must be at least 3 characters long.`);
                     return false;
                 } else if (name.length > 30) {
-                    displayErrorName(`*Name must be less than 30 characters long.`);
+                    displayErrorName(`*name must be less than 30 characters long.`);
                     return false;
                 } else if (!allowedCharacters.test(name)) {
-                    displayErrorName("*Name can only contain letters and spaces.");
-                    return false;
+                    displayErrorName("*name can only contain letters, numbers, and spaces.");
+                    return false
                 }
 
-                // Amount validation
-                const minPrice = 100;
-                const maxPrice = 500000;
+
+                //price validation
+                var minPrice = 100;
+                var maxPrice = 500000;
 
                 if (amount === '') {
-                    displayErrorAmount('*Price is required.');
+                    displayErrorAmount('*price is required.')
                     return false;
                 } else if (isNaN(amount) || amount <= 0) {
-                    displayErrorAmount('*Price must be a positive number.');
+                    displayErrorAmount('*price must be a positive number.')
                     return false;
                 }
+                // else if (amount < minPrice) {
+                //     displayErrorAmount(`*price must be at least $${minPrice.toFixed(2)}.`)
+                //     return false;
+                // } else if (amount > maxPrice) {
+                //     displayErrorAmount(`*price must be less than or equal to $${maxPrice.toFixed(2)}.`)
+                //     return false;
+                // }
 
-                // Date validation
-                const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+                //date validation
+                let dateFormat = /^\d{4}-\d{2}-\d{2}$/;
 
-                if (!dateFormat.test(startDate) || !isValidDate(startDate)) {
-                    displayErrorStDate('*Invalid start date (YYYY-MM-DD).');
-                    return false;
+                if (!dateFormat.test(startDate)) {
+                    displayErrorStDate('*Invalid date')
+                    return false
+                }
+                if (!dateFormat.test(endDate)) {
+                    displayErrorEndDate('*Invalid date')
+                    return false
                 }
 
-                if (!dateFormat.test(endDate) || !isValidDate(endDate)) {
-                    displayErrorEndDate('*Invalid end date (YYYY-MM-DD).');
-                    return false;
-                }
 
-                if (new Date(startDate) > new Date(endDate)) {
-                    displayErrorEndDate('*End date must be after or the same as the start date.');
-                    return false;
-                }
-
-                // Min Purchase Amount validation
+                //minPurchaseAmount validation
                 if (minPurchaseAmount === '') {
-                    displayErrorminPurchaseAmount('*Minimum purchase amount is required.');
+                    displayErrorminPurchaseAmount('*Product price is required.')
                     return false;
                 } else if (isNaN(minPurchaseAmount) || minPurchaseAmount <= 0) {
-                    displayErrorminPurchaseAmount('*Minimum purchase amount must be a positive number.');
+                    displayErrorminPurchaseAmount('*Product price must be a positive number.')
                     return false;
                 } else if (minPurchaseAmount < minPrice) {
-                    displayErrorminPurchaseAmount(`*Minimum purchase amount must be at least $${minPrice.toFixed(2)}.`);
+                    displayErrorminPurchaseAmount(`*Product price must be at least $${minPrice.toFixed(2)}.`)
                     return false;
                 } else if (minPurchaseAmount > maxPrice) {
-                    displayErrorminPurchaseAmount(`*Minimum purchase amount must be less than or equal to $${maxPrice.toFixed(2)}.`);
+                    displayErrorminPurchaseAmount(`*Product price must be less than or equal to $${maxPrice.toFixed(2)}.`)
                     return false;
                 }
 
-                // Description validation
+
+                //description validation
                 if (description === '') {
-                    displayErrorDescription('*Description is required.');
+                    displayErrorDescription('*Product description is required.')
                     return false;
                 }
 
-                return true;
+                return true
             }
 
-            // Helper function to check if a date is valid
-            function isValidDate(dateString) {
-                const date = new Date(dateString);
-                return date instanceof Date && !isNaN(date) && dateString === date.toISOString().split('T')[0];
-            }
-
-            // Helper functions to display error messages
             function displayErrorName(errorMessage) {
                 const errorDiv = document.getElementById('errmsgName');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
@@ -288,7 +284,6 @@
 
             function displayErrorAmount(errorMessage) {
                 const errorDiv = document.getElementById('errmsgAmount');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
@@ -296,7 +291,6 @@
 
             function displayErrorStDate(errorMessage) {
                 const errorDiv = document.getElementById('errmsgStartDate');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
@@ -304,7 +298,6 @@
 
             function displayErrorEndDate(errorMessage) {
                 const errorDiv = document.getElementById('errmsgEndDate');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
@@ -312,7 +305,6 @@
 
             function displayErrorminPurchaseAmount(errorMessage) {
                 const errorDiv = document.getElementById('errmsgMinPA');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
@@ -320,12 +312,10 @@
 
             function displayErrorDescription(errorMessage) {
                 const errorDiv = document.getElementById('errmsgDescription');
-                errorDiv.innerHTML = '';
                 const errorParagraph = document.createElement('p');
                 errorParagraph.textContent = errorMessage;
                 errorDiv.appendChild(errorParagraph);
             }
-
 
             const name = document.getElementById('couponName').value
             const amount = document.getElementById('couponAmount').value
@@ -340,57 +330,76 @@
             document.getElementById('endDate').addEventListener('input', validateCoupon)
             document.getElementById('minPurchaseAmt').addEventListener('input', validateCoupon)
             document.getElementById('description').addEventListener('input', validateCoupon)
-        </script>
-        
-        <!-- creat coupon -->
-        <script>
-            function createCoupon(event) {
-                event.preventDefault()
+</script>
 
-                if (!validateCoupon()) {
-                    return console.log("*validation Error")
-                }
 
-                const name = document.getElementById('couponName').value
-                const amount = document.getElementById('couponAmount').value
-                const startDate = document.getElementById('startDate').value
-                const endDate = document.getElementById('endDate').value
-                const minPurchaseAmount = document.getElementById('minPurchaseAmt').value
-                const description = document.getElementById('description').value
+<!-- edit coupon -->
+<script>
+    // Function to handle form submission
+    async function updateCoupon(event) {
+        event.preventDefault();
 
-                const couponData = {
-                    name: name,
-                    amount: amount,
-                    startDate: startDate,
-                    endDate: endDate,
-                    minPurchaseAmount: minPurchaseAmount,
-                    description: description
-                }
+        if (!validateCoupon()) {
+            return console.log("*validation Error")
+        }
 
-                axios.post('/admin/createCoupon', couponData)
-                    .then(res => {
-                        if (res.data.error) {
-                            displayErrorName("*this coupon already exists")
-                        } else if (res.data.success) {
-                            Swal.fire({
-                                title: "<span style='color: #3BB77E;'>Success!</span>",
-                                html: "<span style='color: black;'>Added new Coupon.</span>",
-                                icon: "success",
-                                confirmButtonColor: "#3BB77E", // Bootstrap's success color
-                                confirmButtonText: "OK"
-                            }).then(result => {
-                                if (result.isConfirmed) {
-                                    window.location.href = '/admin/coupons'
-                                }
-                            })
+        // Get form field values
+        const couponId = '<%= coupon._id %>'; // Make sure you pass the coupon ID from the server-side
+        const name = document.getElementById('couponName').value;
+        const amount = document.getElementById('couponAmount').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const minPurchaseAmount = document.getElementById('minPurchaseAmt').value;
+        const description = document.getElementById('description').value;
 
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+        try {
+            // Send a POST request with Axios
+            const response = await axios.post('/admin/editCoupon', {
+                couponId,
+                name,
+                amount,
+                startDate,
+                endDate,
+                minPurchaseAmount,
+                description
+            });
+
+            // Check response
+            if (response.data.success) {
+                Swal.fire({
+                    title: "<span style='color: #3BB77E;'>Success!</span>",
+                    html: "<span style='color: black;'>Edited Coupon.</span>",
+                    icon: "success",
+                    confirmButtonColor: "#3BB77E",
+                    confirmButtonText: "OK"
+                }).then(result => {
+                    if(result.isConfirmed){
+                        window.location.href = '/admin/coupons'
+                    }
+                })
+            } else {
+                // alert('Error updating coupon: ' + response.data.error);
+                Swal.fire({
+                    title: "<span style='color: #FF0000;'>Error!</span>",
+                    html: `<span style='color: black;'>${response.data.error}</span>`,
+                    icon: "error",
+                    confirmButtonColor: "#3BB77E",
+                    confirmButtonText: "OK"
+                }).then(result => {
+                    if(result.isConfirmed){
+                        window.location.href = '/admin/coupons'
+                    }
+                })
             }
-        </script>
-    </body>
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating the coupon.');
+        }
+    }
 
+    // Attach the function to the button click event
+    document.querySelector('.btn.btn-md').addEventListener('click', updateCoupon);
+</script>
+
+    </body>
     </html>

@@ -60,6 +60,69 @@ const createCoupon = async (req, res, next) => {
     }
 }
 
+const loadEditCoupon = async (req, res, next) => {
+    try {
+        const { couponId } = req.query;
+
+        if (!couponId) {
+            return res.status(400).send({ error: 'Coupon ID is required' });
+        }
+
+        // Find the coupon by ID
+        const coupon = await couponModel.findById(couponId);
+        
+        if (!coupon) {
+            return res.status(404).send({ error: 'Coupon not found' });
+        }
+
+        // Render the edit page with the coupon details
+        res.render('admin/editCoupon', { coupon });
+
+    } catch (error) {
+        next(error); // Pass any errors to the error-handling middleware
+    }
+};
+
+
+const editCoupon = async (req, res, next) => {
+    try {
+        const { couponId, name, amount, startDate, endDate, minPurchaseAmount, description } = req.body;
+
+        // Check if the new name conflicts with another existing coupon (excluding the current one)
+        const existingCoupon = await couponModel.findOne({ name: name, _id: { $ne: couponId } });
+        if (existingCoupon) {
+            console.log("Another coupon with this name already exists");
+            return res.send({ error: "Another coupon with this name already exists" }); 
+        }
+
+        // Update the coupon using findByIdAndUpdate with the $set operator
+        const updatedCoupon = await couponModel.findByIdAndUpdate(
+            couponId,
+            {
+                $set: {
+                    name: name,
+                    description: description,
+                    discountAmount: amount,
+                    startDate: startDate,
+                    endDate: endDate,
+                    minPurchaseAmount: minPurchaseAmount
+                }
+            },
+            { new: true }
+        );
+
+        if (updatedCoupon) {
+            console.log("Successfully updated coupon");
+            res.send({ success: "Successfully updated coupon" });
+        } else {
+            console.log("Coupon not found");
+            res.send({ error: "Coupon not found" }); 
+        }
+    } catch (error) {
+        next(error); 
+    }
+};
+
 const deleteCoupon = async (req, res, next) => {
     try {
         const { couponId } = req.body
@@ -86,4 +149,6 @@ module.exports = {
     loadCreateCoupon,
     createCoupon,
     deleteCoupon,
+    loadEditCoupon,
+    editCoupon,
 }

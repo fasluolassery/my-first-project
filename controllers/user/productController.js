@@ -111,6 +111,8 @@ const combinedController = async (req, res, next) => {
 
         console.log(req.body)
 
+        return
+
         let query = {};
 
         // Search by value
@@ -155,9 +157,55 @@ const combinedController = async (req, res, next) => {
     }
 };
 
+const combinedSearchFilterAndSort = async (req, res, next) => {
+    try {
+        const { value, category, index } = req.body
+
+        console.log(req.body)
+
+        let query = {};
+
+        if (value && value.length > 0) {
+            query.productName = new RegExp(value, 'i');
+        }
+
+        if (category !== 'All' && category) {
+            query.category = category;
+        }
+
+        let findProducts = Product.find(query);
+
+        if (index) {
+            switch (parseInt(index)) {
+                case 1: // Name A-Z
+                    findProducts = findProducts.sort({ productName: 1 });
+                    break;
+                case 2: // Name Z-A
+                    findProducts = findProducts.sort({ productName: -1 });
+                    break;
+                case 3: // Price low to high
+                    findProducts = findProducts.sort({ price: 1 });
+                    break;
+                case 4: // Price high to low
+                    findProducts = findProducts.sort({ price: -1 });
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        const products = await findProducts;
+
+        res.json({ products });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
 
     loadProductsUser,
     loadSingleProductUser,
     combinedController,
+    combinedSearchFilterAndSort
 };

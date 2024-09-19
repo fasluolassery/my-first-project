@@ -14,7 +14,7 @@ const loadUserAccount = async (req, res, next) => {
 
         const findUserDetails = await User.findOne({ _id: userId })
 
-        let referalLink = 'localhost:7777/login/?reff=' + userId
+        let referalLink = 'faslurahman.online/login/?reff=' + userId
 
         const findAddress = await addressModel.findOne({ userId: userId })
 

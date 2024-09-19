@@ -122,52 +122,56 @@
                                         <div class="col-md-4 mb-3">
                                             <label for="product_sku" class="form-label">discount amount</label>
                                             <input type="number" placeholder="Type here" class="form-control"
-                                                id="offerAmount" value="3000" />
+                                                id="offerAmount"/>
                                             <div id="errmsgAmount" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_color" class="form-label">start date</label>
                                             <input type="date" placeholder="Type here" class="form-control"
-                                                id="startDate" value="2024-07-09" />
+                                                id="startDate"  />
                                             <div id="errmsgStartDate" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="product_size" class="form-label">end date</label>
                                             <input type="date" placeholder="Type here" class="form-control" id="endDate"
-                                                value="2024-08-28" />
+                                               />
                                             <div id="errmsgEndDate" class="text-danger"></div>
                                         </div>
                                     </div>
-                                    <div class="mb-4" id="pro"> 
+                                    <div class="mb-4" id="pro">
                                         <label for="products" class="form-label">select product</label>
                                         <select id="products" class="form-control">
-                                            <% if(products.length > 0) {%>
-                                                <% products.forEach(val => { %>
-                                            <option value="<%= val.id %>"><%= val.productName %> </option>
-                                            <% }) %>
-                                            <% } %>
-                                            <!-- <option value="product two">product two</option>
+                                            <% if(products.length> 0) {%>
+                                                <% products.forEach(val=> { %>
+                                                    <option value="<%= val.id %>">
+                                                        <%= val.productName %>
+                                                    </option>
+                                                    <% }) %>
+                                                        <% } %>
+                                                            <!-- <option value="product two">product two</option>
                                             <option value="product three">product three</option> -->
-                                            <!-- <option value="category">Category Offer</option> -->
-                                            <!-- <option value="referral">Referral Offer</option> -->
+                                                            <!-- <option value="category">Category Offer</option> -->
+                                                            <!-- <option value="referral">Referral Offer</option> -->
                                         </select>
                                         <!-- <div id="errmsgName" class="text-danger"></div> -->
                                     </div>
-                                    
-                                    <div class="mb-4" id="cate" style="display: none;"> 
+
+                                    <div class="mb-4" id="cate" style="display: none;">
                                         <label for="category" class="form-label">select category</label>
                                         <select id="category" class="form-control">
 
-                                            <% if(categories.length > 0) {%>
-                                                <% categories.forEach(val => { %>
-                                            <option value="<%= val.id %>"><%= val.categoryName %> </option>
-                                            <% }) %>
-                                            <% } %>
-                                            
+                                            <% if(categories.length> 0) {%>
+                                                <% categories.forEach(val=> { %>
+                                                    <option value="<%= val.id %>">
+                                                        <%= val.categoryName %>
+                                                    </option>
+                                                    <% }) %>
+                                                        <% } %>
+
                                         </select>
                                         <!-- <div id="errmsgName" class="text-danger"></div> -->
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <!-- card end// -->
@@ -218,11 +222,11 @@
 
                 console.log(type)
 
-                if(type.value == 'category'){
+                if (type.value == 'category') {
                     cate.style.display = 'block'
                     pro.style.display = 'none'
 
-                }else{
+                } else {
                     pro.style.display = 'block'
                     cate.style.display = 'none'
 
@@ -232,7 +236,7 @@
 
         <!-- creat offer -->
         <script>
-            function createOffer(event){
+            function createOffer(event) {
                 event.preventDefault()
 
                 if (!validateOffer()) {
@@ -269,11 +273,11 @@
                                 confirmButtonColor: "#3BB77E", // Bootstrap's success color
                                 confirmButtonText: "OK"
                             }).then(result => {
-                                if(result.isConfirmed){
+                                if (result.isConfirmed) {
                                     window.location.href = '/admin/offers'
                                 }
                             })
-                            
+
                         }
                     })
                     .catch(err => {
@@ -285,7 +289,7 @@
 
         <!-- validations -->
         <script>
-            function validateOffer(){
+            function validateOffer() {
                 const offerType = document.getElementById('offer-type').value
                 const discountAmount = document.getElementById('offerAmount').value
                 const startDate = document.getElementById('startDate').value
@@ -308,18 +312,42 @@
                     return false;
                 }
 
-                let dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+                // Validate date format (YYYY-MM-DD)
+                const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
 
                 if (!dateFormat.test(startDate)) {
-                    displayErrorStDate('*Invalid date')
-                    return false
+                    displayErrorStDate('*Invalid date format (YYYY-MM-DD).');
+                    return false;
                 }
+
                 if (!dateFormat.test(endDate)) {
-                    displayErrorEndDate('*Invalid date')
-                    return false
+                    displayErrorEndDate('*Invalid date format (YYYY-MM-DD).');
+                    return false;
+                }
+
+                // Validate if dates are valid calendar dates
+                if (!isValidDate(startDate)) {
+                    displayErrorStDate('*Start date is not a valid date.');
+                    return false;
+                }
+
+                if (!isValidDate(endDate)) {
+                    displayErrorEndDate('*End date is not a valid date.');
+                    return false;
+                }
+
+                // Ensure start date is before or the same as the end date
+                if (new Date(startDate) > new Date(endDate)) {
+                    displayErrorEndDate('*End date must be after or the same as the start date.');
+                    return false;
                 }
 
                 return true
+            }
+
+            function isValidDate(dateString) {
+                const date = new Date(dateString);
+                return date instanceof Date && !isNaN(date) && dateString === date.toISOString().split('T')[0];
             }
 
             function displayErrorAmount(errorMessage) {
@@ -350,7 +378,7 @@
 
         </script>
 
-        
+
     </body>
 
     </html>

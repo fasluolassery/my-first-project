@@ -24,6 +24,8 @@ const userRegisterDetails = async (req, res, next) => {
 
         const { userName, userEmail, userPassword, userPhone, refId } = req.body
 
+        console.log(req.body)
+
         const existingUser = await User.findOne({ email: userEmail })
 
         if (existingUser) {

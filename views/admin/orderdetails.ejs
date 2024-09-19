@@ -144,7 +144,7 @@
                                 <!-- <small class="text-muted">Order ID: 3453012</small> -->
                             </div>
                             <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                                <% if(orderDetails.orderStatus !='Delivered' ) {%>
+                                <% if(orderDetails.orderStatus == 'Pending') {%>
                                     <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200" id="status">
                                         <option value="">Change status</option>
                                         <!-- <option>Processing</option> -->
@@ -259,22 +259,15 @@
 
 
                                                     <td>
-                                                        <input type="hidden" value="<%= val.productStatus %>"
-                                                            id="productStatus<%= val.product.id %>">
-                                                        <select class="form-select d-inline-block" style="width: 110px;"
-                                                            id="productStatusOption<%= val.product.id %>"
+                                                        <input type="hidden" value="<%= val.productStatus %>" id="productStatus<%= val.product.id %>">
+                                                        <select class="form-select d-inline-block" style="width: 110px;" id="productStatusOption<%= val.product.id %>"
                                                             onchange="changeProductStatus('<%= val.product.id %>', '<%= orderDetails.id %>')"
-                                                            <%=orderDetails.orderStatus==='Delivered' ? 'disabled' : ''
-                                                            %>>
-
-                                                            <option value="Pending" <%=val.productStatus==='Pending'
-                                                                ? 'selected' : '' %>>Pending</option>
-                                                            <option value="Delivered" <%=val.productStatus==='Delivered'
-                                                                ? 'selected' : '' %>>Delivered</option>
-                                                            <option value="Cancelled" <%=val.productStatus==='Cancelled'
-                                                                ? 'selected' : '' %>>Cancelled</option>
-                                                            <option value="Returned" <%=val.productStatus==='Returned'
-                                                                ? 'selected' : '' %>>Returned</option>
+                                                            <%= orderDetails.orderStatus !== 'Pending' ? 'disabled' : '' %>>
+                                                            
+                                                            <option value="Pending" <%= val.productStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                            <option value="Delivered" <%= val.productStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                            <option value="Cancelled" <%= val.productStatus === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                                            <option value="Returned" <%= val.productStatus === 'Returned' ? 'selected' : '' %>>Returned</option>
                                                         </select>
                                                     </td>
 

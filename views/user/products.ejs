@@ -59,35 +59,21 @@
 
 
                                     <div class="select-shoing-wrap d-flex align-items-center">
-                                        <div class="shot-product">
-                                            <p>Sort By:</p>
+                                        <div class="shot-product me-2">
+                                            <p class="mb-0" style="white-space: nowrap;">Sort By:</p>
                                         </div>
                                         <!-- Single Wedge End -->
-                                        <div class="header-bottom-set dropdown">
-                                            <button id="sortButton" class="dropdown-toggle header-action-btn"
-                                                data-bs-toggle="dropdown">
-                                                Default <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 0, 'Default')" >Default</a></li>
-                                                <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 1, 'Name, A to Z')">Name, A to Z</a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 2, 'Name, Z to A')">Name, Z to A</a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 3, 'Price, low to high')">Price, low to
-                                                        high</a></li>
-                                                <li><a class="dropdown-item" href="#"
-                                                        onclick="sorting(event, 4, 'Price, high to low')">Price, high to
-                                                        low</a></li>
-                                            </ul>
+                                        <div class="dropdown">
+                                            <select id="sortDropdown" class="form-select" style="min-width: 150px;" onchange="combined()">
+                                                <option value="0">Default</option>
+                                                <option value="1">Name, A to Z</option>
+                                                <option value="2">Name, Z to A</option>
+                                                <option value="3">Price, low to high</option>
+                                                <option value="4">Price, high to low</option>
+                                            </select>
                                         </div>
-
-                                        <!-- Single Wedge Start -->
                                     </div>
+                                    
 
 
 
@@ -323,21 +309,11 @@
                                         <h4 class="sidebar-title">Top Categories</h4>
                                         <div class="sidebar-widget-category">
                                             <ul>
-                                                <li><a href onclick="filterByCategory(event, 'All')" class="selected m-0"> All
-                                                        <span>(<%= categories.length %>)</span> </a></li>
-                                                    
-                                                <% if(categories) { %>
-                                                    <% categories.forEach(category=> { %>
-                                                        
-                                                        <input type="hidden" value="<%= category.categoryName %>" id="categoryForFilter">
-                                                        <li><a href
-                                                                onclick="filterByCategory(event, '<%= category.categoryName %>')">
-                                                                <%= category.categoryName %>
-                                                                    <span></span>
-                                                            </a></li>
-
-                                                        <% }) %>
-                                                            <% } %>
+                                                <li><a href="#" onclick="applyFilter(event, 'All')"> All <span>(<%= categories.length %>)</span></a></li>
+                                                <% categories.forEach(category => { %>
+                                                    <li><a href="#" onclick="applyFilter(event, '<%= category.categoryName %>')">
+                                                        <%= category.categoryName %> <span></span></a></li>
+                                                <% }) %>
                                             </ul>
                                         </div>
                                     </div>
@@ -828,7 +804,7 @@
                                         </script>
 
                                         <!-- search -->
-                                        <script>
+                                        <!-- <script>
 
                                             document.getElementById('searchInput').addEventListener('input', (event) => {
                                                 event.preventDefault()
@@ -847,7 +823,7 @@
                                                         console.log(err)
                                                     })
                                             })
-                                        </script>
+                                        </script> -->
 
                                         <!-- filter -->
                                         <script>
@@ -911,6 +887,46 @@
             });
     }
 
+</script>
+
+<!-- combined search, filter, sort -->
+<script>
+    let selectedCategory = 'All';
+
+    function applyFilter(event, category){
+        event?.preventDefault()
+
+        selectedCategory = category;
+        combined()
+    }    
+
+    function combined(event){
+        event?.preventDefault()
+
+        const searchInput = document.getElementById('searchInput').value
+        const sortValue = document.getElementById('sortDropdown').value
+
+        const data = {
+            value: searchInput,
+            category: selectedCategory,
+            index: sortValue
+        }
+
+        fetch('/combinedSearchFilterAndSort', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            // console.log(data)
+            updateProductList(data.products);
+            updateProductGrid(data.products)
+        })
+        .catch(error => console.error('Error: ', error))
+    }
 </script>
 
     </body>

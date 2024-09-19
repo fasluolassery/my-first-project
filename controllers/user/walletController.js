@@ -6,6 +6,8 @@ const productModel = require('../../models/productModel')
 const couponModel = require('../../models/couponModel')
 const transactionModel = require('../../models/transactionSchema')
 
+const moment = require('moment-timezone')
+
 const loadWallet = async (req, res, next) => {
     try {
         const { userId } = req.session

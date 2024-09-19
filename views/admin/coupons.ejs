@@ -167,7 +167,15 @@
                                                         onclick="deleteCoupon(event, '<%= val.id %>')" href
                                                         class="btn btn-sm font-sm btn-light rounded"> <i
                                                             class="material-icons md-delete_forever"></i> Delete </a>
+                                                </span>
+                                                <span class="ms-2">
+                                                    <a
+                                                        href="/admin/editCoupon?couponId=<%= val.id %>" 
+                                                        class="btn btn-sm font-sm btn-light rounded">
+                                                        <i class="material-icons md-edit"></i> Edit
+                                                    </a>
                                                 </span></td>
+                                                
                                         </tr>
                                         <% }) %>
                                             <% } %>
@@ -238,6 +246,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- delete coupon -->
         <script>
             function deleteCoupon(event, couponId) {
                 event.preventDefault()
@@ -276,6 +285,7 @@
                 })
             }   
         </script>
+
 
     </body>
 

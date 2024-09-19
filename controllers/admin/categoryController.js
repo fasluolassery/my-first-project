@@ -21,6 +21,7 @@ const loadCategory = async (req, res, next) => {
 const getCategoryDetails = async (req, res, next) => {
     try {
         const categoryDetails = req.body
+
         // console.log(categoryDetails) //!to remove
         const existingCategory = await Category.findOne({ categoryName: categoryDetails.categoryName.toLowerCase() })
 

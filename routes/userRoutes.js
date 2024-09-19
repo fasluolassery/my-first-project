@@ -67,6 +67,7 @@ userRouter.post('/applyCoupon', couponController.applyCoupon)
 userRouter.post('/razorPay', razorpayController.createInstance)
 userRouter.post('/verifyPayment', razorpayController.verifyPayment)
 userRouter.post('/placeOrderWithWallet', walletController.orderWithWallet)
+userRouter.post('/combinedSearchFilterAndSort', productController.combinedSearchFilterAndSort)
 // userRouter.post('/succesPayment', razorpayController.success)
 
 
