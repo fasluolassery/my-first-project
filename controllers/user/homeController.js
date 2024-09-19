@@ -1,6 +1,7 @@
 const cartModel = require("../../models/cartModel");
 const Products = require("../../models/productModel");
 const userModel = require("../../models/userModel");
+const moment = require('moment-timezone')
 
 const updatedPrice = async (products) => {
   try {
@@ -32,6 +33,10 @@ const updatedPrice = async (products) => {
 
 const loadHome = async (req, res, next) => {
   try {
+
+    console.log("Server Timezone:", moment.tz.guess());
+    console.log("Current time in Asia/Kolkata:", moment().tz('Asia/Kolkata').format());
+
     const { user, userId } = req.session;
     let findAllProducts = await Products.find({ isBlock: false })
       .sort({ createdAt: -1 })
